@@ -10,7 +10,7 @@ angular.module('ngdesktopui',['servoy'])
 	var isMacDefaultMenu = false;
 	
 	if (typeof require == "function") {
-		remote = require('electron').remote;
+		remote = require('@electron/remote');
 		Menu = remote.Menu;
 		BrowserWindow = remote.BrowserWindow;
 		win = remote.getCurrentWindow();
