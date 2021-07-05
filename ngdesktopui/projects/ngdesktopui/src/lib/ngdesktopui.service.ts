@@ -19,7 +19,7 @@ export class NGDesktopUIService {
         const userAgent = navigator.userAgent.toLowerCase();
         const r = windowRef.nativeWindow['require'];
         if (userAgent.indexOf(' electron/') > -1 && r) {
-            this.remote = r('electron').remote;
+            this.remote = r('@electron/remote');
             this.Menu = this.remote.Menu;
             this.window = this.remote.getCurrentWindow();
             this.isMacOS = ( r('os').platform() === 'darwin');
