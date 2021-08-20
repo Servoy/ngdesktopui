@@ -68,7 +68,7 @@ export class NGDesktopUIService {
                             const bounds = devTools.getBounds();
                             bounds.width = bounds.width + 10;
                             devTools.setBounds(bounds);
-                        }, 10)
+                        }, 10);
                     }
                 }
             ]
@@ -88,7 +88,7 @@ export class NGDesktopUIService {
     removeMenu(index: number) {
         if (Number.isInteger(index)) {
             this.mainMenuTemplate.splice(index, 1);
-            if (this.mainMenuTemplate.length == 0) {
+            if (this.mainMenuTemplate.length === 0) {
                 this.removeAllMenus();
             } else {
                 this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
@@ -109,7 +109,7 @@ export class NGDesktopUIService {
         if (menu != null) {
             for (let index = 0; index < menu.items.length; index++) {
                 const item = menu.items[index];
-                if (item.label == text) {
+                if (item.label === text) {
                     retVal = index;
                     break;
                 }
@@ -222,7 +222,7 @@ export class NGDesktopUIService {
      * Note: when add an item to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
      *       If previously a callback has been set, that callback will no longer be called
      */
-    addMenuItem(index: number, text: string, callback: {formname:string, script: string}, position: number, itemIndex: number) {
+    addMenuItem(index: number, text: string, callback: {formname: string; script: string}, position: number, itemIndex: number) {
         const result = this.addMenuItemImpl(index, text, null, null, callback, position, itemIndex, 'normal');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -253,7 +253,7 @@ export class NGDesktopUIService {
             const menuItem = items[index];
             if (Number.isInteger(itemIndex) && (itemIndex >= 0 && itemIndex < menuItem.submenu.items.length)) {//submenu count desired
                 const submenuItem = menuItem.submenu.items[itemIndex];
-                if (submenuItem.type == 'submenu') {
+                if (submenuItem.type === 'submenu') {
                     return submenuItem.submenu.items.length;
                 } else {
                     return 0;
@@ -285,7 +285,7 @@ export class NGDesktopUIService {
      * Note: when add the checkbox to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
      *       If previously a callback has been set, that callback will no longer be called
      */
-    addCheckBox(index: number, text: string, callback: {formname:string, script: string}, checked: boolean, position: number, itemIndex: number) {
+    addCheckBox(index: number, text: string, callback: {formname: string; script: string}, checked: boolean, position: number, itemIndex: number) {
         const result = this.addMenuItemImpl(index, text, null, checked, callback, position, itemIndex, 'checkbox');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -310,7 +310,7 @@ export class NGDesktopUIService {
      *       If previously a callback has been set, that callback will no longer be called
      * Note: For the first added radio button in a group, the radio button is selected regardless the selected param
      */
-    addRadioButton(index: number, text: string, callback: {formname:string, script: string}, selected:boolean, position: number, itemIndex: number) {
+    addRadioButton(index: number, text: string, callback: {formname: string; script: string}, selected: boolean, position: number, itemIndex: number) {
         const result = this.addMenuItemImpl(index, text, null, selected, callback, position, itemIndex, 'radio');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -328,6 +328,7 @@ export class NGDesktopUIService {
      * @return - the index of the added role item
      *
      */
+    // eslint-disable-next-line max-len
     addRoleItem(index: number, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
                          text: string, position: number, itemIndex: number) {
         const result = this.addMenuItemImpl(index, text, role, null, null, position, itemIndex, 'role');
@@ -346,7 +347,7 @@ export class NGDesktopUIService {
         if (Number.isInteger(index) && (index >= 0 && index < appMenu.items.length)) {
             const menuitems = appMenu.items[index].submenu.items;
             for (let itemIndex = 0; itemIndex < menuitems.length; itemIndex++) {
-                if (menuitems[itemIndex].label == text) {
+                if (menuitems[itemIndex].label === text) {
                     retVal = itemIndex;
                     break;
                 }
@@ -418,7 +419,7 @@ export class NGDesktopUIService {
      * @param js - the piece of javascript that is injected into this view.
      * @param callback - the callback function that is used to get the results or exception if the call fails.
      */
-    injectJSIntoBrowserView(id: string, js: string, callback: {formname:string, script: string}) {
+    injectJSIntoBrowserView(id: string, js: string, callback: {formname: string; script: string}) {
         const view = this.browserViews[id];
         if (view) {
             view.webContents.executeJavaScript(js).then((result: any) => {
@@ -460,7 +461,7 @@ export class NGDesktopUIService {
             if (Number.isInteger(position)) {
                 submenu.splice(position, 1);
                 if (isSubmenu) {
-                    if (submenu.length == 0) {//no submenu items => switch item from submenu to normal
+                    if (submenu.length === 0) {//no submenu items => switch item from submenu to normal
                         this.mainMenuTemplate[menuIndex].submenu[itemIndex].type = 'normal';
                     }
                     this.mainMenuTemplate[menuIndex].submenu[itemIndex].submenu = submenu;
@@ -471,8 +472,10 @@ export class NGDesktopUIService {
         }
         return this.mainMenuTemplate;
     }
+                // eslint-disable-next-line max-len
     private addMenuItemImpl(menuIndex: number, text: string, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
-                checked: boolean, callback: {formname:string, script: string}, position: number, itemIndex: number, type: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio') | 'role'): number {
+                // eslint-disable-next-line max-len
+                checked: boolean, callback: {formname: string; script: string}, position: number, itemIndex: number, type: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio') | 'role'): number {
         let addResultIndex = -1;
         if (Number.isInteger(menuIndex) && (menuIndex >= 0 && menuIndex < this.mainMenuTemplate.length)) {
             let submenu = this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[];
