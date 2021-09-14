@@ -1,6 +1,6 @@
 {
   "name": "@servoy/ngdesktopui",
-  "version": "2.0.1-rc1",
+  "version": "2.0.2",
   "peerDependencies": {
      "@angular/common": ">=12",
     "@angular/core": ">=12"
