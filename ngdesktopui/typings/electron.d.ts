@@ -31,20 +31,20 @@ declare namespace Electron {
                                                            */
                                                           accessibilitySupportEnabled: boolean) => void): this;
     once(event: 'accessibility-support-changed', listener: (event: Event,
-                                                          /**
-                                                           * `true` when Chrome's accessibility support is enabled, `false` otherwise.
-                                                           */
-                                                          accessibilitySupportEnabled: boolean) => void): this;
+                                                            /**
+                                                             * `true` when Chrome's accessibility support is enabled, `false` otherwise.
+                                                             */
+                                                            accessibilitySupportEnabled: boolean) => void): this;
     addListener(event: 'accessibility-support-changed', listener: (event: Event,
-                                                          /**
-                                                           * `true` when Chrome's accessibility support is enabled, `false` otherwise.
-                                                           */
-                                                          accessibilitySupportEnabled: boolean) => void): this;
+                                                                   /**
+                                                                    * `true` when Chrome's accessibility support is enabled, `false` otherwise.
+                                                                    */
+                                                                   accessibilitySupportEnabled: boolean) => void): this;
     removeListener(event: 'accessibility-support-changed', listener: (event: Event,
-                                                          /**
-                                                           * `true` when Chrome's accessibility support is enabled, `false` otherwise.
-                                                           */
-                                                          accessibilitySupportEnabled: boolean) => void): this;
+                                                                      /**
+                                                                       * `true` when Chrome's accessibility support is enabled, `false` otherwise.
+                                                                       */
+                                                                      accessibilitySupportEnabled: boolean) => void): this;
     /**
      * Emitted when the application is activated. Various actions can trigger this
      * event, such as launching the application for the first time, attempting to
@@ -56,11 +56,11 @@ declare namespace Electron {
     on(event: 'activate', listener: (event: Event,
                                      hasVisibleWindows: boolean) => void): this;
     once(event: 'activate', listener: (event: Event,
-                                     hasVisibleWindows: boolean) => void): this;
+                                       hasVisibleWindows: boolean) => void): this;
     addListener(event: 'activate', listener: (event: Event,
-                                     hasVisibleWindows: boolean) => void): this;
+                                              hasVisibleWindows: boolean) => void): this;
     removeListener(event: 'activate', listener: (event: Event,
-                                     hasVisibleWindows: boolean) => void): this;
+                                                 hasVisibleWindows: boolean) => void): this;
     /**
      * Emitted during Handoff after an activity from this device was successfully
      * resumed on another one.
@@ -77,32 +77,32 @@ declare namespace Electron {
                                                     */
                                                    userInfo: unknown) => void): this;
     once(event: 'activity-was-continued', listener: (event: Event,
-                                                   /**
-                                                    * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                    */
-                                                   type: string,
-                                                   /**
-                                                    * Contains app-specific state stored by the activity.
-                                                    */
-                                                   userInfo: unknown) => void): this;
+                                                     /**
+                                                      * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                      */
+                                                     type: string,
+                                                     /**
+                                                      * Contains app-specific state stored by the activity.
+                                                      */
+                                                     userInfo: unknown) => void): this;
     addListener(event: 'activity-was-continued', listener: (event: Event,
-                                                   /**
-                                                    * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                    */
-                                                   type: string,
-                                                   /**
-                                                    * Contains app-specific state stored by the activity.
-                                                    */
-                                                   userInfo: unknown) => void): this;
+                                                            /**
+                                                             * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                             */
+                                                            type: string,
+                                                            /**
+                                                             * Contains app-specific state stored by the activity.
+                                                             */
+                                                            userInfo: unknown) => void): this;
     removeListener(event: 'activity-was-continued', listener: (event: Event,
-                                                   /**
-                                                    * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                    */
-                                                   type: string,
-                                                   /**
-                                                    * Contains app-specific state stored by the activity.
-                                                    */
-                                                   userInfo: unknown) => void): this;
+                                                               /**
+                                                                * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                                */
+                                                               type: string,
+                                                               /**
+                                                                * Contains app-specific state stored by the activity.
+                                                                */
+                                                               userInfo: unknown) => void): this;
     /**
      * Emitted before the application starts closing its windows. Calling
      * `event.preventDefault()` will prevent the default behavior, which is terminating
@@ -125,33 +125,33 @@ declare namespace Electron {
     on(event: 'browser-window-blur', listener: (event: Event,
                                                 window: BrowserWindow) => void): this;
     once(event: 'browser-window-blur', listener: (event: Event,
-                                                window: BrowserWindow) => void): this;
+                                                  window: BrowserWindow) => void): this;
     addListener(event: 'browser-window-blur', listener: (event: Event,
-                                                window: BrowserWindow) => void): this;
+                                                         window: BrowserWindow) => void): this;
     removeListener(event: 'browser-window-blur', listener: (event: Event,
-                                                window: BrowserWindow) => void): this;
+                                                            window: BrowserWindow) => void): this;
     /**
      * Emitted when a new browserWindow is created.
      */
     on(event: 'browser-window-created', listener: (event: Event,
                                                    window: BrowserWindow) => void): this;
     once(event: 'browser-window-created', listener: (event: Event,
-                                                   window: BrowserWindow) => void): this;
+                                                     window: BrowserWindow) => void): this;
     addListener(event: 'browser-window-created', listener: (event: Event,
-                                                   window: BrowserWindow) => void): this;
+                                                            window: BrowserWindow) => void): this;
     removeListener(event: 'browser-window-created', listener: (event: Event,
-                                                   window: BrowserWindow) => void): this;
+                                                               window: BrowserWindow) => void): this;
     /**
      * Emitted when a browserWindow gets focused.
      */
     on(event: 'browser-window-focus', listener: (event: Event,
                                                  window: BrowserWindow) => void): this;
     once(event: 'browser-window-focus', listener: (event: Event,
-                                                 window: BrowserWindow) => void): this;
+                                                   window: BrowserWindow) => void): this;
     addListener(event: 'browser-window-focus', listener: (event: Event,
-                                                 window: BrowserWindow) => void): this;
+                                                          window: BrowserWindow) => void): this;
     removeListener(event: 'browser-window-focus', listener: (event: Event,
-                                                 window: BrowserWindow) => void): this;
+                                                             window: BrowserWindow) => void): this;
     /**
      * Emitted when failed to verify the `certificate` for `url`, to trust the
      * certificate you should prevent the default behavior with
@@ -167,32 +167,32 @@ declare namespace Electron {
                                               certificate: Certificate,
                                               callback: (isTrusted: boolean) => void) => void): this;
     once(event: 'certificate-error', listener: (event: Event,
-                                              webContents: WebContents,
-                                              url: string,
-                                              /**
-                                               * The error code
-                                               */
-                                              error: string,
-                                              certificate: Certificate,
-                                              callback: (isTrusted: boolean) => void) => void): this;
+                                                webContents: WebContents,
+                                                url: string,
+                                                /**
+                                                 * The error code
+                                                 */
+                                                error: string,
+                                                certificate: Certificate,
+                                                callback: (isTrusted: boolean) => void) => void): this;
     addListener(event: 'certificate-error', listener: (event: Event,
-                                              webContents: WebContents,
-                                              url: string,
-                                              /**
-                                               * The error code
-                                               */
-                                              error: string,
-                                              certificate: Certificate,
-                                              callback: (isTrusted: boolean) => void) => void): this;
+                                                       webContents: WebContents,
+                                                       url: string,
+                                                       /**
+                                                        * The error code
+                                                        */
+                                                       error: string,
+                                                       certificate: Certificate,
+                                                       callback: (isTrusted: boolean) => void) => void): this;
     removeListener(event: 'certificate-error', listener: (event: Event,
-                                              webContents: WebContents,
-                                              url: string,
-                                              /**
-                                               * The error code
-                                               */
-                                              error: string,
-                                              certificate: Certificate,
-                                              callback: (isTrusted: boolean) => void) => void): this;
+                                                          webContents: WebContents,
+                                                          url: string,
+                                                          /**
+                                                           * The error code
+                                                           */
+                                                          error: string,
+                                                          certificate: Certificate,
+                                                          callback: (isTrusted: boolean) => void) => void): this;
     /**
      * Emitted when the child process unexpectedly disappears. This is normally because
      * it was crashed or killed. It does not include renderer processes.
@@ -200,11 +200,11 @@ declare namespace Electron {
     on(event: 'child-process-gone', listener: (event: Event,
                                                details: Details) => void): this;
     once(event: 'child-process-gone', listener: (event: Event,
-                                               details: Details) => void): this;
+                                                 details: Details) => void): this;
     addListener(event: 'child-process-gone', listener: (event: Event,
-                                               details: Details) => void): this;
+                                                        details: Details) => void): this;
     removeListener(event: 'child-process-gone', listener: (event: Event,
-                                               details: Details) => void): this;
+                                                           details: Details) => void): this;
     /**
      * Emitted during Handoff when an activity from a different device wants to be
      * resumed. You should call `event.preventDefault()` if you want to handle this
@@ -227,32 +227,32 @@ declare namespace Electron {
                                                */
                                               userInfo: unknown) => void): this;
     once(event: 'continue-activity', listener: (event: Event,
-                                              /**
-                                               * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                               */
-                                              type: string,
-                                              /**
-                                               * Contains app-specific state stored by the activity on another device.
-                                               */
-                                              userInfo: unknown) => void): this;
+                                                /**
+                                                 * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                 */
+                                                type: string,
+                                                /**
+                                                 * Contains app-specific state stored by the activity on another device.
+                                                 */
+                                                userInfo: unknown) => void): this;
     addListener(event: 'continue-activity', listener: (event: Event,
-                                              /**
-                                               * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                               */
-                                              type: string,
-                                              /**
-                                               * Contains app-specific state stored by the activity on another device.
-                                               */
-                                              userInfo: unknown) => void): this;
+                                                       /**
+                                                        * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                        */
+                                                       type: string,
+                                                       /**
+                                                        * Contains app-specific state stored by the activity on another device.
+                                                        */
+                                                       userInfo: unknown) => void): this;
     removeListener(event: 'continue-activity', listener: (event: Event,
-                                              /**
-                                               * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                               */
-                                              type: string,
-                                              /**
-                                               * Contains app-specific state stored by the activity on another device.
-                                               */
-                                              userInfo: unknown) => void): this;
+                                                          /**
+                                                           * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                           */
+                                                          type: string,
+                                                          /**
+                                                           * Contains app-specific state stored by the activity on another device.
+                                                           */
+                                                          userInfo: unknown) => void): this;
     /**
      * Emitted during Handoff when an activity from a different device fails to be
      * resumed.
@@ -269,32 +269,32 @@ declare namespace Electron {
                                                      */
                                                     error: string) => void): this;
     once(event: 'continue-activity-error', listener: (event: Event,
-                                                    /**
-                                                     * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                     */
-                                                    type: string,
-                                                    /**
-                                                     * A string with the error's localized description.
-                                                     */
-                                                    error: string) => void): this;
+                                                      /**
+                                                       * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                       */
+                                                      type: string,
+                                                      /**
+                                                       * A string with the error's localized description.
+                                                       */
+                                                      error: string) => void): this;
     addListener(event: 'continue-activity-error', listener: (event: Event,
-                                                    /**
-                                                     * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                     */
-                                                    type: string,
-                                                    /**
-                                                     * A string with the error's localized description.
-                                                     */
-                                                    error: string) => void): this;
+                                                             /**
+                                                              * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                              */
+                                                             type: string,
+                                                             /**
+                                                              * A string with the error's localized description.
+                                                              */
+                                                             error: string) => void): this;
     removeListener(event: 'continue-activity-error', listener: (event: Event,
-                                                    /**
-                                                     * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                     */
-                                                    type: string,
-                                                    /**
-                                                     * A string with the error's localized description.
-                                                     */
-                                                    error: string) => void): this;
+                                                                /**
+                                                                 * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                                 */
+                                                                type: string,
+                                                                /**
+                                                                 * A string with the error's localized description.
+                                                                 */
+                                                                error: string) => void): this;
     /**
      * Emitted when `desktopCapturer.getSources()` is called in the renderer process of
      * `webContents`. Calling `event.preventDefault()` will make it return empty
@@ -303,11 +303,11 @@ declare namespace Electron {
     on(event: 'desktop-capturer-get-sources', listener: (event: Event,
                                                          webContents: WebContents) => void): this;
     once(event: 'desktop-capturer-get-sources', listener: (event: Event,
-                                                         webContents: WebContents) => void): this;
+                                                           webContents: WebContents) => void): this;
     addListener(event: 'desktop-capturer-get-sources', listener: (event: Event,
-                                                         webContents: WebContents) => void): this;
+                                                                  webContents: WebContents) => void): this;
     removeListener(event: 'desktop-capturer-get-sources', listener: (event: Event,
-                                                         webContents: WebContents) => void): this;
+                                                                     webContents: WebContents) => void): this;
     /**
      * Emitted when mac application become active. Difference from `activate` event is
      * that `did-become-active` is emitted every time the app becomes active, not only
@@ -339,11 +339,11 @@ declare namespace Electron {
     on(event: 'gpu-process-crashed', listener: (event: Event,
                                                 killed: boolean) => void): this;
     once(event: 'gpu-process-crashed', listener: (event: Event,
-                                                killed: boolean) => void): this;
+                                                  killed: boolean) => void): this;
     addListener(event: 'gpu-process-crashed', listener: (event: Event,
-                                                killed: boolean) => void): this;
+                                                         killed: boolean) => void): this;
     removeListener(event: 'gpu-process-crashed', listener: (event: Event,
-                                                killed: boolean) => void): this;
+                                                            killed: boolean) => void): this;
     /**
      * Emitted when `webContents` wants to do basic auth.
      *
@@ -361,20 +361,20 @@ declare namespace Electron {
                                   authInfo: AuthInfo,
                                   callback: (username?: string, password?: string) => void) => void): this;
     once(event: 'login', listener: (event: Event,
-                                  webContents: WebContents,
-                                  authenticationResponseDetails: AuthenticationResponseDetails,
-                                  authInfo: AuthInfo,
-                                  callback: (username?: string, password?: string) => void) => void): this;
+                                    webContents: WebContents,
+                                    authenticationResponseDetails: AuthenticationResponseDetails,
+                                    authInfo: AuthInfo,
+                                    callback: (username?: string, password?: string) => void) => void): this;
     addListener(event: 'login', listener: (event: Event,
-                                  webContents: WebContents,
-                                  authenticationResponseDetails: AuthenticationResponseDetails,
-                                  authInfo: AuthInfo,
-                                  callback: (username?: string, password?: string) => void) => void): this;
+                                           webContents: WebContents,
+                                           authenticationResponseDetails: AuthenticationResponseDetails,
+                                           authInfo: AuthInfo,
+                                           callback: (username?: string, password?: string) => void) => void): this;
     removeListener(event: 'login', listener: (event: Event,
-                                  webContents: WebContents,
-                                  authenticationResponseDetails: AuthenticationResponseDetails,
-                                  authInfo: AuthInfo,
-                                  callback: (username?: string, password?: string) => void) => void): this;
+                                              webContents: WebContents,
+                                              authenticationResponseDetails: AuthenticationResponseDetails,
+                                              authInfo: AuthInfo,
+                                              callback: (username?: string, password?: string) => void) => void): this;
     /**
      * Emitted when the user clicks the native macOS new tab button. The new tab button
      * is only visible if the current `BrowserWindow` has a `tabbingIdentifier`
@@ -403,28 +403,28 @@ declare namespace Electron {
     on(event: 'open-file', listener: (event: Event,
                                       path: string) => void): this;
     once(event: 'open-file', listener: (event: Event,
-                                      path: string) => void): this;
+                                        path: string) => void): this;
     addListener(event: 'open-file', listener: (event: Event,
-                                      path: string) => void): this;
+                                               path: string) => void): this;
     removeListener(event: 'open-file', listener: (event: Event,
-                                      path: string) => void): this;
+                                                  path: string) => void): this;
     /**
      * Emitted when the user wants to open a URL with the application. Your
      * application's `Info.plist` file must define the URL scheme within the
      * `CFBundleURLTypes` key, and set `NSPrincipalClass` to `AtomApplication`.
-     * 
-You should call `event.preventDefault()` if you want to handle this event.
+     *
+     You should call `event.preventDefault()` if you want to handle this event.
      *
      * @platform darwin
      */
     on(event: 'open-url', listener: (event: Event,
                                      url: string) => void): this;
     once(event: 'open-url', listener: (event: Event,
-                                     url: string) => void): this;
+                                       url: string) => void): this;
     addListener(event: 'open-url', listener: (event: Event,
-                                     url: string) => void): this;
+                                              url: string) => void): this;
     removeListener(event: 'open-url', listener: (event: Event,
-                                     url: string) => void): this;
+                                                 url: string) => void): this;
     /**
      * Emitted when the application is quitting.
      *
@@ -434,11 +434,11 @@ You should call `event.preventDefault()` if you want to handle this event.
     on(event: 'quit', listener: (event: Event,
                                  exitCode: number) => void): this;
     once(event: 'quit', listener: (event: Event,
-                                 exitCode: number) => void): this;
+                                   exitCode: number) => void): this;
     addListener(event: 'quit', listener: (event: Event,
-                                 exitCode: number) => void): this;
+                                          exitCode: number) => void): this;
     removeListener(event: 'quit', listener: (event: Event,
-                                 exitCode: number) => void): this;
+                                             exitCode: number) => void): this;
     /**
      * Emitted once, when Electron has finished initializing. On macOS, `launchInfo`
      * holds the `userInfo` of the `NSUserNotification` that was used to open the
@@ -449,11 +449,11 @@ You should call `event.preventDefault()` if you want to handle this event.
     on(event: 'ready', listener: (event: Event,
                                   launchInfo: Record<string, any>) => void): this;
     once(event: 'ready', listener: (event: Event,
-                                  launchInfo: Record<string, any>) => void): this;
+                                    launchInfo: Record<string, any>) => void): this;
     addListener(event: 'ready', listener: (event: Event,
-                                  launchInfo: Record<string, any>) => void): this;
+                                           launchInfo: Record<string, any>) => void): this;
     removeListener(event: 'ready', listener: (event: Event,
-                                  launchInfo: Record<string, any>) => void): this;
+                                              launchInfo: Record<string, any>) => void): this;
     /**
      * Emitted when `remote.getBuiltin()` is called in the renderer process of
      * `webContents`. Calling `event.preventDefault()` will prevent the module from
@@ -463,14 +463,14 @@ You should call `event.preventDefault()` if you want to handle this event.
                                                webContents: WebContents,
                                                moduleName: string) => void): this;
     once(event: 'remote-get-builtin', listener: (event: Event,
-                                               webContents: WebContents,
-                                               moduleName: string) => void): this;
+                                                 webContents: WebContents,
+                                                 moduleName: string) => void): this;
     addListener(event: 'remote-get-builtin', listener: (event: Event,
-                                               webContents: WebContents,
-                                               moduleName: string) => void): this;
+                                                        webContents: WebContents,
+                                                        moduleName: string) => void): this;
     removeListener(event: 'remote-get-builtin', listener: (event: Event,
-                                               webContents: WebContents,
-                                               moduleName: string) => void): this;
+                                                           webContents: WebContents,
+                                                           moduleName: string) => void): this;
     /**
      * Emitted when `remote.getCurrentWebContents()` is called in the renderer process
      * of `webContents`. Calling `event.preventDefault()` will prevent the object from
@@ -479,11 +479,11 @@ You should call `event.preventDefault()` if you want to handle this event.
     on(event: 'remote-get-current-web-contents', listener: (event: Event,
                                                             webContents: WebContents) => void): this;
     once(event: 'remote-get-current-web-contents', listener: (event: Event,
-                                                            webContents: WebContents) => void): this;
+                                                              webContents: WebContents) => void): this;
     addListener(event: 'remote-get-current-web-contents', listener: (event: Event,
-                                                            webContents: WebContents) => void): this;
+                                                                     webContents: WebContents) => void): this;
     removeListener(event: 'remote-get-current-web-contents', listener: (event: Event,
-                                                            webContents: WebContents) => void): this;
+                                                                        webContents: WebContents) => void): this;
     /**
      * Emitted when `remote.getCurrentWindow()` is called in the renderer process of
      * `webContents`. Calling `event.preventDefault()` will prevent the object from
@@ -492,11 +492,11 @@ You should call `event.preventDefault()` if you want to handle this event.
     on(event: 'remote-get-current-window', listener: (event: Event,
                                                       webContents: WebContents) => void): this;
     once(event: 'remote-get-current-window', listener: (event: Event,
-                                                      webContents: WebContents) => void): this;
+                                                        webContents: WebContents) => void): this;
     addListener(event: 'remote-get-current-window', listener: (event: Event,
-                                                      webContents: WebContents) => void): this;
+                                                               webContents: WebContents) => void): this;
     removeListener(event: 'remote-get-current-window', listener: (event: Event,
-                                                      webContents: WebContents) => void): this;
+                                                                  webContents: WebContents) => void): this;
     /**
      * Emitted when `remote.getGlobal()` is called in the renderer process of
      * `webContents`. Calling `event.preventDefault()` will prevent the global from
@@ -506,14 +506,14 @@ You should call `event.preventDefault()` if you want to handle this event.
                                               webContents: WebContents,
                                               globalName: string) => void): this;
     once(event: 'remote-get-global', listener: (event: Event,
-                                              webContents: WebContents,
-                                              globalName: string) => void): this;
+                                                webContents: WebContents,
+                                                globalName: string) => void): this;
     addListener(event: 'remote-get-global', listener: (event: Event,
-                                              webContents: WebContents,
-                                              globalName: string) => void): this;
+                                                       webContents: WebContents,
+                                                       globalName: string) => void): this;
     removeListener(event: 'remote-get-global', listener: (event: Event,
-                                              webContents: WebContents,
-                                              globalName: string) => void): this;
+                                                          webContents: WebContents,
+                                                          globalName: string) => void): this;
     /**
      * Emitted when `remote.require()` is called in the renderer process of
      * `webContents`. Calling `event.preventDefault()` will prevent the module from
@@ -523,14 +523,14 @@ You should call `event.preventDefault()` if you want to handle this event.
                                            webContents: WebContents,
                                            moduleName: string) => void): this;
     once(event: 'remote-require', listener: (event: Event,
-                                           webContents: WebContents,
-                                           moduleName: string) => void): this;
+                                             webContents: WebContents,
+                                             moduleName: string) => void): this;
     addListener(event: 'remote-require', listener: (event: Event,
-                                           webContents: WebContents,
-                                           moduleName: string) => void): this;
+                                                    webContents: WebContents,
+                                                    moduleName: string) => void): this;
     removeListener(event: 'remote-require', listener: (event: Event,
-                                           webContents: WebContents,
-                                           moduleName: string) => void): this;
+                                                       webContents: WebContents,
+                                                       moduleName: string) => void): this;
     /**
      * Emitted when the renderer process unexpectedly disappears.  This is normally
      * because it was crashed or killed.
@@ -539,26 +539,26 @@ You should call `event.preventDefault()` if you want to handle this event.
                                                 webContents: WebContents,
                                                 details: RenderProcessGoneDetails) => void): this;
     once(event: 'render-process-gone', listener: (event: Event,
-                                                webContents: WebContents,
-                                                details: RenderProcessGoneDetails) => void): this;
+                                                  webContents: WebContents,
+                                                  details: RenderProcessGoneDetails) => void): this;
     addListener(event: 'render-process-gone', listener: (event: Event,
-                                                webContents: WebContents,
-                                                details: RenderProcessGoneDetails) => void): this;
+                                                         webContents: WebContents,
+                                                         details: RenderProcessGoneDetails) => void): this;
     removeListener(event: 'render-process-gone', listener: (event: Event,
-                                                webContents: WebContents,
-                                                details: RenderProcessGoneDetails) => void): this;
+                                                            webContents: WebContents,
+                                                            details: RenderProcessGoneDetails) => void): this;
     on(event: 'renderer-process-crashed', listener: (event: Event,
                                                      webContents: WebContents,
                                                      killed: boolean) => void): this;
     once(event: 'renderer-process-crashed', listener: (event: Event,
-                                                     webContents: WebContents,
-                                                     killed: boolean) => void): this;
+                                                       webContents: WebContents,
+                                                       killed: boolean) => void): this;
     addListener(event: 'renderer-process-crashed', listener: (event: Event,
-                                                     webContents: WebContents,
-                                                     killed: boolean) => void): this;
+                                                              webContents: WebContents,
+                                                              killed: boolean) => void): this;
     removeListener(event: 'renderer-process-crashed', listener: (event: Event,
-                                                     webContents: WebContents,
-                                                     killed: boolean) => void): this;
+                                                                 webContents: WebContents,
+                                                                 killed: boolean) => void): this;
     /**
      * This event will be emitted inside the primary instance of your application when
      * a second instance has been executed and calls `app.requestSingleInstanceLock()`.
@@ -586,32 +586,32 @@ You should call `event.preventDefault()` if you want to handle this event.
                                              */
                                             workingDirectory: string) => void): this;
     once(event: 'second-instance', listener: (event: Event,
-                                            /**
-                                             * An array of the second instance's command line arguments
-                                             */
-                                            argv: string[],
-                                            /**
-                                             * The second instance's working directory
-                                             */
-                                            workingDirectory: string) => void): this;
+                                              /**
+                                               * An array of the second instance's command line arguments
+                                               */
+                                              argv: string[],
+                                              /**
+                                               * The second instance's working directory
+                                               */
+                                              workingDirectory: string) => void): this;
     addListener(event: 'second-instance', listener: (event: Event,
-                                            /**
-                                             * An array of the second instance's command line arguments
-                                             */
-                                            argv: string[],
-                                            /**
-                                             * The second instance's working directory
-                                             */
-                                            workingDirectory: string) => void): this;
+                                                     /**
+                                                      * An array of the second instance's command line arguments
+                                                      */
+                                                     argv: string[],
+                                                     /**
+                                                      * The second instance's working directory
+                                                      */
+                                                     workingDirectory: string) => void): this;
     removeListener(event: 'second-instance', listener: (event: Event,
-                                            /**
-                                             * An array of the second instance's command line arguments
-                                             */
-                                            argv: string[],
-                                            /**
-                                             * The second instance's working directory
-                                             */
-                                            workingDirectory: string) => void): this;
+                                                        /**
+                                                         * An array of the second instance's command line arguments
+                                                         */
+                                                        argv: string[],
+                                                        /**
+                                                         * The second instance's working directory
+                                                         */
+                                                        workingDirectory: string) => void): this;
     /**
      * Emitted when a client certificate is requested.
      *
@@ -626,20 +626,20 @@ You should call `event.preventDefault()` if you want to handle this event.
                                                       certificateList: Certificate[],
                                                       callback: (certificate?: Certificate) => void) => void): this;
     once(event: 'select-client-certificate', listener: (event: Event,
-                                                      webContents: WebContents,
-                                                      url: string,
-                                                      certificateList: Certificate[],
-                                                      callback: (certificate?: Certificate) => void) => void): this;
+                                                        webContents: WebContents,
+                                                        url: string,
+                                                        certificateList: Certificate[],
+                                                        callback: (certificate?: Certificate) => void) => void): this;
     addListener(event: 'select-client-certificate', listener: (event: Event,
-                                                      webContents: WebContents,
-                                                      url: string,
-                                                      certificateList: Certificate[],
-                                                      callback: (certificate?: Certificate) => void) => void): this;
+                                                               webContents: WebContents,
+                                                               url: string,
+                                                               certificateList: Certificate[],
+                                                               callback: (certificate?: Certificate) => void) => void): this;
     removeListener(event: 'select-client-certificate', listener: (event: Event,
-                                                      webContents: WebContents,
-                                                      url: string,
-                                                      certificateList: Certificate[],
-                                                      callback: (certificate?: Certificate) => void) => void): this;
+                                                                  webContents: WebContents,
+                                                                  url: string,
+                                                                  certificateList: Certificate[],
+                                                                  callback: (certificate?: Certificate) => void) => void): this;
     /**
      * Emitted when Electron has created a new `session`.
      */
@@ -666,43 +666,43 @@ You should call `event.preventDefault()` if you want to handle this event.
                                                    */
                                                   userInfo: unknown) => void): this;
     once(event: 'update-activity-state', listener: (event: Event,
-                                                  /**
-                                                   * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                   */
-                                                  type: string,
-                                                  /**
-                                                   * Contains app-specific state stored by the activity.
-                                                   */
-                                                  userInfo: unknown) => void): this;
+                                                    /**
+                                                     * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                     */
+                                                    type: string,
+                                                    /**
+                                                     * Contains app-specific state stored by the activity.
+                                                     */
+                                                    userInfo: unknown) => void): this;
     addListener(event: 'update-activity-state', listener: (event: Event,
-                                                  /**
-                                                   * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                   */
-                                                  type: string,
-                                                  /**
-                                                   * Contains app-specific state stored by the activity.
-                                                   */
-                                                  userInfo: unknown) => void): this;
+                                                           /**
+                                                            * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                            */
+                                                           type: string,
+                                                           /**
+                                                            * Contains app-specific state stored by the activity.
+                                                            */
+                                                           userInfo: unknown) => void): this;
     removeListener(event: 'update-activity-state', listener: (event: Event,
-                                                  /**
-                                                   * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                   */
-                                                  type: string,
-                                                  /**
-                                                   * Contains app-specific state stored by the activity.
-                                                   */
-                                                  userInfo: unknown) => void): this;
+                                                              /**
+                                                               * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                               */
+                                                              type: string,
+                                                              /**
+                                                               * Contains app-specific state stored by the activity.
+                                                               */
+                                                              userInfo: unknown) => void): this;
     /**
      * Emitted when a new webContents is created.
      */
     on(event: 'web-contents-created', listener: (event: Event,
                                                  webContents: WebContents) => void): this;
     once(event: 'web-contents-created', listener: (event: Event,
-                                                 webContents: WebContents) => void): this;
+                                                   webContents: WebContents) => void): this;
     addListener(event: 'web-contents-created', listener: (event: Event,
-                                                 webContents: WebContents) => void): this;
+                                                          webContents: WebContents) => void): this;
     removeListener(event: 'web-contents-created', listener: (event: Event,
-                                                 webContents: WebContents) => void): this;
+                                                             webContents: WebContents) => void): this;
     /**
      * Emitted during Handoff before an activity from a different device wants to be
      * resumed. You should call `event.preventDefault()` if you want to handle this
@@ -716,28 +716,28 @@ You should call `event.preventDefault()` if you want to handle this event.
                                                     */
                                                    type: string) => void): this;
     once(event: 'will-continue-activity', listener: (event: Event,
-                                                   /**
-                                                    * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                    */
-                                                   type: string) => void): this;
+                                                     /**
+                                                      * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                      */
+                                                     type: string) => void): this;
     addListener(event: 'will-continue-activity', listener: (event: Event,
-                                                   /**
-                                                    * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                    */
-                                                   type: string) => void): this;
+                                                            /**
+                                                             * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                             */
+                                                            type: string) => void): this;
     removeListener(event: 'will-continue-activity', listener: (event: Event,
-                                                   /**
-                                                    * A string identifying the activity. Maps to `NSUserActivity.activityType`.
-                                                    */
-                                                   type: string) => void): this;
+                                                               /**
+                                                                * A string identifying the activity. Maps to `NSUserActivity.activityType`.
+                                                                */
+                                                               type: string) => void): this;
     /**
      * Emitted when the application has finished basic startup. On Windows and Linux,
      * the `will-finish-launching` event is the same as the `ready` event; on macOS,
      * this event represents the `applicationWillFinishLaunching` notification of
      * `NSApplication`. You would usually set up listeners for the `open-file` and
      * `open-url` events here, and start the crash reporter and auto updater.
-     * 
-In most cases, you should do everything in the `ready` event handler.
+     *
+     In most cases, you should do everything in the `ready` event handler.
      */
     on(event: 'will-finish-launching', listener: Function): this;
     once(event: 'will-finish-launching', listener: Function): this;
@@ -792,13 +792,13 @@ In most cases, you should do everything in the `ready` event handler.
      * basis if the GPU processes crashes too frequently. This function disables that
      * behavior.
 
-This method can only be called before app is ready.
+     This method can only be called before app is ready.
      */
     disableDomainBlockingFor3DAPIs(): void;
     /**
      * Disables hardware acceleration for current app.
-     * 
-This method can only be called before app is ready.
+     *
+     This method can only be called before app is ready.
      */
     disableHardwareAcceleration(): void;
     /**
@@ -806,7 +806,7 @@ This method can only be called before app is ready.
      * launched sandboxed, regardless of the value of the `sandbox` flag in
      * WebPreferences.
 
-This method can only be called before app is ready.
+     This method can only be called before app is ready.
      */
     enableSandbox(): void;
     /**
@@ -819,8 +819,8 @@ This method can only be called before app is ready.
     /**
      * On Linux, focuses on the first visible window. On macOS, makes the application
      * the active app. On Windows, focuses on the application's first window.
-     * 
-You should seek to use the `steal` option as sparingly as possible.
+     *
+     You should seek to use the `steal` option as sparingly as possible.
      */
     focus(options?: FocusOptions): void;
     /**
@@ -929,8 +929,8 @@ You should seek to use the `steal` option as sparingly as possible.
     /**
      * User operating system's locale two-letter ISO 3166 country code. The value is
      * taken from native OS APIs.
-     * 
-**Note:** When unable to detect locale country code, it returns empty string.
+     *
+     **Note:** When unable to detect locale country code, it returns empty string.
      */
     getLocaleCountryCode(): string;
     /**
@@ -1062,8 +1062,8 @@ You should seek to use the `steal` option as sparingly as possible.
     isReady(): boolean;
     /**
      * whether `Secure Keyboard Entry` is enabled.
-     * 
-By default this API will return `false`.
+     *
+     By default this API will return `false`.
      *
      * @platform darwin
      */
@@ -1300,8 +1300,8 @@ By default this API will return `false`.
      * removed item to a custom category earlier than that will result in the entire
      * custom category being omitted from the Jump List. The list of removed items can
      * be obtained using `app.getJumpListSettings()`.
-     * 
-Here's a very simple example of creating a custom Jump List:
+     *
+     Here's a very simple example of creating a custom Jump List:
      *
      * @platform win32
      */
@@ -1566,20 +1566,20 @@ Here's a very simple example of creating a custom Jump List:
                                               releaseDate: Date,
                                               updateURL: string) => void): this;
     once(event: 'update-downloaded', listener: (event: Event,
-                                              releaseNotes: string,
-                                              releaseName: string,
-                                              releaseDate: Date,
-                                              updateURL: string) => void): this;
+                                                releaseNotes: string,
+                                                releaseName: string,
+                                                releaseDate: Date,
+                                                updateURL: string) => void): this;
     addListener(event: 'update-downloaded', listener: (event: Event,
-                                              releaseNotes: string,
-                                              releaseName: string,
-                                              releaseDate: Date,
-                                              updateURL: string) => void): this;
+                                                       releaseNotes: string,
+                                                       releaseName: string,
+                                                       releaseDate: Date,
+                                                       updateURL: string) => void): this;
     removeListener(event: 'update-downloaded', listener: (event: Event,
-                                              releaseNotes: string,
-                                              releaseName: string,
-                                              releaseDate: Date,
-                                              updateURL: string) => void): this;
+                                                          releaseNotes: string,
+                                                          releaseName: string,
+                                                          releaseDate: Date,
+                                                          updateURL: string) => void): this;
     /**
      * Emitted when there is no available update.
      */
@@ -1658,11 +1658,11 @@ Here's a very simple example of creating a custom Jump List:
     on(event: 'always-on-top-changed', listener: (event: Event,
                                                   isAlwaysOnTop: boolean) => void): this;
     once(event: 'always-on-top-changed', listener: (event: Event,
-                                                  isAlwaysOnTop: boolean) => void): this;
+                                                    isAlwaysOnTop: boolean) => void): this;
     addListener(event: 'always-on-top-changed', listener: (event: Event,
-                                                  isAlwaysOnTop: boolean) => void): this;
+                                                           isAlwaysOnTop: boolean) => void): this;
     removeListener(event: 'always-on-top-changed', listener: (event: Event,
-                                                  isAlwaysOnTop: boolean) => void): this;
+                                                              isAlwaysOnTop: boolean) => void): this;
     /**
      * Emitted when an App Command is invoked. These are typically related to keyboard
      * media keys or browser commands, as well as the "Back" button built into some
@@ -1673,20 +1673,20 @@ Here's a very simple example of creating a custom Jump List:
      * emitted as `browser-backward`.
      *
      * The following app commands are explicitly supported on Linux:
-     * 
-* `browser-backward`
-* `browser-forward`
+     *
+     * `browser-backward`
+     * `browser-forward`
      *
      * @platform win32,linux
      */
     on(event: 'app-command', listener: (event: Event,
                                         command: string) => void): this;
     once(event: 'app-command', listener: (event: Event,
-                                        command: string) => void): this;
+                                          command: string) => void): this;
     addListener(event: 'app-command', listener: (event: Event,
-                                        command: string) => void): this;
+                                                 command: string) => void): this;
     removeListener(event: 'app-command', listener: (event: Event,
-                                        command: string) => void): this;
+                                                    command: string) => void): this;
     /**
      * Emitted when the window loses focus.
      */
@@ -1787,8 +1787,8 @@ Here's a very simple example of creating a custom Jump List:
     removeListener(event: 'move', listener: Function): this;
     /**
      * Emitted once when the window is moved to a new position.
-     * 
-__Note__: On macOS this event is an alias of `move`.
+     *
+     __Note__: On macOS this event is an alias of `move`.
      *
      * @platform darwin,win32
      */
@@ -1814,14 +1814,14 @@ __Note__: On macOS this event is an alias of `move`.
                                                title: string,
                                                explicitSet: boolean) => void): this;
     once(event: 'page-title-updated', listener: (event: Event,
-                                               title: string,
-                                               explicitSet: boolean) => void): this;
+                                                 title: string,
+                                                 explicitSet: boolean) => void): this;
     addListener(event: 'page-title-updated', listener: (event: Event,
-                                               title: string,
-                                               explicitSet: boolean) => void): this;
+                                                        title: string,
+                                                        explicitSet: boolean) => void): this;
     removeListener(event: 'page-title-updated', listener: (event: Event,
-                                               title: string,
-                                               explicitSet: boolean) => void): this;
+                                                           title: string,
+                                                           explicitSet: boolean) => void): this;
     /**
      * Emitted when the web page has been rendered (while not being shown) and window
      * can be displayed without a visual flash.
@@ -1880,11 +1880,11 @@ __Note__: On macOS this event is an alias of `move`.
     on(event: 'rotate-gesture', listener: (event: Event,
                                            rotation: number) => void): this;
     once(event: 'rotate-gesture', listener: (event: Event,
-                                           rotation: number) => void): this;
+                                             rotation: number) => void): this;
     addListener(event: 'rotate-gesture', listener: (event: Event,
-                                           rotation: number) => void): this;
+                                                    rotation: number) => void): this;
     removeListener(event: 'rotate-gesture', listener: (event: Event,
-                                           rotation: number) => void): this;
+                                                       rotation: number) => void): this;
     /**
      * Emitted when scroll wheel event phase has begun.
      *
@@ -1963,18 +1963,18 @@ __Note__: On macOS this event is an alias of `move`.
     on(event: 'swipe', listener: (event: Event,
                                   direction: string) => void): this;
     once(event: 'swipe', listener: (event: Event,
-                                  direction: string) => void): this;
+                                    direction: string) => void): this;
     addListener(event: 'swipe', listener: (event: Event,
-                                  direction: string) => void): this;
+                                           direction: string) => void): this;
     removeListener(event: 'swipe', listener: (event: Event,
-                                  direction: string) => void): this;
+                                              direction: string) => void): this;
     /**
      * Emitted when the system context menu is triggered on the window, this is
      * normally only triggered when the user right clicks on the non-client area of
      * your window.  This is the window titlebar or any area you have declared as
      * `-webkit-app-region: drag` in a frameless window.
-     * 
-Calling `event.preventDefault()` will prevent the menu from being displayed.
+     *
+     Calling `event.preventDefault()` will prevent the menu from being displayed.
      *
      * @platform win32
      */
@@ -1984,20 +1984,20 @@ Calling `event.preventDefault()` will prevent the menu from being displayed.
                                                  */
                                                 point: Point) => void): this;
     once(event: 'system-context-menu', listener: (event: Event,
-                                                /**
-                                                 * The screen coordinates the context menu was triggered at
-                                                 */
-                                                point: Point) => void): this;
+                                                  /**
+                                                   * The screen coordinates the context menu was triggered at
+                                                   */
+                                                  point: Point) => void): this;
     addListener(event: 'system-context-menu', listener: (event: Event,
-                                                /**
-                                                 * The screen coordinates the context menu was triggered at
-                                                 */
-                                                point: Point) => void): this;
+                                                         /**
+                                                          * The screen coordinates the context menu was triggered at
+                                                          */
+                                                         point: Point) => void): this;
     removeListener(event: 'system-context-menu', listener: (event: Event,
-                                                /**
-                                                 * The screen coordinates the context menu was triggered at
-                                                 */
-                                                point: Point) => void): this;
+                                                            /**
+                                                             * The screen coordinates the context menu was triggered at
+                                                             */
+                                                            point: Point) => void): this;
     /**
      * Emitted when the window exits from a maximized state.
      */
@@ -2027,20 +2027,20 @@ Calling `event.preventDefault()` will prevent the menu from being displayed.
                                        */
                                       newBounds: Rectangle) => void): this;
     once(event: 'will-move', listener: (event: Event,
-                                      /**
-                                       * Location the window is being moved to.
-                                       */
-                                      newBounds: Rectangle) => void): this;
+                                        /**
+                                         * Location the window is being moved to.
+                                         */
+                                        newBounds: Rectangle) => void): this;
     addListener(event: 'will-move', listener: (event: Event,
-                                      /**
-                                       * Location the window is being moved to.
-                                       */
-                                      newBounds: Rectangle) => void): this;
+                                               /**
+                                                * Location the window is being moved to.
+                                                */
+                                               newBounds: Rectangle) => void): this;
     removeListener(event: 'will-move', listener: (event: Event,
-                                      /**
-                                       * Location the window is being moved to.
-                                       */
-                                      newBounds: Rectangle) => void): this;
+                                                  /**
+                                                   * Location the window is being moved to.
+                                                   */
+                                                  newBounds: Rectangle) => void): this;
     /**
      * Emitted before the window is resized. Calling `event.preventDefault()` will
      * prevent the window from being resized.
@@ -2056,20 +2056,20 @@ Calling `event.preventDefault()` will prevent the menu from being displayed.
                                          */
                                         newBounds: Rectangle) => void): this;
     once(event: 'will-resize', listener: (event: Event,
-                                        /**
-                                         * Size the window is being resized to.
-                                         */
-                                        newBounds: Rectangle) => void): this;
+                                          /**
+                                           * Size the window is being resized to.
+                                           */
+                                          newBounds: Rectangle) => void): this;
     addListener(event: 'will-resize', listener: (event: Event,
-                                        /**
-                                         * Size the window is being resized to.
-                                         */
-                                        newBounds: Rectangle) => void): this;
+                                                 /**
+                                                  * Size the window is being resized to.
+                                                  */
+                                                 newBounds: Rectangle) => void): this;
     removeListener(event: 'will-resize', listener: (event: Event,
-                                        /**
-                                         * Size the window is being resized to.
-                                         */
-                                        newBounds: Rectangle) => void): this;
+                                                    /**
+                                                     * Size the window is being resized to.
+                                                     */
+                                                    newBounds: Rectangle) => void): this;
     /**
      * BrowserWindow
      */
@@ -2087,8 +2087,8 @@ Calling `event.preventDefault()` will prevent the menu from being displayed.
      *
      * **Note:** This API cannot be called before the `ready` event of the `app` module
      * is emitted.
-     * 
-**Note:** This method is deprecated. Instead, use `ses.loadExtension(path)`.
+     *
+     **Note:** This method is deprecated. Instead, use `ses.loadExtension(path)`.
      *
      * @deprecated
      */
@@ -2101,8 +2101,8 @@ Calling `event.preventDefault()` will prevent the menu from being displayed.
      *
      * **Note:** This API cannot be called before the `ready` event of the `app` module
      * is emitted.
-     * 
-**Note:** This method is deprecated. Instead, use `ses.loadExtension(path)`.
+     *
+     **Note:** This method is deprecated. Instead, use `ses.loadExtension(path)`.
      *
      * @deprecated
      */
@@ -2133,8 +2133,8 @@ Calling `event.preventDefault()` will prevent the menu from being displayed.
      *
      * **Note:** This API cannot be called before the `ready` event of the `app` module
      * is emitted.
-     * 
-**Note:** This method is deprecated. Instead, use `ses.getAllExtensions()`.
+     *
+     **Note:** This method is deprecated. Instead, use `ses.getAllExtensions()`.
      *
      * @deprecated
      */
@@ -2145,8 +2145,8 @@ Calling `event.preventDefault()` will prevent the menu from being displayed.
      *
      * **Note:** This API cannot be called before the `ready` event of the `app` module
      * is emitted.
-     * 
-**Note:** This method is deprecated. Instead, use `ses.getAllExtensions()`.
+     *
+     **Note:** This method is deprecated. Instead, use `ses.getAllExtensions()`.
      *
      * @deprecated
      */
@@ -2363,8 +2363,8 @@ Calling `event.preventDefault()` will prevent the menu from being displayed.
     isAlwaysOnTop(): boolean;
     /**
      * Whether the window can be manually closed by user.
-     * 
-On Linux always returns `true`.
+     *
+     On Linux always returns `true`.
      *
      * @platform darwin,win32
      */
@@ -2402,8 +2402,8 @@ On Linux always returns `true`.
     isKiosk(): boolean;
     /**
      * Whether the window can be manually maximized by user.
-     * 
-On Linux always returns `true`.
+     *
+     On Linux always returns `true`.
      *
      * @platform darwin,win32
      */
@@ -2422,8 +2422,8 @@ On Linux always returns `true`.
     isMenuBarVisible(): boolean;
     /**
      * Whether the window can be manually minimized by the user.
-     * 
-On Linux always returns `true`.
+     *
+     On Linux always returns `true`.
      *
      * @platform darwin,win32
      */
@@ -2439,7 +2439,7 @@ On Linux always returns `true`.
     /**
      * Whether the window can be moved by user.
 
-On Linux always returns `true`.
+     On Linux always returns `true`.
      *
      * @platform darwin,win32
      */
@@ -2465,8 +2465,8 @@ On Linux always returns `true`.
     isVisible(): boolean;
     /**
      * Whether the window is visible on all workspaces.
-     * 
-**Note:** This API always returns false on Windows.
+     *
+     **Note:** This API always returns false on Windows.
      */
     isVisibleOnAllWorkspaces(): boolean;
     /**
@@ -2663,8 +2663,8 @@ On Linux always returns `true`.
     setEnabled(enable: boolean): void;
     /**
      * Changes whether the window can be focused.
-     * 
-On macOS it does not remove the focus from the window.
+     *
+     On macOS it does not remove the focus from the window.
      *
      * @platform darwin,win32
      */
@@ -2913,14 +2913,14 @@ On macOS it does not remove the focus from the window.
     setVibrancy(type: (('appearance-based' | 'light' | 'dark' | 'titlebar' | 'selection' | 'menu' | 'popover' | 'sidebar' | 'medium-light' | 'ultra-dark' | 'header' | 'sheet' | 'window' | 'hud' | 'fullscreen-ui' | 'tooltip' | 'content' | 'under-window' | 'under-page')) | (null)): void;
     /**
      * Sets whether the window should be visible on all workspaces.
-     * 
-**Note:** This API does nothing on Windows.
+     *
+     **Note:** This API does nothing on Windows.
      */
     setVisibleOnAllWorkspaces(visible: boolean, options?: VisibleOnAllWorkspacesOptions): void;
     /**
      * Sets whether the window traffic light buttons should be visible.
-     * 
-This cannot be called when `titleBarStyle` is set to `customButtonsOnHover`.
+     *
+     This cannot be called when `titleBarStyle` is set to `customButtonsOnHover`.
      *
      * @platform darwin
      */
@@ -3122,25 +3122,25 @@ This cannot be called when `titleBarStyle` is set to `customButtonsOnHover`.
      * follow and no response object will be provided.
      */
     on(event: 'error', listener: (
-                                  /**
-                                   * an error object providing some information about the failure.
-                                   */
-                                  error: Error) => void): this;
+      /**
+       * an error object providing some information about the failure.
+       */
+      error: Error) => void): this;
     once(event: 'error', listener: (
-                                  /**
-                                   * an error object providing some information about the failure.
-                                   */
-                                  error: Error) => void): this;
+      /**
+       * an error object providing some information about the failure.
+       */
+      error: Error) => void): this;
     addListener(event: 'error', listener: (
-                                  /**
-                                   * an error object providing some information about the failure.
-                                   */
-                                  error: Error) => void): this;
+      /**
+       * an error object providing some information about the failure.
+       */
+      error: Error) => void): this;
     removeListener(event: 'error', listener: (
-                                  /**
-                                   * an error object providing some information about the failure.
-                                   */
-                                  error: Error) => void): this;
+      /**
+       * an error object providing some information about the failure.
+       */
+      error: Error) => void): this;
     /**
      * Emitted just after the last chunk of the `request`'s data has been written into
      * the `request` object.
@@ -3163,11 +3163,11 @@ This cannot be called when `titleBarStyle` is set to `customButtonsOnHover`.
     on(event: 'login', listener: (authInfo: AuthInfo,
                                   callback: (username?: string, password?: string) => void) => void): this;
     once(event: 'login', listener: (authInfo: AuthInfo,
-                                  callback: (username?: string, password?: string) => void) => void): this;
+                                    callback: (username?: string, password?: string) => void) => void): this;
     addListener(event: 'login', listener: (authInfo: AuthInfo,
-                                  callback: (username?: string, password?: string) => void) => void): this;
+                                           callback: (username?: string, password?: string) => void) => void): this;
     removeListener(event: 'login', listener: (authInfo: AuthInfo,
-                                  callback: (username?: string, password?: string) => void) => void): this;
+                                              callback: (username?: string, password?: string) => void) => void): this;
     /**
      * Emitted when the server returns a redirect response (e.g. 301 Moved
      * Permanently). Calling `request.followRedirect` will continue with the
@@ -3179,37 +3179,37 @@ This cannot be called when `titleBarStyle` is set to `customButtonsOnHover`.
                                      redirectUrl: string,
                                      responseHeaders: Record<string, string[]>) => void): this;
     once(event: 'redirect', listener: (statusCode: number,
-                                     method: string,
-                                     redirectUrl: string,
-                                     responseHeaders: Record<string, string[]>) => void): this;
+                                       method: string,
+                                       redirectUrl: string,
+                                       responseHeaders: Record<string, string[]>) => void): this;
     addListener(event: 'redirect', listener: (statusCode: number,
-                                     method: string,
-                                     redirectUrl: string,
-                                     responseHeaders: Record<string, string[]>) => void): this;
+                                              method: string,
+                                              redirectUrl: string,
+                                              responseHeaders: Record<string, string[]>) => void): this;
     removeListener(event: 'redirect', listener: (statusCode: number,
-                                     method: string,
-                                     redirectUrl: string,
-                                     responseHeaders: Record<string, string[]>) => void): this;
+                                                 method: string,
+                                                 redirectUrl: string,
+                                                 responseHeaders: Record<string, string[]>) => void): this;
     on(event: 'response', listener: (
-                                     /**
-                                      * An object representing the HTTP response message.
-                                      */
-                                     response: IncomingMessage) => void): this;
+      /**
+       * An object representing the HTTP response message.
+       */
+      response: IncomingMessage) => void): this;
     once(event: 'response', listener: (
-                                     /**
-                                      * An object representing the HTTP response message.
-                                      */
-                                     response: IncomingMessage) => void): this;
+      /**
+       * An object representing the HTTP response message.
+       */
+      response: IncomingMessage) => void): this;
     addListener(event: 'response', listener: (
-                                     /**
-                                      * An object representing the HTTP response message.
-                                      */
-                                     response: IncomingMessage) => void): this;
+      /**
+       * An object representing the HTTP response message.
+       */
+      response: IncomingMessage) => void): this;
     removeListener(event: 'response', listener: (
-                                     /**
-                                      * An object representing the HTTP response message.
-                                      */
-                                     response: IncomingMessage) => void): this;
+      /**
+       * An object representing the HTTP response message.
+       */
+      response: IncomingMessage) => void): this;
     /**
      * ClientRequest
      */
@@ -3569,8 +3569,8 @@ This cannot be called when `titleBarStyle` is set to `customButtonsOnHover`.
     removeListener(event: 'changed', listener: Function): this;
     /**
      * A promise which resolves when the cookie store has been flushed
-     * 
-Writes any unwritten cookies data to disk.
+     *
+     Writes any unwritten cookies data to disk.
      */
     flushStore(): Promise<void>;
     /**
@@ -3582,14 +3582,14 @@ Writes any unwritten cookies data to disk.
     get(filter: CookiesGetFilter): Promise<Electron.Cookie[]>;
     /**
      * A promise which resolves when the cookie has been removed
-     * 
-Removes the cookies matching `url` and `name`
+     *
+     Removes the cookies matching `url` and `name`
      */
     remove(url: string, name: string): Promise<void>;
     /**
      * A promise which resolves when the cookie has been set
-     * 
-Sets a cookie with `details`.
+     *
+     Sets a cookie with `details`.
      */
     set(details: CookiesSetDetails): Promise<void>;
   }
@@ -3648,8 +3648,8 @@ Sets a cookie with `details`.
     addExtraParameter(key: string, value: string): void;
     /**
      * The directory where crashes are temporarily stored before being uploaded.
-     * 
-**Note:** This method is deprecated, use `app.getPath('crashDumps')` instead.
+     *
+     **Note:** This method is deprecated, use `app.getPath('crashDumps')` instead.
      *
      * @deprecated
      */
@@ -3659,8 +3659,8 @@ Sets a cookie with `details`.
      * uploaded will be returned; even if a crash report is present on disk it will not
      * be returned until it is uploaded. In the case that there are no uploaded
      * reports, `null` is returned.
-     * 
-**Note:** Calling this method from the renderer process is deprecated.
+     *
+     **Note:** Calling this method from the renderer process is deprecated.
      */
     getLastCrashReport(): CrashReport;
     /**
@@ -3671,14 +3671,14 @@ Sets a cookie with `details`.
      * Returns all uploaded crash reports. Each report contains the date and uploaded
      * ID.
 
-**Note:** Calling this method from the renderer process is deprecated.
+     **Note:** Calling this method from the renderer process is deprecated.
      */
     getUploadedReports(): CrashReport[];
     /**
      * Whether reports should be submitted to the server. Set through the `start`
      * method or `setUploadToServer`.
-     * 
-**Note:** Calling this method from the renderer process is deprecated.
+     *
+     **Note:** Calling this method from the renderer process is deprecated.
      */
     getUploadToServer(): boolean;
     /**
@@ -3689,8 +3689,8 @@ Sets a cookie with `details`.
     /**
      * This would normally be controlled by user preferences. This has no effect if
      * called before `start` is called.
-     * 
-**Note:** Calling this method from the renderer process is deprecated.
+     *
+     **Note:** Calling this method from the renderer process is deprecated.
      */
     setUploadToServer(uploadToServer: boolean): void;
     /**
@@ -3715,8 +3715,8 @@ Sets a cookie with `details`.
      * must be at most 39 bytes long, and values must be no longer than 127 bytes. Keys
      * with names longer than the maximum will be silently ignored. Key values longer
      * than the maximum length will be truncated.
-     * 
-**Note:** Calling this method from the renderer process is deprecated.
+     *
+     **Note:** Calling this method from the renderer process is deprecated.
      */
     start(options: CrashReporterStartOptions): void;
   }
@@ -3746,20 +3746,20 @@ Sets a cookie with `details`.
                                     */
                                    reason: string) => void): this;
     once(event: 'detach', listener: (event: Event,
-                                   /**
-                                    * Reason for detaching debugger.
-                                    */
-                                   reason: string) => void): this;
+                                     /**
+                                      * Reason for detaching debugger.
+                                      */
+                                     reason: string) => void): this;
     addListener(event: 'detach', listener: (event: Event,
-                                   /**
-                                    * Reason for detaching debugger.
-                                    */
-                                   reason: string) => void): this;
+                                            /**
+                                             * Reason for detaching debugger.
+                                             */
+                                            reason: string) => void): this;
     removeListener(event: 'detach', listener: (event: Event,
-                                   /**
-                                    * Reason for detaching debugger.
-                                    */
-                                   reason: string) => void): this;
+                                               /**
+                                                * Reason for detaching debugger.
+                                                */
+                                               reason: string) => void): this;
     /**
      * Emitted whenever the debugging target issues an instrumentation event.
      */
@@ -3779,50 +3779,50 @@ Sets a cookie with `details`.
                                      */
                                     sessionId: string) => void): this;
     once(event: 'message', listener: (event: Event,
-                                    /**
-                                     * Method name.
-                                     */
-                                    method: string,
-                                    /**
-                                     * Event parameters defined by the 'parameters' attribute in the remote debugging
-                                     * protocol.
-                                     */
-                                    params: any,
-                                    /**
-                                     * Unique identifier of attached debugging session, will match the value sent from
-                                     * `debugger.sendCommand`.
-                                     */
-                                    sessionId: string) => void): this;
+                                      /**
+                                       * Method name.
+                                       */
+                                      method: string,
+                                      /**
+                                       * Event parameters defined by the 'parameters' attribute in the remote debugging
+                                       * protocol.
+                                       */
+                                      params: any,
+                                      /**
+                                       * Unique identifier of attached debugging session, will match the value sent from
+                                       * `debugger.sendCommand`.
+                                       */
+                                      sessionId: string) => void): this;
     addListener(event: 'message', listener: (event: Event,
-                                    /**
-                                     * Method name.
-                                     */
-                                    method: string,
-                                    /**
-                                     * Event parameters defined by the 'parameters' attribute in the remote debugging
-                                     * protocol.
-                                     */
-                                    params: any,
-                                    /**
-                                     * Unique identifier of attached debugging session, will match the value sent from
-                                     * `debugger.sendCommand`.
-                                     */
-                                    sessionId: string) => void): this;
+                                             /**
+                                              * Method name.
+                                              */
+                                             method: string,
+                                             /**
+                                              * Event parameters defined by the 'parameters' attribute in the remote debugging
+                                              * protocol.
+                                              */
+                                             params: any,
+                                             /**
+                                              * Unique identifier of attached debugging session, will match the value sent from
+                                              * `debugger.sendCommand`.
+                                              */
+                                             sessionId: string) => void): this;
     removeListener(event: 'message', listener: (event: Event,
-                                    /**
-                                     * Method name.
-                                     */
-                                    method: string,
-                                    /**
-                                     * Event parameters defined by the 'parameters' attribute in the remote debugging
-                                     * protocol.
-                                     */
-                                    params: any,
-                                    /**
-                                     * Unique identifier of attached debugging session, will match the value sent from
-                                     * `debugger.sendCommand`.
-                                     */
-                                    sessionId: string) => void): this;
+                                                /**
+                                                 * Method name.
+                                                 */
+                                                method: string,
+                                                /**
+                                                 * Event parameters defined by the 'parameters' attribute in the remote debugging
+                                                 * protocol.
+                                                 */
+                                                params: any,
+                                                /**
+                                                 * Unique identifier of attached debugging session, will match the value sent from
+                                                 * `debugger.sendCommand`.
+                                                 */
+                                                sessionId: string) => void): this;
     /**
      * Attaches the debugger to the `webContents`.
      */
@@ -3839,8 +3839,8 @@ Sets a cookie with `details`.
      * A promise that resolves with the response defined by the 'returns' attribute of
      * the command description in the remote debugging protocol or is rejected
      * indicating the failure of the command.
-     * 
-Send given command to the debugging target.
+     *
+     Send given command to the debugging target.
      */
     sendCommand(method: string, commandParams?: any, sessionId?: string): Promise<any>;
   }
@@ -4306,20 +4306,20 @@ Send given command to the debugging target.
                                   */
                                  state: ('completed' | 'cancelled' | 'interrupted')) => void): this;
     once(event: 'done', listener: (event: Event,
-                                 /**
-                                  * Can be `completed`, `cancelled` or `interrupted`.
-                                  */
-                                 state: ('completed' | 'cancelled' | 'interrupted')) => void): this;
+                                   /**
+                                    * Can be `completed`, `cancelled` or `interrupted`.
+                                    */
+                                   state: ('completed' | 'cancelled' | 'interrupted')) => void): this;
     addListener(event: 'done', listener: (event: Event,
-                                 /**
-                                  * Can be `completed`, `cancelled` or `interrupted`.
-                                  */
-                                 state: ('completed' | 'cancelled' | 'interrupted')) => void): this;
+                                          /**
+                                           * Can be `completed`, `cancelled` or `interrupted`.
+                                           */
+                                          state: ('completed' | 'cancelled' | 'interrupted')) => void): this;
     removeListener(event: 'done', listener: (event: Event,
-                                 /**
-                                  * Can be `completed`, `cancelled` or `interrupted`.
-                                  */
-                                 state: ('completed' | 'cancelled' | 'interrupted')) => void): this;
+                                             /**
+                                              * Can be `completed`, `cancelled` or `interrupted`.
+                                              */
+                                             state: ('completed' | 'cancelled' | 'interrupted')) => void): this;
     /**
      * Emitted when the download has been updated and is not done.
      *
@@ -4334,20 +4334,20 @@ Send given command to the debugging target.
                                      */
                                     state: ('progressing' | 'interrupted')) => void): this;
     once(event: 'updated', listener: (event: Event,
-                                    /**
-                                     * Can be `progressing` or `interrupted`.
-                                     */
-                                    state: ('progressing' | 'interrupted')) => void): this;
+                                      /**
+                                       * Can be `progressing` or `interrupted`.
+                                       */
+                                      state: ('progressing' | 'interrupted')) => void): this;
     addListener(event: 'updated', listener: (event: Event,
-                                    /**
-                                     * Can be `progressing` or `interrupted`.
-                                     */
-                                    state: ('progressing' | 'interrupted')) => void): this;
+                                             /**
+                                              * Can be `progressing` or `interrupted`.
+                                              */
+                                             state: ('progressing' | 'interrupted')) => void): this;
     removeListener(event: 'updated', listener: (event: Event,
-                                    /**
-                                     * Can be `progressing` or `interrupted`.
-                                     */
-                                    state: ('progressing' | 'interrupted')) => void): this;
+                                                /**
+                                                 * Can be `progressing` or `interrupted`.
+                                                 */
+                                                state: ('progressing' | 'interrupted')) => void): this;
     /**
      * Cancels the download operation.
      */
@@ -4409,8 +4409,8 @@ Send given command to the debugging target.
     getState(): ('progressing' | 'completed' | 'cancelled' | 'interrupted');
     /**
      * The total size in bytes of the download item.
-     * 
-If the size is unknown, it returns 0.
+     *
+     If the size is unknown, it returns 0.
      */
     getTotalBytes(): number;
     /**
@@ -4542,8 +4542,8 @@ If the size is unknown, it returns 0.
      *
      * * "Media Play/Pause"
      * * "Media Next Track"
-* "Media Previous Track"
-* "Media Stop"
+     * "Media Previous Track"
+     * "Media Stop"
      */
     register(accelerator: Accelerator, callback: () => void): boolean;
     /**
@@ -4560,8 +4560,8 @@ If the size is unknown, it returns 0.
      *
      * * "Media Play/Pause"
      * * "Media Next Track"
-* "Media Previous Track"
-* "Media Stop"
+     * "Media Previous Track"
+     * "Media Stop"
      */
     registerAll(accelerators: string[], callback: () => void): void;
     /**
@@ -4654,8 +4654,8 @@ If the size is unknown, it returns 0.
     finishTransactionByDate(date: string): void;
     /**
      * Resolves with an array of `Product` objects.
-     * 
-Retrieves the product descriptions.
+     *
+     Retrieves the product descriptions.
      */
     getProducts(productIDs: string[]): Promise<Electron.Product[]>;
     /**
@@ -4697,25 +4697,25 @@ Retrieves the product descriptions.
      * applicative code.
      */
     on(event: 'data', listener: (
-                                 /**
-                                  * A chunk of response body's data.
-                                  */
-                                 chunk: Buffer) => void): this;
+      /**
+       * A chunk of response body's data.
+       */
+      chunk: Buffer) => void): this;
     once(event: 'data', listener: (
-                                 /**
-                                  * A chunk of response body's data.
-                                  */
-                                 chunk: Buffer) => void): this;
+      /**
+       * A chunk of response body's data.
+       */
+      chunk: Buffer) => void): this;
     addListener(event: 'data', listener: (
-                                 /**
-                                  * A chunk of response body's data.
-                                  */
-                                 chunk: Buffer) => void): this;
+      /**
+       * A chunk of response body's data.
+       */
+      chunk: Buffer) => void): this;
     removeListener(event: 'data', listener: (
-                                 /**
-                                  * A chunk of response body's data.
-                                  */
-                                 chunk: Buffer) => void): this;
+      /**
+       * A chunk of response body's data.
+       */
+      chunk: Buffer) => void): this;
     /**
      * Indicates that response body has ended.
      */
@@ -5417,8 +5417,8 @@ Retrieves the product descriptions.
      *
      * `echo -e '#import <Cocoa/Cocoa.h>\nint main() { NSLog(@"%@", SYSTEM_IMAGE_NAME);
      * }' | clang -otest -x objective-c -framework Cocoa - && ./test`
-     * 
-where `SYSTEM_IMAGE_NAME` should be replaced with any value from this list.
+     *
+     where `SYSTEM_IMAGE_NAME` should be replaced with any value from this list.
      *
      * @platform darwin
      */
@@ -5613,8 +5613,8 @@ where `SYSTEM_IMAGE_NAME` should be replaced with any value from this list.
 
     /**
      * resolves when the net log has begun recording.
-     * 
-Starts recording network events to `path`.
+     *
+     Starts recording network events to `path`.
      */
     startLogging(path: string, options?: StartLoggingOptions): Promise<void>;
     /**
@@ -5649,20 +5649,20 @@ Starts recording network events to `path`.
                                     */
                                    index: number) => void): this;
     once(event: 'action', listener: (event: Event,
-                                   /**
-                                    * The index of the action that was activated.
-                                    */
-                                   index: number) => void): this;
+                                     /**
+                                      * The index of the action that was activated.
+                                      */
+                                     index: number) => void): this;
     addListener(event: 'action', listener: (event: Event,
-                                   /**
-                                    * The index of the action that was activated.
-                                    */
-                                   index: number) => void): this;
+                                            /**
+                                             * The index of the action that was activated.
+                                             */
+                                            index: number) => void): this;
     removeListener(event: 'action', listener: (event: Event,
-                                   /**
-                                    * The index of the action that was activated.
-                                    */
-                                   index: number) => void): this;
+                                               /**
+                                                * The index of the action that was activated.
+                                                */
+                                               index: number) => void): this;
     /**
      * Emitted when the notification is clicked by the user.
      */
@@ -5692,20 +5692,20 @@ Starts recording network events to `path`.
                                    */
                                   reply: string) => void): this;
     once(event: 'reply', listener: (event: Event,
-                                  /**
-                                   * The string the user entered into the inline reply field.
-                                   */
-                                  reply: string) => void): this;
+                                    /**
+                                     * The string the user entered into the inline reply field.
+                                     */
+                                    reply: string) => void): this;
     addListener(event: 'reply', listener: (event: Event,
-                                  /**
-                                   * The string the user entered into the inline reply field.
-                                   */
-                                  reply: string) => void): this;
+                                           /**
+                                            * The string the user entered into the inline reply field.
+                                            */
+                                           reply: string) => void): this;
     removeListener(event: 'reply', listener: (event: Event,
-                                  /**
-                                   * The string the user entered into the inline reply field.
-                                   */
-                                  reply: string) => void): this;
+                                              /**
+                                               * The string the user entered into the inline reply field.
+                                               */
+                                              reply: string) => void): this;
     /**
      * Emitted when the notification is shown to the user, note this could be fired
      * multiple times as a notification can be shown multiple times through the
@@ -5911,7 +5911,7 @@ Starts recording network events to `path`.
     /**
      * Idle time in seconds
 
-Calculate system idle time in seconds.
+     Calculate system idle time in seconds.
      */
     getSystemIdleTime(): number;
   }
@@ -6145,7 +6145,7 @@ Calculate system idle time in seconds.
      * should be called with either a `Buffer` object or an object that has the `data`
      * property.
 
-Example:
+     Example:
      */
     registerBufferProtocol(scheme: string, handler: (request: ProtocolRequest, callback: (response: (Buffer) | (ProtocolResponse)) => void) => void): boolean;
     /**
@@ -6237,14 +6237,14 @@ Example:
     registerStringProtocol(scheme: string, handler: (request: ProtocolRequest, callback: (response: (string) | (ProtocolResponse)) => void) => void): boolean;
     /**
      * Whether the protocol was successfully unintercepted
-     * 
-Remove the interceptor installed for `scheme` and restore its original handler.
+     *
+     Remove the interceptor installed for `scheme` and restore its original handler.
      */
     uninterceptProtocol(scheme: string): boolean;
     /**
      * Whether the protocol was successfully unregistered
-     * 
-Unregisters the custom protocol of `scheme`.
+     *
+     Unregisters the custom protocol of `scheme`.
      */
     unregisterProtocol(scheme: string): boolean;
   }
@@ -6403,7 +6403,7 @@ Unregisters the custom protocol of `scheme`.
      * by their relative path will resolve relative to the entrypoint of the main
      * process.
 
-e.g.
+     e.g.
      */
     require(module: string): any;
     /**
@@ -6424,11 +6424,11 @@ e.g.
     on(event: 'display-added', listener: (event: Event,
                                           newDisplay: Display) => void): this;
     once(event: 'display-added', listener: (event: Event,
-                                          newDisplay: Display) => void): this;
+                                            newDisplay: Display) => void): this;
     addListener(event: 'display-added', listener: (event: Event,
-                                          newDisplay: Display) => void): this;
+                                                   newDisplay: Display) => void): this;
     removeListener(event: 'display-added', listener: (event: Event,
-                                          newDisplay: Display) => void): this;
+                                                      newDisplay: Display) => void): this;
     /**
      * Emitted when one or more metrics change in a `display`. The `changedMetrics` is
      * an array of strings that describe the changes. Possible changes are `bounds`,
@@ -6438,25 +6438,25 @@ e.g.
                                                     display: Display,
                                                     changedMetrics: string[]) => void): this;
     once(event: 'display-metrics-changed', listener: (event: Event,
-                                                    display: Display,
-                                                    changedMetrics: string[]) => void): this;
+                                                      display: Display,
+                                                      changedMetrics: string[]) => void): this;
     addListener(event: 'display-metrics-changed', listener: (event: Event,
-                                                    display: Display,
-                                                    changedMetrics: string[]) => void): this;
+                                                             display: Display,
+                                                             changedMetrics: string[]) => void): this;
     removeListener(event: 'display-metrics-changed', listener: (event: Event,
-                                                    display: Display,
-                                                    changedMetrics: string[]) => void): this;
+                                                                display: Display,
+                                                                changedMetrics: string[]) => void): this;
     /**
      * Emitted when `oldDisplay` has been removed.
      */
     on(event: 'display-removed', listener: (event: Event,
                                             oldDisplay: Display) => void): this;
     once(event: 'display-removed', listener: (event: Event,
-                                            oldDisplay: Display) => void): this;
+                                              oldDisplay: Display) => void): this;
     addListener(event: 'display-removed', listener: (event: Event,
-                                            oldDisplay: Display) => void): this;
+                                                     oldDisplay: Display) => void): this;
     removeListener(event: 'display-removed', listener: (event: Event,
-                                            oldDisplay: Display) => void): this;
+                                                        oldDisplay: Display) => void): this;
     /**
      * Converts a screen DIP point to a screen physical point. The DPI scale is
      * performed relative to the display containing the DIP point.
@@ -6574,20 +6574,20 @@ e.g.
                                              */
                                             messageDetails: MessageDetails) => void): this;
     once(event: 'console-message', listener: (event: Event,
-                                            /**
-                                             * Information about the console message
-                                             */
-                                            messageDetails: MessageDetails) => void): this;
+                                              /**
+                                               * Information about the console message
+                                               */
+                                              messageDetails: MessageDetails) => void): this;
     addListener(event: 'console-message', listener: (event: Event,
-                                            /**
-                                             * Information about the console message
-                                             */
-                                            messageDetails: MessageDetails) => void): this;
+                                                     /**
+                                                      * Information about the console message
+                                                      */
+                                                     messageDetails: MessageDetails) => void): this;
     removeListener(event: 'console-message', listener: (event: Event,
-                                            /**
-                                             * Information about the console message
-                                             */
-                                            messageDetails: MessageDetails) => void): this;
+                                                        /**
+                                                         * Information about the console message
+                                                         */
+                                                        messageDetails: MessageDetails) => void): this;
     /**
      * A ServiceWorkerInfo object where the keys are the service worker version ID and
      * the values are the information about that service worker.
@@ -6640,35 +6640,35 @@ e.g.
                                         */
                                        allowCredentials: boolean) => void): this;
     once(event: 'preconnect', listener: (event: Event,
-                                       /**
-                                        * The URL being requested for preconnection by the renderer.
-                                        */
-                                       preconnectUrl: string,
-                                       /**
-                                        * True if the renderer is requesting that the connection include credentials (see
-                                        * the spec for more details.)
-                                        */
-                                       allowCredentials: boolean) => void): this;
+                                         /**
+                                          * The URL being requested for preconnection by the renderer.
+                                          */
+                                         preconnectUrl: string,
+                                         /**
+                                          * True if the renderer is requesting that the connection include credentials (see
+                                          * the spec for more details.)
+                                          */
+                                         allowCredentials: boolean) => void): this;
     addListener(event: 'preconnect', listener: (event: Event,
-                                       /**
-                                        * The URL being requested for preconnection by the renderer.
-                                        */
-                                       preconnectUrl: string,
-                                       /**
-                                        * True if the renderer is requesting that the connection include credentials (see
-                                        * the spec for more details.)
-                                        */
-                                       allowCredentials: boolean) => void): this;
+                                                /**
+                                                 * The URL being requested for preconnection by the renderer.
+                                                 */
+                                                preconnectUrl: string,
+                                                /**
+                                                 * True if the renderer is requesting that the connection include credentials (see
+                                                 * the spec for more details.)
+                                                 */
+                                                allowCredentials: boolean) => void): this;
     removeListener(event: 'preconnect', listener: (event: Event,
-                                       /**
-                                        * The URL being requested for preconnection by the renderer.
-                                        */
-                                       preconnectUrl: string,
-                                       /**
-                                        * True if the renderer is requesting that the connection include credentials (see
-                                        * the spec for more details.)
-                                        */
-                                       allowCredentials: boolean) => void): this;
+                                                   /**
+                                                    * The URL being requested for preconnection by the renderer.
+                                                    */
+                                                   preconnectUrl: string,
+                                                   /**
+                                                    * True if the renderer is requesting that the connection include credentials (see
+                                                    * the spec for more details.)
+                                                    */
+                                                   allowCredentials: boolean) => void): this;
     /**
      * Emitted when a hunspell dictionary file starts downloading
      */
@@ -6678,20 +6678,20 @@ e.g.
                                                                   */
                                                                  languageCode: string) => void): this;
     once(event: 'spellcheck-dictionary-download-begin', listener: (event: Event,
-                                                                 /**
-                                                                  * The language code of the dictionary file
-                                                                  */
-                                                                 languageCode: string) => void): this;
+                                                                   /**
+                                                                    * The language code of the dictionary file
+                                                                    */
+                                                                   languageCode: string) => void): this;
     addListener(event: 'spellcheck-dictionary-download-begin', listener: (event: Event,
-                                                                 /**
-                                                                  * The language code of the dictionary file
-                                                                  */
-                                                                 languageCode: string) => void): this;
+                                                                          /**
+                                                                           * The language code of the dictionary file
+                                                                           */
+                                                                          languageCode: string) => void): this;
     removeListener(event: 'spellcheck-dictionary-download-begin', listener: (event: Event,
-                                                                 /**
-                                                                  * The language code of the dictionary file
-                                                                  */
-                                                                 languageCode: string) => void): this;
+                                                                             /**
+                                                                              * The language code of the dictionary file
+                                                                              */
+                                                                             languageCode: string) => void): this;
     /**
      * Emitted when a hunspell dictionary file download fails.  For details on the
      * failure you should collect a netlog and inspect the download request.
@@ -6702,20 +6702,20 @@ e.g.
                                                                     */
                                                                    languageCode: string) => void): this;
     once(event: 'spellcheck-dictionary-download-failure', listener: (event: Event,
-                                                                   /**
-                                                                    * The language code of the dictionary file
-                                                                    */
-                                                                   languageCode: string) => void): this;
+                                                                     /**
+                                                                      * The language code of the dictionary file
+                                                                      */
+                                                                     languageCode: string) => void): this;
     addListener(event: 'spellcheck-dictionary-download-failure', listener: (event: Event,
-                                                                   /**
-                                                                    * The language code of the dictionary file
-                                                                    */
-                                                                   languageCode: string) => void): this;
+                                                                            /**
+                                                                             * The language code of the dictionary file
+                                                                             */
+                                                                            languageCode: string) => void): this;
     removeListener(event: 'spellcheck-dictionary-download-failure', listener: (event: Event,
-                                                                   /**
-                                                                    * The language code of the dictionary file
-                                                                    */
-                                                                   languageCode: string) => void): this;
+                                                                               /**
+                                                                                * The language code of the dictionary file
+                                                                                */
+                                                                               languageCode: string) => void): this;
     /**
      * Emitted when a hunspell dictionary file has been successfully downloaded
      */
@@ -6725,20 +6725,20 @@ e.g.
                                                                     */
                                                                    languageCode: string) => void): this;
     once(event: 'spellcheck-dictionary-download-success', listener: (event: Event,
-                                                                   /**
-                                                                    * The language code of the dictionary file
-                                                                    */
-                                                                   languageCode: string) => void): this;
+                                                                     /**
+                                                                      * The language code of the dictionary file
+                                                                      */
+                                                                     languageCode: string) => void): this;
     addListener(event: 'spellcheck-dictionary-download-success', listener: (event: Event,
-                                                                   /**
-                                                                    * The language code of the dictionary file
-                                                                    */
-                                                                   languageCode: string) => void): this;
+                                                                            /**
+                                                                             * The language code of the dictionary file
+                                                                             */
+                                                                            languageCode: string) => void): this;
     removeListener(event: 'spellcheck-dictionary-download-success', listener: (event: Event,
-                                                                   /**
-                                                                    * The language code of the dictionary file
-                                                                    */
-                                                                   languageCode: string) => void): this;
+                                                                               /**
+                                                                                * The language code of the dictionary file
+                                                                                */
+                                                                               languageCode: string) => void): this;
     /**
      * Emitted when a hunspell dictionary file has been successfully initialized. This
      * occurs after the file has been downloaded.
@@ -6749,20 +6749,20 @@ e.g.
                                                                */
                                                               languageCode: string) => void): this;
     once(event: 'spellcheck-dictionary-initialized', listener: (event: Event,
-                                                              /**
-                                                               * The language code of the dictionary file
-                                                               */
-                                                              languageCode: string) => void): this;
+                                                                /**
+                                                                 * The language code of the dictionary file
+                                                                 */
+                                                                languageCode: string) => void): this;
     addListener(event: 'spellcheck-dictionary-initialized', listener: (event: Event,
-                                                              /**
-                                                               * The language code of the dictionary file
-                                                               */
-                                                              languageCode: string) => void): this;
+                                                                       /**
+                                                                        * The language code of the dictionary file
+                                                                        */
+                                                                       languageCode: string) => void): this;
     removeListener(event: 'spellcheck-dictionary-initialized', listener: (event: Event,
-                                                              /**
-                                                               * The language code of the dictionary file
-                                                               */
-                                                              languageCode: string) => void): this;
+                                                                          /**
+                                                                           * The language code of the dictionary file
+                                                                           */
+                                                                          languageCode: string) => void): this;
     /**
      * Emitted when Electron is about to download `item` in `webContents`.
      *
@@ -6773,14 +6773,14 @@ e.g.
                                           item: DownloadItem,
                                           webContents: WebContents) => void): this;
     once(event: 'will-download', listener: (event: Event,
-                                          item: DownloadItem,
-                                          webContents: WebContents) => void): this;
+                                            item: DownloadItem,
+                                            webContents: WebContents) => void): this;
     addListener(event: 'will-download', listener: (event: Event,
-                                          item: DownloadItem,
-                                          webContents: WebContents) => void): this;
+                                                   item: DownloadItem,
+                                                   webContents: WebContents) => void): this;
     removeListener(event: 'will-download', listener: (event: Event,
-                                          item: DownloadItem,
-                                          webContents: WebContents) => void): this;
+                                                      item: DownloadItem,
+                                                      webContents: WebContents) => void): this;
     /**
      * Whether the word was successfully written to the custom dictionary. This API
      * will not work on non-persistent (in-memory) sessions.
@@ -6800,14 +6800,14 @@ e.g.
     clearAuthCache(): Promise<void>;
     /**
      * resolves when the cache clear operation is complete.
-     * 
-Clears the session’s HTTP cache.
+     *
+     Clears the session’s HTTP cache.
      */
     clearCache(): Promise<void>;
     /**
      * Resolves when the operation is complete.
 
-Clears the host resolver cache.
+     Clears the host resolver cache.
      */
     clearHostResolverCache(): Promise<void>;
     /**
@@ -7102,8 +7102,8 @@ Clears the host resolver cache.
     beep(): void;
     /**
      * Whether the item was successfully moved to the trash or otherwise deleted.
-     * 
-Move the given file to trash and returns a boolean status for the operation.
+     *
+     Move the given file to trash and returns a boolean status for the operation.
      */
     moveItemToTrash(fullPath: string, deleteOnFail?: boolean): boolean;
     /**
@@ -7114,14 +7114,14 @@ Move the given file to trash and returns a boolean status for the operation.
     /**
      * Resolves with a string containing the error message corresponding to the failure
      * if a failure occurred, otherwise "".
-     * 
-Open the given file in the desktop's default manner.
+     *
+     Open the given file in the desktop's default manner.
      */
     openPath(path: string): Promise<string>;
     /**
      * Resolves the shortcut link at `shortcutPath`.
-     * 
-An exception will be thrown when any error happens.
+     *
+     An exception will be thrown when any error happens.
      *
      * @platform win32
      */
@@ -7132,16 +7132,16 @@ An exception will be thrown when any error happens.
     showItemInFolder(fullPath: string): void;
     /**
      * Whether the shortcut was created successfully.
-     * 
-Creates or updates a shortcut link at `shortcutPath`.
+     *
+     Creates or updates a shortcut link at `shortcutPath`.
      *
      * @platform win32
      */
     writeShortcutLink(shortcutPath: string, operation: 'create' | 'update' | 'replace', options: ShortcutDetails): boolean;
     /**
      * Whether the shortcut was created successfully.
-     * 
-Creates or updates a shortcut link at `shortcutPath`.
+     *
+     Creates or updates a shortcut link at `shortcutPath`.
      *
      * @platform win32
      */
@@ -7202,20 +7202,20 @@ Creates or updates a shortcut link at `shortcutPath`.
                                                   */
                                                  newColor: string) => void): this;
     once(event: 'accent-color-changed', listener: (event: Event,
-                                                 /**
-                                                  * The new RGBA color the user assigned to be their system accent color.
-                                                  */
-                                                 newColor: string) => void): this;
+                                                   /**
+                                                    * The new RGBA color the user assigned to be their system accent color.
+                                                    */
+                                                   newColor: string) => void): this;
     addListener(event: 'accent-color-changed', listener: (event: Event,
-                                                 /**
-                                                  * The new RGBA color the user assigned to be their system accent color.
-                                                  */
-                                                 newColor: string) => void): this;
+                                                          /**
+                                                           * The new RGBA color the user assigned to be their system accent color.
+                                                           */
+                                                          newColor: string) => void): this;
     removeListener(event: 'accent-color-changed', listener: (event: Event,
-                                                 /**
-                                                  * The new RGBA color the user assigned to be their system accent color.
-                                                  */
-                                                 newColor: string) => void): this;
+                                                             /**
+                                                              * The new RGBA color the user assigned to be their system accent color.
+                                                              */
+                                                             newColor: string) => void): this;
     on(event: 'color-changed', listener: (event: Event) => void): this;
     once(event: 'color-changed', listener: (event: Event) => void): this;
     addListener(event: 'color-changed', listener: (event: Event) => void): this;
@@ -7232,20 +7232,20 @@ Creates or updates a shortcut link at `shortcutPath`.
                                                                 */
                                                                highContrastColorScheme: boolean) => void): this;
     once(event: 'high-contrast-color-scheme-changed', listener: (event: Event,
-                                                               /**
-                                                                * `true` if a high contrast theme is being used, `false` otherwise.
-                                                                */
-                                                               highContrastColorScheme: boolean) => void): this;
+                                                                 /**
+                                                                  * `true` if a high contrast theme is being used, `false` otherwise.
+                                                                  */
+                                                                 highContrastColorScheme: boolean) => void): this;
     addListener(event: 'high-contrast-color-scheme-changed', listener: (event: Event,
-                                                               /**
-                                                                * `true` if a high contrast theme is being used, `false` otherwise.
-                                                                */
-                                                               highContrastColorScheme: boolean) => void): this;
+                                                                        /**
+                                                                         * `true` if a high contrast theme is being used, `false` otherwise.
+                                                                         */
+                                                                        highContrastColorScheme: boolean) => void): this;
     removeListener(event: 'high-contrast-color-scheme-changed', listener: (event: Event,
-                                                               /**
-                                                                * `true` if a high contrast theme is being used, `false` otherwise.
-                                                                */
-                                                               highContrastColorScheme: boolean) => void): this;
+                                                                           /**
+                                                                            * `true` if a high contrast theme is being used, `false` otherwise.
+                                                                            */
+                                                                           highContrastColorScheme: boolean) => void): this;
     /**
      * **Deprecated:** Should use the new `updated` event on the `nativeTheme` module.
      *
@@ -7259,23 +7259,23 @@ Creates or updates a shortcut link at `shortcutPath`.
                                                            */
                                                           invertedColorScheme: boolean) => void): this;
     once(event: 'inverted-color-scheme-changed', listener: (event: Event,
-                                                          /**
-                                                           * `true` if an inverted color scheme (a high contrast color scheme with light text
-                                                           * and dark backgrounds) is being used, `false` otherwise.
-                                                           */
-                                                          invertedColorScheme: boolean) => void): this;
+                                                            /**
+                                                             * `true` if an inverted color scheme (a high contrast color scheme with light text
+                                                             * and dark backgrounds) is being used, `false` otherwise.
+                                                             */
+                                                            invertedColorScheme: boolean) => void): this;
     addListener(event: 'inverted-color-scheme-changed', listener: (event: Event,
-                                                          /**
-                                                           * `true` if an inverted color scheme (a high contrast color scheme with light text
-                                                           * and dark backgrounds) is being used, `false` otherwise.
-                                                           */
-                                                          invertedColorScheme: boolean) => void): this;
+                                                                   /**
+                                                                    * `true` if an inverted color scheme (a high contrast color scheme with light text
+                                                                    * and dark backgrounds) is being used, `false` otherwise.
+                                                                    */
+                                                                   invertedColorScheme: boolean) => void): this;
     removeListener(event: 'inverted-color-scheme-changed', listener: (event: Event,
-                                                          /**
-                                                           * `true` if an inverted color scheme (a high contrast color scheme with light text
-                                                           * and dark backgrounds) is being used, `false` otherwise.
-                                                           */
-                                                          invertedColorScheme: boolean) => void): this;
+                                                                      /**
+                                                                       * `true` if an inverted color scheme (a high contrast color scheme with light text
+                                                                       * and dark backgrounds) is being used, `false` otherwise.
+                                                                       */
+                                                                      invertedColorScheme: boolean) => void): this;
     /**
      * A promise that resolves with `true` if consent was granted and `false` if it was
      * denied. If an invalid `mediaType` is passed, the promise will be rejected. If an
@@ -7309,8 +7309,8 @@ Creates or updates a shortcut link at `shortcutPath`.
     canPromptTouchID(): boolean;
     /**
      * The users current system wide accent color preference in RGBA hexadecimal form.
-     * 
-This API is only available on macOS 10.14 Mojave or newer.
+     *
+     This API is only available on macOS 10.14 Mojave or newer.
      *
      * @platform win32,darwin
      */
@@ -7323,8 +7323,8 @@ This API is only available on macOS 10.14 Mojave or newer.
      * whether scroll animations (e.g. produced by home/end key) should be enabled.
      * * `prefersReducedMotion` Boolean - Determines whether the user desires reduced
      * motion based on platform APIs.
-     * 
-Returns an object with system animation settings.
+     *
+     Returns an object with system animation settings.
      */
     getAnimationSettings(): AnimationSettings;
     /**
@@ -7416,8 +7416,8 @@ Returns an object with system animation settings.
      * value when in the "automatic" dark mode setting you must either have
      * `NSRequiresAquaSystemAppearance=false` in your `Info.plist` or be on Electron
      * `>=7.0.0`.  See the dark mode guide for more information.
-     * 
-**Deprecated:** Should use the new `nativeTheme.shouldUseDarkColors` API.
+     *
+     **Deprecated:** Should use the new `nativeTheme.shouldUseDarkColors` API.
      *
      * @deprecated
      * @platform darwin,win32
@@ -7520,10 +7520,10 @@ Returns an object with system animation settings.
      *
      * Note that `type` should match actual type of `value`. An exception is thrown if
      * they don't.
-     * 
-Some popular `key` and `type`s are:
+     *
+     Some popular `key` and `type`s are:
 
-* `ApplePressAndHoldEnabled`: `boolean`
+     * `ApplePressAndHoldEnabled`: `boolean`
      *
      * @platform darwin
      */
@@ -7597,8 +7597,8 @@ Some popular `key` and `type`s are:
      *
      * Possible values that can be set are `dark` and `light`, and possible return
      * values are `dark`, `light`, and `unknown`.
-     * 
-This property is only available on macOS 10.14 Mojave or newer.
+     *
+     This property is only available on macOS 10.14 Mojave or newer.
      *
      * @platform darwin
      */
@@ -7978,32 +7978,32 @@ This property is only available on macOS 10.14 Mojave or newer.
                                    */
                                   position: Point) => void): this;
     once(event: 'click', listener: (event: KeyboardEvent,
-                                  /**
-                                   * The bounds of tray icon.
-                                   */
-                                  bounds: Rectangle,
-                                  /**
-                                   * The position of the event.
-                                   */
-                                  position: Point) => void): this;
+                                    /**
+                                     * The bounds of tray icon.
+                                     */
+                                    bounds: Rectangle,
+                                    /**
+                                     * The position of the event.
+                                     */
+                                    position: Point) => void): this;
     addListener(event: 'click', listener: (event: KeyboardEvent,
-                                  /**
-                                   * The bounds of tray icon.
-                                   */
-                                  bounds: Rectangle,
-                                  /**
-                                   * The position of the event.
-                                   */
-                                  position: Point) => void): this;
+                                           /**
+                                            * The bounds of tray icon.
+                                            */
+                                           bounds: Rectangle,
+                                           /**
+                                            * The position of the event.
+                                            */
+                                           position: Point) => void): this;
     removeListener(event: 'click', listener: (event: KeyboardEvent,
-                                  /**
-                                   * The bounds of tray icon.
-                                   */
-                                  bounds: Rectangle,
-                                  /**
-                                   * The position of the event.
-                                   */
-                                  position: Point) => void): this;
+                                              /**
+                                               * The bounds of tray icon.
+                                               */
+                                              bounds: Rectangle,
+                                              /**
+                                               * The position of the event.
+                                               */
+                                              position: Point) => void): this;
     /**
      * Emitted when the tray icon is double clicked.
      *
@@ -8015,20 +8015,20 @@ This property is only available on macOS 10.14 Mojave or newer.
                                           */
                                          bounds: Rectangle) => void): this;
     once(event: 'double-click', listener: (event: KeyboardEvent,
-                                         /**
-                                          * The bounds of tray icon.
-                                          */
-                                         bounds: Rectangle) => void): this;
+                                           /**
+                                            * The bounds of tray icon.
+                                            */
+                                           bounds: Rectangle) => void): this;
     addListener(event: 'double-click', listener: (event: KeyboardEvent,
-                                         /**
-                                          * The bounds of tray icon.
-                                          */
-                                         bounds: Rectangle) => void): this;
+                                                  /**
+                                                   * The bounds of tray icon.
+                                                   */
+                                                  bounds: Rectangle) => void): this;
     removeListener(event: 'double-click', listener: (event: KeyboardEvent,
-                                         /**
-                                          * The bounds of tray icon.
-                                          */
-                                         bounds: Rectangle) => void): this;
+                                                     /**
+                                                      * The bounds of tray icon.
+                                                      */
+                                                     bounds: Rectangle) => void): this;
     /**
      * Emitted when a drag operation ends on the tray or ends at another location.
      *
@@ -8076,20 +8076,20 @@ This property is only available on macOS 10.14 Mojave or newer.
                                         */
                                        files: string[]) => void): this;
     once(event: 'drop-files', listener: (event: Event,
-                                       /**
-                                        * The paths of the dropped files.
-                                        */
-                                       files: string[]) => void): this;
+                                         /**
+                                          * The paths of the dropped files.
+                                          */
+                                         files: string[]) => void): this;
     addListener(event: 'drop-files', listener: (event: Event,
-                                       /**
-                                        * The paths of the dropped files.
-                                        */
-                                       files: string[]) => void): this;
+                                                /**
+                                                 * The paths of the dropped files.
+                                                 */
+                                                files: string[]) => void): this;
     removeListener(event: 'drop-files', listener: (event: Event,
-                                       /**
-                                        * The paths of the dropped files.
-                                        */
-                                       files: string[]) => void): this;
+                                                   /**
+                                                    * The paths of the dropped files.
+                                                    */
+                                                   files: string[]) => void): this;
     /**
      * Emitted when dragged text is dropped in the tray icon.
      *
@@ -8101,20 +8101,20 @@ This property is only available on macOS 10.14 Mojave or newer.
                                        */
                                       text: string) => void): this;
     once(event: 'drop-text', listener: (event: Event,
-                                      /**
-                                       * the dropped text string.
-                                       */
-                                      text: string) => void): this;
+                                        /**
+                                         * the dropped text string.
+                                         */
+                                        text: string) => void): this;
     addListener(event: 'drop-text', listener: (event: Event,
-                                      /**
-                                       * the dropped text string.
-                                       */
-                                      text: string) => void): this;
+                                               /**
+                                                * the dropped text string.
+                                                */
+                                               text: string) => void): this;
     removeListener(event: 'drop-text', listener: (event: Event,
-                                      /**
-                                       * the dropped text string.
-                                       */
-                                      text: string) => void): this;
+                                                  /**
+                                                   * the dropped text string.
+                                                   */
+                                                  text: string) => void): this;
     /**
      * Emitted when the mouse clicks the tray icon.
      *
@@ -8126,20 +8126,20 @@ This property is only available on macOS 10.14 Mojave or newer.
                                         */
                                        position: Point) => void): this;
     once(event: 'mouse-down', listener: (event: KeyboardEvent,
-                                       /**
-                                        * The position of the event.
-                                        */
-                                       position: Point) => void): this;
+                                         /**
+                                          * The position of the event.
+                                          */
+                                         position: Point) => void): this;
     addListener(event: 'mouse-down', listener: (event: KeyboardEvent,
-                                       /**
-                                        * The position of the event.
-                                        */
-                                       position: Point) => void): this;
+                                                /**
+                                                 * The position of the event.
+                                                 */
+                                                position: Point) => void): this;
     removeListener(event: 'mouse-down', listener: (event: KeyboardEvent,
-                                       /**
-                                        * The position of the event.
-                                        */
-                                       position: Point) => void): this;
+                                                   /**
+                                                    * The position of the event.
+                                                    */
+                                                   position: Point) => void): this;
     /**
      * Emitted when the mouse enters the tray icon.
      *
@@ -8151,20 +8151,20 @@ This property is only available on macOS 10.14 Mojave or newer.
                                          */
                                         position: Point) => void): this;
     once(event: 'mouse-enter', listener: (event: KeyboardEvent,
-                                        /**
-                                         * The position of the event.
-                                         */
-                                        position: Point) => void): this;
+                                          /**
+                                           * The position of the event.
+                                           */
+                                          position: Point) => void): this;
     addListener(event: 'mouse-enter', listener: (event: KeyboardEvent,
-                                        /**
-                                         * The position of the event.
-                                         */
-                                        position: Point) => void): this;
+                                                 /**
+                                                  * The position of the event.
+                                                  */
+                                                 position: Point) => void): this;
     removeListener(event: 'mouse-enter', listener: (event: KeyboardEvent,
-                                        /**
-                                         * The position of the event.
-                                         */
-                                        position: Point) => void): this;
+                                                    /**
+                                                     * The position of the event.
+                                                     */
+                                                    position: Point) => void): this;
     /**
      * Emitted when the mouse exits the tray icon.
      *
@@ -8176,20 +8176,20 @@ This property is only available on macOS 10.14 Mojave or newer.
                                          */
                                         position: Point) => void): this;
     once(event: 'mouse-leave', listener: (event: KeyboardEvent,
-                                        /**
-                                         * The position of the event.
-                                         */
-                                        position: Point) => void): this;
+                                          /**
+                                           * The position of the event.
+                                           */
+                                          position: Point) => void): this;
     addListener(event: 'mouse-leave', listener: (event: KeyboardEvent,
-                                        /**
-                                         * The position of the event.
-                                         */
-                                        position: Point) => void): this;
+                                                 /**
+                                                  * The position of the event.
+                                                  */
+                                                 position: Point) => void): this;
     removeListener(event: 'mouse-leave', listener: (event: KeyboardEvent,
-                                        /**
-                                         * The position of the event.
-                                         */
-                                        position: Point) => void): this;
+                                                    /**
+                                                     * The position of the event.
+                                                     */
+                                                    position: Point) => void): this;
     /**
      * Emitted when the mouse moves in the tray icon.
      *
@@ -8201,20 +8201,20 @@ This property is only available on macOS 10.14 Mojave or newer.
                                         */
                                        position: Point) => void): this;
     once(event: 'mouse-move', listener: (event: KeyboardEvent,
-                                       /**
-                                        * The position of the event.
-                                        */
-                                       position: Point) => void): this;
+                                         /**
+                                          * The position of the event.
+                                          */
+                                         position: Point) => void): this;
     addListener(event: 'mouse-move', listener: (event: KeyboardEvent,
-                                       /**
-                                        * The position of the event.
-                                        */
-                                       position: Point) => void): this;
+                                                /**
+                                                 * The position of the event.
+                                                 */
+                                                position: Point) => void): this;
     removeListener(event: 'mouse-move', listener: (event: KeyboardEvent,
-                                       /**
-                                        * The position of the event.
-                                        */
-                                       position: Point) => void): this;
+                                                   /**
+                                                    * The position of the event.
+                                                    */
+                                                   position: Point) => void): this;
     /**
      * Emitted when the mouse is released from clicking the tray icon.
      *
@@ -8229,20 +8229,20 @@ This property is only available on macOS 10.14 Mojave or newer.
                                       */
                                      position: Point) => void): this;
     once(event: 'mouse-up', listener: (event: KeyboardEvent,
-                                     /**
-                                      * The position of the event.
-                                      */
-                                     position: Point) => void): this;
+                                       /**
+                                        * The position of the event.
+                                        */
+                                       position: Point) => void): this;
     addListener(event: 'mouse-up', listener: (event: KeyboardEvent,
-                                     /**
-                                      * The position of the event.
-                                      */
-                                     position: Point) => void): this;
+                                              /**
+                                               * The position of the event.
+                                               */
+                                              position: Point) => void): this;
     removeListener(event: 'mouse-up', listener: (event: KeyboardEvent,
-                                     /**
-                                      * The position of the event.
-                                      */
-                                     position: Point) => void): this;
+                                                 /**
+                                                  * The position of the event.
+                                                  */
+                                                 position: Point) => void): this;
     /**
      * Emitted when the tray icon is right clicked.
      *
@@ -8254,20 +8254,20 @@ This property is only available on macOS 10.14 Mojave or newer.
                                          */
                                         bounds: Rectangle) => void): this;
     once(event: 'right-click', listener: (event: KeyboardEvent,
-                                        /**
-                                         * The bounds of tray icon.
-                                         */
-                                        bounds: Rectangle) => void): this;
+                                          /**
+                                           * The bounds of tray icon.
+                                           */
+                                          bounds: Rectangle) => void): this;
     addListener(event: 'right-click', listener: (event: KeyboardEvent,
-                                        /**
-                                         * The bounds of tray icon.
-                                         */
-                                        bounds: Rectangle) => void): this;
+                                                 /**
+                                                  * The bounds of tray icon.
+                                                  */
+                                                 bounds: Rectangle) => void): this;
     removeListener(event: 'right-click', listener: (event: KeyboardEvent,
-                                        /**
-                                         * The bounds of tray icon.
-                                         */
-                                        bounds: Rectangle) => void): this;
+                                                    /**
+                                                     * The bounds of tray icon.
+                                                     */
+                                                    bounds: Rectangle) => void): this;
     /**
      * Tray
      */
@@ -8322,8 +8322,8 @@ This property is only available on macOS 10.14 Mojave or newer.
     /**
      * Pops up the context menu of the tray icon. When `menu` is passed, the `menu`
      * will be shown instead of the tray icon's context menu.
-     * 
-The `position` is only available on Windows, and it is (0, 0) by default.
+     *
+     The `position` is only available on Windows, and it is (0, 0) by default.
      *
      * @platform darwin,win32
      */
@@ -8341,8 +8341,8 @@ The `position` is only available on Windows, and it is (0, 0) by default.
     /**
      * Sets the option to ignore double click events. Ignoring these events allows you
      * to detect every individual click of the tray icon.
-     * 
-This value is set to false by default.
+     *
+     This value is set to false by default.
      *
      * @platform darwin
      */
@@ -8464,8 +8464,8 @@ This value is set to false by default.
      * Emitted before dispatching the `keydown` and `keyup` events in the page. Calling
      * `event.preventDefault` will prevent the page `keydown`/`keyup` events and the
      * menu shortcuts.
-     * 
-To only prevent the menu shortcuts, use `setIgnoreMenuShortcuts`:
+     *
+     To only prevent the menu shortcuts, use `setIgnoreMenuShortcuts`:
      */
     on(event: 'before-input-event', listener: (event: Event,
                                                /**
@@ -8473,24 +8473,24 @@ To only prevent the menu shortcuts, use `setIgnoreMenuShortcuts`:
                                                 */
                                                input: Input) => void): this;
     once(event: 'before-input-event', listener: (event: Event,
-                                               /**
-                                                * Input properties.
-                                                */
-                                               input: Input) => void): this;
+                                                 /**
+                                                  * Input properties.
+                                                  */
+                                                 input: Input) => void): this;
     addListener(event: 'before-input-event', listener: (event: Event,
-                                               /**
-                                                * Input properties.
-                                                */
-                                               input: Input) => void): this;
+                                                        /**
+                                                         * Input properties.
+                                                         */
+                                                        input: Input) => void): this;
     removeListener(event: 'before-input-event', listener: (event: Event,
-                                               /**
-                                                * Input properties.
-                                                */
-                                               input: Input) => void): this;
+                                                           /**
+                                                            * Input properties.
+                                                            */
+                                                           input: Input) => void): this;
     /**
      * Emitted when failed to verify the `certificate` for `url`.
-     * 
-The usage is the same with the `certificate-error` event of `app`.
+     *
+     The usage is the same with the `certificate-error` event of `app`.
      */
     on(event: 'certificate-error', listener: (event: Event,
                                               url: string,
@@ -8501,29 +8501,29 @@ The usage is the same with the `certificate-error` event of `app`.
                                               certificate: Certificate,
                                               callback: (isTrusted: boolean) => void) => void): this;
     once(event: 'certificate-error', listener: (event: Event,
-                                              url: string,
-                                              /**
-                                               * The error code.
-                                               */
-                                              error: string,
-                                              certificate: Certificate,
-                                              callback: (isTrusted: boolean) => void) => void): this;
+                                                url: string,
+                                                /**
+                                                 * The error code.
+                                                 */
+                                                error: string,
+                                                certificate: Certificate,
+                                                callback: (isTrusted: boolean) => void) => void): this;
     addListener(event: 'certificate-error', listener: (event: Event,
-                                              url: string,
-                                              /**
-                                               * The error code.
-                                               */
-                                              error: string,
-                                              certificate: Certificate,
-                                              callback: (isTrusted: boolean) => void) => void): this;
+                                                       url: string,
+                                                       /**
+                                                        * The error code.
+                                                        */
+                                                       error: string,
+                                                       certificate: Certificate,
+                                                       callback: (isTrusted: boolean) => void) => void): this;
     removeListener(event: 'certificate-error', listener: (event: Event,
-                                              url: string,
-                                              /**
-                                               * The error code.
-                                               */
-                                              error: string,
-                                              certificate: Certificate,
-                                              callback: (isTrusted: boolean) => void) => void): this;
+                                                          url: string,
+                                                          /**
+                                                           * The error code.
+                                                           */
+                                                          error: string,
+                                                          certificate: Certificate,
+                                                          callback: (isTrusted: boolean) => void) => void): this;
     /**
      * Emitted when the associated window logs a console message.
      */
@@ -8543,61 +8543,61 @@ The usage is the same with the `certificate-error` event of `app`.
                                             line: number,
                                             sourceId: string) => void): this;
     once(event: 'console-message', listener: (event: Event,
-                                            /**
-                                             * The log level, from 0 to 3. In order it matches `verbose`, `info`, `warning` and
-                                             * `error`.
-                                             */
-                                            level: number,
-                                            /**
-                                             * The actual console message
-                                             */
-                                            message: string,
-                                            /**
-                                             * The line number of the source that triggered this console message
-                                             */
-                                            line: number,
-                                            sourceId: string) => void): this;
+                                              /**
+                                               * The log level, from 0 to 3. In order it matches `verbose`, `info`, `warning` and
+                                               * `error`.
+                                               */
+                                              level: number,
+                                              /**
+                                               * The actual console message
+                                               */
+                                              message: string,
+                                              /**
+                                               * The line number of the source that triggered this console message
+                                               */
+                                              line: number,
+                                              sourceId: string) => void): this;
     addListener(event: 'console-message', listener: (event: Event,
-                                            /**
-                                             * The log level, from 0 to 3. In order it matches `verbose`, `info`, `warning` and
-                                             * `error`.
-                                             */
-                                            level: number,
-                                            /**
-                                             * The actual console message
-                                             */
-                                            message: string,
-                                            /**
-                                             * The line number of the source that triggered this console message
-                                             */
-                                            line: number,
-                                            sourceId: string) => void): this;
+                                                     /**
+                                                      * The log level, from 0 to 3. In order it matches `verbose`, `info`, `warning` and
+                                                      * `error`.
+                                                      */
+                                                     level: number,
+                                                     /**
+                                                      * The actual console message
+                                                      */
+                                                     message: string,
+                                                     /**
+                                                      * The line number of the source that triggered this console message
+                                                      */
+                                                     line: number,
+                                                     sourceId: string) => void): this;
     removeListener(event: 'console-message', listener: (event: Event,
-                                            /**
-                                             * The log level, from 0 to 3. In order it matches `verbose`, `info`, `warning` and
-                                             * `error`.
-                                             */
-                                            level: number,
-                                            /**
-                                             * The actual console message
-                                             */
-                                            message: string,
-                                            /**
-                                             * The line number of the source that triggered this console message
-                                             */
-                                            line: number,
-                                            sourceId: string) => void): this;
+                                                        /**
+                                                         * The log level, from 0 to 3. In order it matches `verbose`, `info`, `warning` and
+                                                         * `error`.
+                                                         */
+                                                        level: number,
+                                                        /**
+                                                         * The actual console message
+                                                         */
+                                                        message: string,
+                                                        /**
+                                                         * The line number of the source that triggered this console message
+                                                         */
+                                                        line: number,
+                                                        sourceId: string) => void): this;
     /**
      * Emitted when there is a new context menu that needs to be handled.
      */
     on(event: 'context-menu', listener: (event: Event,
                                          params: ContextMenuParams) => void): this;
     once(event: 'context-menu', listener: (event: Event,
-                                         params: ContextMenuParams) => void): this;
+                                           params: ContextMenuParams) => void): this;
     addListener(event: 'context-menu', listener: (event: Event,
-                                         params: ContextMenuParams) => void): this;
+                                                  params: ContextMenuParams) => void): this;
     removeListener(event: 'context-menu', listener: (event: Event,
-                                         params: ContextMenuParams) => void): this;
+                                                     params: ContextMenuParams) => void): this;
     /**
      * Emitted when the renderer process crashes or is killed.
      *
@@ -8611,11 +8611,11 @@ The usage is the same with the `certificate-error` event of `app`.
     on(event: 'crashed', listener: (event: Event,
                                     killed: boolean) => void): this;
     once(event: 'crashed', listener: (event: Event,
-                                    killed: boolean) => void): this;
+                                      killed: boolean) => void): this;
     addListener(event: 'crashed', listener: (event: Event,
-                                    killed: boolean) => void): this;
+                                             killed: boolean) => void): this;
     removeListener(event: 'crashed', listener: (event: Event,
-                                    killed: boolean) => void): this;
+                                                killed: boolean) => void): this;
     /**
      * Emitted when the cursor's type changes. The `type` parameter can be `default`,
      * `crosshair`, `pointer`, `text`, `wait`, `help`, `e-resize`, `n-resize`,
@@ -8646,50 +8646,50 @@ The usage is the same with the `certificate-error` event of `app`.
                                             */
                                            hotspot: Point) => void): this;
     once(event: 'cursor-changed', listener: (event: Event,
-                                           type: string,
-                                           image: NativeImage,
-                                           /**
-                                            * scaling factor for the custom cursor.
-                                            */
-                                           scale: number,
-                                           /**
-                                            * the size of the `image`.
-                                            */
-                                           size: Size,
-                                           /**
-                                            * coordinates of the custom cursor's hotspot.
-                                            */
-                                           hotspot: Point) => void): this;
+                                             type: string,
+                                             image: NativeImage,
+                                             /**
+                                              * scaling factor for the custom cursor.
+                                              */
+                                             scale: number,
+                                             /**
+                                              * the size of the `image`.
+                                              */
+                                             size: Size,
+                                             /**
+                                              * coordinates of the custom cursor's hotspot.
+                                              */
+                                             hotspot: Point) => void): this;
     addListener(event: 'cursor-changed', listener: (event: Event,
-                                           type: string,
-                                           image: NativeImage,
-                                           /**
-                                            * scaling factor for the custom cursor.
-                                            */
-                                           scale: number,
-                                           /**
-                                            * the size of the `image`.
-                                            */
-                                           size: Size,
-                                           /**
-                                            * coordinates of the custom cursor's hotspot.
-                                            */
-                                           hotspot: Point) => void): this;
+                                                    type: string,
+                                                    image: NativeImage,
+                                                    /**
+                                                     * scaling factor for the custom cursor.
+                                                     */
+                                                    scale: number,
+                                                    /**
+                                                     * the size of the `image`.
+                                                     */
+                                                    size: Size,
+                                                    /**
+                                                     * coordinates of the custom cursor's hotspot.
+                                                     */
+                                                    hotspot: Point) => void): this;
     removeListener(event: 'cursor-changed', listener: (event: Event,
-                                           type: string,
-                                           image: NativeImage,
-                                           /**
-                                            * scaling factor for the custom cursor.
-                                            */
-                                           scale: number,
-                                           /**
-                                            * the size of the `image`.
-                                            */
-                                           size: Size,
-                                           /**
-                                            * coordinates of the custom cursor's hotspot.
-                                            */
-                                           hotspot: Point) => void): this;
+                                                       type: string,
+                                                       image: NativeImage,
+                                                       /**
+                                                        * scaling factor for the custom cursor.
+                                                        */
+                                                       scale: number,
+                                                       /**
+                                                        * the size of the `image`.
+                                                        */
+                                                       size: Size,
+                                                       /**
+                                                        * coordinates of the custom cursor's hotspot.
+                                                        */
+                                                       hotspot: Point) => void): this;
     /**
      * Emitted when `desktopCapturer.getSources()` is called in the renderer process.
      * Calling `event.preventDefault()` will make it return empty sources.
@@ -8742,20 +8742,20 @@ The usage is the same with the `certificate-error` event of `app`.
                                                 */
                                                webContents: WebContents) => void): this;
     once(event: 'did-attach-webview', listener: (event: Event,
-                                               /**
-                                                * The guest web contents that is used by the `<webview>`.
-                                                */
-                                               webContents: WebContents) => void): this;
+                                                 /**
+                                                  * The guest web contents that is used by the `<webview>`.
+                                                  */
+                                                 webContents: WebContents) => void): this;
     addListener(event: 'did-attach-webview', listener: (event: Event,
-                                               /**
-                                                * The guest web contents that is used by the `<webview>`.
-                                                */
-                                               webContents: WebContents) => void): this;
+                                                        /**
+                                                         * The guest web contents that is used by the `<webview>`.
+                                                         */
+                                                        webContents: WebContents) => void): this;
     removeListener(event: 'did-attach-webview', listener: (event: Event,
-                                               /**
-                                                * The guest web contents that is used by the `<webview>`.
-                                                */
-                                               webContents: WebContents) => void): this;
+                                                           /**
+                                                            * The guest web contents that is used by the `<webview>`.
+                                                            */
+                                                           webContents: WebContents) => void): this;
     /**
      * Emitted when a page's theme color changes. This is usually due to encountering a
      * meta tag:
@@ -8766,20 +8766,20 @@ The usage is the same with the `certificate-error` event of `app`.
                                                     */
                                                    color: (string) | (null)) => void): this;
     once(event: 'did-change-theme-color', listener: (event: Event,
-                                                   /**
-                                                    * Theme color is in format of '#rrggbb'. It is `null` when no theme color is set.
-                                                    */
-                                                   color: (string) | (null)) => void): this;
+                                                     /**
+                                                      * Theme color is in format of '#rrggbb'. It is `null` when no theme color is set.
+                                                      */
+                                                     color: (string) | (null)) => void): this;
     addListener(event: 'did-change-theme-color', listener: (event: Event,
-                                                   /**
-                                                    * Theme color is in format of '#rrggbb'. It is `null` when no theme color is set.
-                                                    */
-                                                   color: (string) | (null)) => void): this;
+                                                            /**
+                                                             * Theme color is in format of '#rrggbb'. It is `null` when no theme color is set.
+                                                             */
+                                                            color: (string) | (null)) => void): this;
     removeListener(event: 'did-change-theme-color', listener: (event: Event,
-                                                   /**
-                                                    * Theme color is in format of '#rrggbb'. It is `null` when no theme color is set.
-                                                    */
-                                                   color: (string) | (null)) => void): this;
+                                                               /**
+                                                                * Theme color is in format of '#rrggbb'. It is `null` when no theme color is set.
+                                                                */
+                                                               color: (string) | (null)) => void): this;
     /**
      * This event is like `did-finish-load` but emitted when the load failed. The full
      * list of error codes and their meaning is available here.
@@ -8792,26 +8792,26 @@ The usage is the same with the `certificate-error` event of `app`.
                                           frameProcessId: number,
                                           frameRoutingId: number) => void): this;
     once(event: 'did-fail-load', listener: (event: Event,
-                                          errorCode: number,
-                                          errorDescription: string,
-                                          validatedURL: string,
-                                          isMainFrame: boolean,
-                                          frameProcessId: number,
-                                          frameRoutingId: number) => void): this;
+                                            errorCode: number,
+                                            errorDescription: string,
+                                            validatedURL: string,
+                                            isMainFrame: boolean,
+                                            frameProcessId: number,
+                                            frameRoutingId: number) => void): this;
     addListener(event: 'did-fail-load', listener: (event: Event,
-                                          errorCode: number,
-                                          errorDescription: string,
-                                          validatedURL: string,
-                                          isMainFrame: boolean,
-                                          frameProcessId: number,
-                                          frameRoutingId: number) => void): this;
+                                                   errorCode: number,
+                                                   errorDescription: string,
+                                                   validatedURL: string,
+                                                   isMainFrame: boolean,
+                                                   frameProcessId: number,
+                                                   frameRoutingId: number) => void): this;
     removeListener(event: 'did-fail-load', listener: (event: Event,
-                                          errorCode: number,
-                                          errorDescription: string,
-                                          validatedURL: string,
-                                          isMainFrame: boolean,
-                                          frameProcessId: number,
-                                          frameRoutingId: number) => void): this;
+                                                      errorCode: number,
+                                                      errorDescription: string,
+                                                      validatedURL: string,
+                                                      isMainFrame: boolean,
+                                                      frameProcessId: number,
+                                                      frameRoutingId: number) => void): this;
     /**
      * This event is like `did-fail-load` but emitted when the load was cancelled (e.g.
      * `window.stop()` was invoked).
@@ -8824,26 +8824,26 @@ The usage is the same with the `certificate-error` event of `app`.
                                                       frameProcessId: number,
                                                       frameRoutingId: number) => void): this;
     once(event: 'did-fail-provisional-load', listener: (event: Event,
-                                                      errorCode: number,
-                                                      errorDescription: string,
-                                                      validatedURL: string,
-                                                      isMainFrame: boolean,
-                                                      frameProcessId: number,
-                                                      frameRoutingId: number) => void): this;
+                                                        errorCode: number,
+                                                        errorDescription: string,
+                                                        validatedURL: string,
+                                                        isMainFrame: boolean,
+                                                        frameProcessId: number,
+                                                        frameRoutingId: number) => void): this;
     addListener(event: 'did-fail-provisional-load', listener: (event: Event,
-                                                      errorCode: number,
-                                                      errorDescription: string,
-                                                      validatedURL: string,
-                                                      isMainFrame: boolean,
-                                                      frameProcessId: number,
-                                                      frameRoutingId: number) => void): this;
+                                                               errorCode: number,
+                                                               errorDescription: string,
+                                                               validatedURL: string,
+                                                               isMainFrame: boolean,
+                                                               frameProcessId: number,
+                                                               frameRoutingId: number) => void): this;
     removeListener(event: 'did-fail-provisional-load', listener: (event: Event,
-                                                      errorCode: number,
-                                                      errorDescription: string,
-                                                      validatedURL: string,
-                                                      isMainFrame: boolean,
-                                                      frameProcessId: number,
-                                                      frameRoutingId: number) => void): this;
+                                                                  errorCode: number,
+                                                                  errorDescription: string,
+                                                                  validatedURL: string,
+                                                                  isMainFrame: boolean,
+                                                                  frameProcessId: number,
+                                                                  frameRoutingId: number) => void): this;
     /**
      * Emitted when the navigation is done, i.e. the spinner of the tab has stopped
      * spinning, and the `onload` event was dispatched.
@@ -8860,17 +8860,17 @@ The usage is the same with the `certificate-error` event of `app`.
                                                   frameProcessId: number,
                                                   frameRoutingId: number) => void): this;
     once(event: 'did-frame-finish-load', listener: (event: Event,
-                                                  isMainFrame: boolean,
-                                                  frameProcessId: number,
-                                                  frameRoutingId: number) => void): this;
+                                                    isMainFrame: boolean,
+                                                    frameProcessId: number,
+                                                    frameRoutingId: number) => void): this;
     addListener(event: 'did-frame-finish-load', listener: (event: Event,
-                                                  isMainFrame: boolean,
-                                                  frameProcessId: number,
-                                                  frameRoutingId: number) => void): this;
+                                                           isMainFrame: boolean,
+                                                           frameProcessId: number,
+                                                           frameRoutingId: number) => void): this;
     removeListener(event: 'did-frame-finish-load', listener: (event: Event,
-                                                  isMainFrame: boolean,
-                                                  frameProcessId: number,
-                                                  frameRoutingId: number) => void): this;
+                                                              isMainFrame: boolean,
+                                                              frameProcessId: number,
+                                                              frameRoutingId: number) => void): this;
     /**
      * Emitted when any frame navigation is done.
      *
@@ -8892,44 +8892,44 @@ The usage is the same with the `certificate-error` event of `app`.
                                                frameProcessId: number,
                                                frameRoutingId: number) => void): this;
     once(event: 'did-frame-navigate', listener: (event: Event,
-                                               url: string,
-                                               /**
-                                                * -1 for non HTTP navigations
-                                                */
-                                               httpResponseCode: number,
-                                               /**
-                                                * empty for non HTTP navigations,
-                                                */
-                                               httpStatusText: string,
-                                               isMainFrame: boolean,
-                                               frameProcessId: number,
-                                               frameRoutingId: number) => void): this;
+                                                 url: string,
+                                                 /**
+                                                  * -1 for non HTTP navigations
+                                                  */
+                                                 httpResponseCode: number,
+                                                 /**
+                                                  * empty for non HTTP navigations,
+                                                  */
+                                                 httpStatusText: string,
+                                                 isMainFrame: boolean,
+                                                 frameProcessId: number,
+                                                 frameRoutingId: number) => void): this;
     addListener(event: 'did-frame-navigate', listener: (event: Event,
-                                               url: string,
-                                               /**
-                                                * -1 for non HTTP navigations
-                                                */
-                                               httpResponseCode: number,
-                                               /**
-                                                * empty for non HTTP navigations,
-                                                */
-                                               httpStatusText: string,
-                                               isMainFrame: boolean,
-                                               frameProcessId: number,
-                                               frameRoutingId: number) => void): this;
+                                                        url: string,
+                                                        /**
+                                                         * -1 for non HTTP navigations
+                                                         */
+                                                        httpResponseCode: number,
+                                                        /**
+                                                         * empty for non HTTP navigations,
+                                                         */
+                                                        httpStatusText: string,
+                                                        isMainFrame: boolean,
+                                                        frameProcessId: number,
+                                                        frameRoutingId: number) => void): this;
     removeListener(event: 'did-frame-navigate', listener: (event: Event,
-                                               url: string,
-                                               /**
-                                                * -1 for non HTTP navigations
-                                                */
-                                               httpResponseCode: number,
-                                               /**
-                                                * empty for non HTTP navigations,
-                                                */
-                                               httpStatusText: string,
-                                               isMainFrame: boolean,
-                                               frameProcessId: number,
-                                               frameRoutingId: number) => void): this;
+                                                           url: string,
+                                                           /**
+                                                            * -1 for non HTTP navigations
+                                                            */
+                                                           httpResponseCode: number,
+                                                           /**
+                                                            * empty for non HTTP navigations,
+                                                            */
+                                                           httpStatusText: string,
+                                                           isMainFrame: boolean,
+                                                           frameProcessId: number,
+                                                           frameRoutingId: number) => void): this;
     /**
      * Emitted when a main frame navigation is done.
      *
@@ -8948,35 +8948,35 @@ The usage is the same with the `certificate-error` event of `app`.
                                           */
                                          httpStatusText: string) => void): this;
     once(event: 'did-navigate', listener: (event: Event,
-                                         url: string,
-                                         /**
-                                          * -1 for non HTTP navigations
-                                          */
-                                         httpResponseCode: number,
-                                         /**
-                                          * empty for non HTTP navigations
-                                          */
-                                         httpStatusText: string) => void): this;
+                                           url: string,
+                                           /**
+                                            * -1 for non HTTP navigations
+                                            */
+                                           httpResponseCode: number,
+                                           /**
+                                            * empty for non HTTP navigations
+                                            */
+                                           httpStatusText: string) => void): this;
     addListener(event: 'did-navigate', listener: (event: Event,
-                                         url: string,
-                                         /**
-                                          * -1 for non HTTP navigations
-                                          */
-                                         httpResponseCode: number,
-                                         /**
-                                          * empty for non HTTP navigations
-                                          */
-                                         httpStatusText: string) => void): this;
+                                                  url: string,
+                                                  /**
+                                                   * -1 for non HTTP navigations
+                                                   */
+                                                  httpResponseCode: number,
+                                                  /**
+                                                   * empty for non HTTP navigations
+                                                   */
+                                                  httpStatusText: string) => void): this;
     removeListener(event: 'did-navigate', listener: (event: Event,
-                                         url: string,
-                                         /**
-                                          * -1 for non HTTP navigations
-                                          */
-                                         httpResponseCode: number,
-                                         /**
-                                          * empty for non HTTP navigations
-                                          */
-                                         httpStatusText: string) => void): this;
+                                                     url: string,
+                                                     /**
+                                                      * -1 for non HTTP navigations
+                                                      */
+                                                     httpResponseCode: number,
+                                                     /**
+                                                      * empty for non HTTP navigations
+                                                      */
+                                                     httpStatusText: string) => void): this;
     /**
      * Emitted when an in-page navigation happened in any frame.
      *
@@ -8990,20 +8990,20 @@ The usage is the same with the `certificate-error` event of `app`.
                                                  frameProcessId: number,
                                                  frameRoutingId: number) => void): this;
     once(event: 'did-navigate-in-page', listener: (event: Event,
-                                                 url: string,
-                                                 isMainFrame: boolean,
-                                                 frameProcessId: number,
-                                                 frameRoutingId: number) => void): this;
+                                                   url: string,
+                                                   isMainFrame: boolean,
+                                                   frameProcessId: number,
+                                                   frameRoutingId: number) => void): this;
     addListener(event: 'did-navigate-in-page', listener: (event: Event,
-                                                 url: string,
-                                                 isMainFrame: boolean,
-                                                 frameProcessId: number,
-                                                 frameRoutingId: number) => void): this;
+                                                          url: string,
+                                                          isMainFrame: boolean,
+                                                          frameProcessId: number,
+                                                          frameRoutingId: number) => void): this;
     removeListener(event: 'did-navigate-in-page', listener: (event: Event,
-                                                 url: string,
-                                                 isMainFrame: boolean,
-                                                 frameProcessId: number,
-                                                 frameRoutingId: number) => void): this;
+                                                             url: string,
+                                                             isMainFrame: boolean,
+                                                             frameProcessId: number,
+                                                             frameRoutingId: number) => void): this;
     /**
      * Emitted after a server side redirect occurs during navigation.  For example a
      * 302 redirect.
@@ -9018,23 +9018,23 @@ The usage is the same with the `certificate-error` event of `app`.
                                                     frameProcessId: number,
                                                     frameRoutingId: number) => void): this;
     once(event: 'did-redirect-navigation', listener: (event: Event,
-                                                    url: string,
-                                                    isInPlace: boolean,
-                                                    isMainFrame: boolean,
-                                                    frameProcessId: number,
-                                                    frameRoutingId: number) => void): this;
+                                                      url: string,
+                                                      isInPlace: boolean,
+                                                      isMainFrame: boolean,
+                                                      frameProcessId: number,
+                                                      frameRoutingId: number) => void): this;
     addListener(event: 'did-redirect-navigation', listener: (event: Event,
-                                                    url: string,
-                                                    isInPlace: boolean,
-                                                    isMainFrame: boolean,
-                                                    frameProcessId: number,
-                                                    frameRoutingId: number) => void): this;
+                                                             url: string,
+                                                             isInPlace: boolean,
+                                                             isMainFrame: boolean,
+                                                             frameProcessId: number,
+                                                             frameRoutingId: number) => void): this;
     removeListener(event: 'did-redirect-navigation', listener: (event: Event,
-                                                    url: string,
-                                                    isInPlace: boolean,
-                                                    isMainFrame: boolean,
-                                                    frameProcessId: number,
-                                                    frameRoutingId: number) => void): this;
+                                                                url: string,
+                                                                isInPlace: boolean,
+                                                                isMainFrame: boolean,
+                                                                frameProcessId: number,
+                                                                frameRoutingId: number) => void): this;
     /**
      * Corresponds to the points in time when the spinner of the tab started spinning.
      */
@@ -9053,23 +9053,23 @@ The usage is the same with the `certificate-error` event of `app`.
                                                  frameProcessId: number,
                                                  frameRoutingId: number) => void): this;
     once(event: 'did-start-navigation', listener: (event: Event,
-                                                 url: string,
-                                                 isInPlace: boolean,
-                                                 isMainFrame: boolean,
-                                                 frameProcessId: number,
-                                                 frameRoutingId: number) => void): this;
+                                                   url: string,
+                                                   isInPlace: boolean,
+                                                   isMainFrame: boolean,
+                                                   frameProcessId: number,
+                                                   frameRoutingId: number) => void): this;
     addListener(event: 'did-start-navigation', listener: (event: Event,
-                                                 url: string,
-                                                 isInPlace: boolean,
-                                                 isMainFrame: boolean,
-                                                 frameProcessId: number,
-                                                 frameRoutingId: number) => void): this;
+                                                          url: string,
+                                                          isInPlace: boolean,
+                                                          isMainFrame: boolean,
+                                                          frameProcessId: number,
+                                                          frameRoutingId: number) => void): this;
     removeListener(event: 'did-start-navigation', listener: (event: Event,
-                                                 url: string,
-                                                 isInPlace: boolean,
-                                                 isMainFrame: boolean,
-                                                 frameProcessId: number,
-                                                 frameRoutingId: number) => void): this;
+                                                             url: string,
+                                                             isInPlace: boolean,
+                                                             isMainFrame: boolean,
+                                                             frameProcessId: number,
+                                                             frameRoutingId: number) => void): this;
     /**
      * Corresponds to the points in time when the spinner of the tab stopped spinning.
      */
@@ -9097,11 +9097,11 @@ The usage is the same with the `certificate-error` event of `app`.
     on(event: 'found-in-page', listener: (event: Event,
                                           result: Result) => void): this;
     once(event: 'found-in-page', listener: (event: Event,
-                                          result: Result) => void): this;
+                                            result: Result) => void): this;
     addListener(event: 'found-in-page', listener: (event: Event,
-                                          result: Result) => void): this;
+                                                   result: Result) => void): this;
     removeListener(event: 'found-in-page', listener: (event: Event,
-                                          result: Result) => void): this;
+                                                      result: Result) => void): this;
     /**
      * Emitted when the renderer process sends an asynchronous message via
      * `ipcRenderer.send()`.
@@ -9110,14 +9110,14 @@ The usage is the same with the `certificate-error` event of `app`.
                                         channel: string,
                                         ...args: any[]) => void): this;
     once(event: 'ipc-message', listener: (event: Event,
-                                        channel: string,
-                                        ...args: any[]) => void): this;
+                                          channel: string,
+                                          ...args: any[]) => void): this;
     addListener(event: 'ipc-message', listener: (event: Event,
-                                        channel: string,
-                                        ...args: any[]) => void): this;
+                                                 channel: string,
+                                                 ...args: any[]) => void): this;
     removeListener(event: 'ipc-message', listener: (event: Event,
-                                        channel: string,
-                                        ...args: any[]) => void): this;
+                                                    channel: string,
+                                                    ...args: any[]) => void): this;
     /**
      * Emitted when the renderer process sends a synchronous message via
      * `ipcRenderer.sendSync()`.
@@ -9126,14 +9126,14 @@ The usage is the same with the `certificate-error` event of `app`.
                                              channel: string,
                                              ...args: any[]) => void): this;
     once(event: 'ipc-message-sync', listener: (event: Event,
-                                             channel: string,
-                                             ...args: any[]) => void): this;
+                                               channel: string,
+                                               ...args: any[]) => void): this;
     addListener(event: 'ipc-message-sync', listener: (event: Event,
-                                             channel: string,
-                                             ...args: any[]) => void): this;
+                                                      channel: string,
+                                                      ...args: any[]) => void): this;
     removeListener(event: 'ipc-message-sync', listener: (event: Event,
-                                             channel: string,
-                                             ...args: any[]) => void): this;
+                                                         channel: string,
+                                                         ...args: any[]) => void): this;
     /**
      * Emitted when the window leaves a full-screen state triggered by HTML API.
      */
@@ -9143,25 +9143,25 @@ The usage is the same with the `certificate-error` event of `app`.
     removeListener(event: 'leave-html-full-screen', listener: Function): this;
     /**
      * Emitted when `webContents` wants to do basic auth.
-     * 
-The usage is the same with the `login` event of `app`.
+     *
+     The usage is the same with the `login` event of `app`.
      */
     on(event: 'login', listener: (event: Event,
                                   authenticationResponseDetails: AuthenticationResponseDetails,
                                   authInfo: AuthInfo,
                                   callback: (username?: string, password?: string) => void) => void): this;
     once(event: 'login', listener: (event: Event,
-                                  authenticationResponseDetails: AuthenticationResponseDetails,
-                                  authInfo: AuthInfo,
-                                  callback: (username?: string, password?: string) => void) => void): this;
+                                    authenticationResponseDetails: AuthenticationResponseDetails,
+                                    authInfo: AuthInfo,
+                                    callback: (username?: string, password?: string) => void) => void): this;
     addListener(event: 'login', listener: (event: Event,
-                                  authenticationResponseDetails: AuthenticationResponseDetails,
-                                  authInfo: AuthInfo,
-                                  callback: (username?: string, password?: string) => void) => void): this;
+                                           authenticationResponseDetails: AuthenticationResponseDetails,
+                                           authInfo: AuthInfo,
+                                           callback: (username?: string, password?: string) => void) => void): this;
     removeListener(event: 'login', listener: (event: Event,
-                                  authenticationResponseDetails: AuthenticationResponseDetails,
-                                  authInfo: AuthInfo,
-                                  callback: (username?: string, password?: string) => void) => void): this;
+                                              authenticationResponseDetails: AuthenticationResponseDetails,
+                                              authInfo: AuthInfo,
+                                              callback: (username?: string, password?: string) => void) => void): this;
     /**
      * Emitted when media is paused or done playing.
      */
@@ -9218,92 +9218,92 @@ The usage is the same with the `login` event of `app`.
                                         */
                                        postBody: PostBody) => void): this;
     once(event: 'new-window', listener: (event: NewWindowWebContentsEvent,
-                                       url: string,
-                                       frameName: string,
-                                       /**
-                                        * Can be `default`, `foreground-tab`, `background-tab`, `new-window`,
-                                        * `save-to-disk` and `other`.
-                                        */
-                                       disposition: ('default' | 'foreground-tab' | 'background-tab' | 'new-window' | 'save-to-disk' | 'other'),
-                                       /**
-                                        * The options which will be used for creating the new `BrowserWindow`.
-                                        */
-                                       options: BrowserWindowConstructorOptions,
-                                       /**
-                                        * The non-standard features (features not handled by Chromium or Electron) given
-                                        * to `window.open()`.
-                                        */
-                                       additionalFeatures: string[],
-                                       /**
-                                        * The referrer that will be passed to the new window. May or may not result in the
-                                        * `Referer` header being sent, depending on the referrer policy.
-                                        */
-                                       referrer: Referrer,
-                                       /**
-                                        * The post data that will be sent to the new window, along with the appropriate
-                                        * headers that will be set. If no post data is to be sent, the value will be
-                                        * `null`. Only defined when the window is being created by a form that set
-                                        * `target=_blank`.
-                                        */
-                                       postBody: PostBody) => void): this;
+                                         url: string,
+                                         frameName: string,
+                                         /**
+                                          * Can be `default`, `foreground-tab`, `background-tab`, `new-window`,
+                                          * `save-to-disk` and `other`.
+                                          */
+                                         disposition: ('default' | 'foreground-tab' | 'background-tab' | 'new-window' | 'save-to-disk' | 'other'),
+                                         /**
+                                          * The options which will be used for creating the new `BrowserWindow`.
+                                          */
+                                         options: BrowserWindowConstructorOptions,
+                                         /**
+                                          * The non-standard features (features not handled by Chromium or Electron) given
+                                          * to `window.open()`.
+                                          */
+                                         additionalFeatures: string[],
+                                         /**
+                                          * The referrer that will be passed to the new window. May or may not result in the
+                                          * `Referer` header being sent, depending on the referrer policy.
+                                          */
+                                         referrer: Referrer,
+                                         /**
+                                          * The post data that will be sent to the new window, along with the appropriate
+                                          * headers that will be set. If no post data is to be sent, the value will be
+                                          * `null`. Only defined when the window is being created by a form that set
+                                          * `target=_blank`.
+                                          */
+                                         postBody: PostBody) => void): this;
     addListener(event: 'new-window', listener: (event: NewWindowWebContentsEvent,
-                                       url: string,
-                                       frameName: string,
-                                       /**
-                                        * Can be `default`, `foreground-tab`, `background-tab`, `new-window`,
-                                        * `save-to-disk` and `other`.
-                                        */
-                                       disposition: ('default' | 'foreground-tab' | 'background-tab' | 'new-window' | 'save-to-disk' | 'other'),
-                                       /**
-                                        * The options which will be used for creating the new `BrowserWindow`.
-                                        */
-                                       options: BrowserWindowConstructorOptions,
-                                       /**
-                                        * The non-standard features (features not handled by Chromium or Electron) given
-                                        * to `window.open()`.
-                                        */
-                                       additionalFeatures: string[],
-                                       /**
-                                        * The referrer that will be passed to the new window. May or may not result in the
-                                        * `Referer` header being sent, depending on the referrer policy.
-                                        */
-                                       referrer: Referrer,
-                                       /**
-                                        * The post data that will be sent to the new window, along with the appropriate
-                                        * headers that will be set. If no post data is to be sent, the value will be
-                                        * `null`. Only defined when the window is being created by a form that set
-                                        * `target=_blank`.
-                                        */
-                                       postBody: PostBody) => void): this;
+                                                url: string,
+                                                frameName: string,
+                                                /**
+                                                 * Can be `default`, `foreground-tab`, `background-tab`, `new-window`,
+                                                 * `save-to-disk` and `other`.
+                                                 */
+                                                disposition: ('default' | 'foreground-tab' | 'background-tab' | 'new-window' | 'save-to-disk' | 'other'),
+                                                /**
+                                                 * The options which will be used for creating the new `BrowserWindow`.
+                                                 */
+                                                options: BrowserWindowConstructorOptions,
+                                                /**
+                                                 * The non-standard features (features not handled by Chromium or Electron) given
+                                                 * to `window.open()`.
+                                                 */
+                                                additionalFeatures: string[],
+                                                /**
+                                                 * The referrer that will be passed to the new window. May or may not result in the
+                                                 * `Referer` header being sent, depending on the referrer policy.
+                                                 */
+                                                referrer: Referrer,
+                                                /**
+                                                 * The post data that will be sent to the new window, along with the appropriate
+                                                 * headers that will be set. If no post data is to be sent, the value will be
+                                                 * `null`. Only defined when the window is being created by a form that set
+                                                 * `target=_blank`.
+                                                 */
+                                                postBody: PostBody) => void): this;
     removeListener(event: 'new-window', listener: (event: NewWindowWebContentsEvent,
-                                       url: string,
-                                       frameName: string,
-                                       /**
-                                        * Can be `default`, `foreground-tab`, `background-tab`, `new-window`,
-                                        * `save-to-disk` and `other`.
-                                        */
-                                       disposition: ('default' | 'foreground-tab' | 'background-tab' | 'new-window' | 'save-to-disk' | 'other'),
-                                       /**
-                                        * The options which will be used for creating the new `BrowserWindow`.
-                                        */
-                                       options: BrowserWindowConstructorOptions,
-                                       /**
-                                        * The non-standard features (features not handled by Chromium or Electron) given
-                                        * to `window.open()`.
-                                        */
-                                       additionalFeatures: string[],
-                                       /**
-                                        * The referrer that will be passed to the new window. May or may not result in the
-                                        * `Referer` header being sent, depending on the referrer policy.
-                                        */
-                                       referrer: Referrer,
-                                       /**
-                                        * The post data that will be sent to the new window, along with the appropriate
-                                        * headers that will be set. If no post data is to be sent, the value will be
-                                        * `null`. Only defined when the window is being created by a form that set
-                                        * `target=_blank`.
-                                        */
-                                       postBody: PostBody) => void): this;
+                                                   url: string,
+                                                   frameName: string,
+                                                   /**
+                                                    * Can be `default`, `foreground-tab`, `background-tab`, `new-window`,
+                                                    * `save-to-disk` and `other`.
+                                                    */
+                                                   disposition: ('default' | 'foreground-tab' | 'background-tab' | 'new-window' | 'save-to-disk' | 'other'),
+                                                   /**
+                                                    * The options which will be used for creating the new `BrowserWindow`.
+                                                    */
+                                                   options: BrowserWindowConstructorOptions,
+                                                   /**
+                                                    * The non-standard features (features not handled by Chromium or Electron) given
+                                                    * to `window.open()`.
+                                                    */
+                                                   additionalFeatures: string[],
+                                                   /**
+                                                    * The referrer that will be passed to the new window. May or may not result in the
+                                                    * `Referer` header being sent, depending on the referrer policy.
+                                                    */
+                                                   referrer: Referrer,
+                                                   /**
+                                                    * The post data that will be sent to the new window, along with the appropriate
+                                                    * headers that will be set. If no post data is to be sent, the value will be
+                                                    * `null`. Only defined when the window is being created by a form that set
+                                                    * `target=_blank`.
+                                                    */
+                                                   postBody: PostBody) => void): this;
     /**
      * Emitted when page receives favicon urls.
      */
@@ -9313,20 +9313,20 @@ The usage is the same with the `login` event of `app`.
                                                   */
                                                  favicons: string[]) => void): this;
     once(event: 'page-favicon-updated', listener: (event: Event,
-                                                 /**
-                                                  * Array of URLs.
-                                                  */
-                                                 favicons: string[]) => void): this;
+                                                   /**
+                                                    * Array of URLs.
+                                                    */
+                                                   favicons: string[]) => void): this;
     addListener(event: 'page-favicon-updated', listener: (event: Event,
-                                                 /**
-                                                  * Array of URLs.
-                                                  */
-                                                 favicons: string[]) => void): this;
+                                                          /**
+                                                           * Array of URLs.
+                                                           */
+                                                          favicons: string[]) => void): this;
     removeListener(event: 'page-favicon-updated', listener: (event: Event,
-                                                 /**
-                                                  * Array of URLs.
-                                                  */
-                                                 favicons: string[]) => void): this;
+                                                             /**
+                                                              * Array of URLs.
+                                                              */
+                                                             favicons: string[]) => void): this;
     /**
      * Fired when page title is set during navigation. `explicitSet` is false when
      * title is synthesized from file url.
@@ -9335,14 +9335,14 @@ The usage is the same with the `login` event of `app`.
                                                title: string,
                                                explicitSet: boolean) => void): this;
     once(event: 'page-title-updated', listener: (event: Event,
-                                               title: string,
-                                               explicitSet: boolean) => void): this;
+                                                 title: string,
+                                                 explicitSet: boolean) => void): this;
     addListener(event: 'page-title-updated', listener: (event: Event,
-                                               title: string,
-                                               explicitSet: boolean) => void): this;
+                                                        title: string,
+                                                        explicitSet: boolean) => void): this;
     removeListener(event: 'page-title-updated', listener: (event: Event,
-                                               title: string,
-                                               explicitSet: boolean) => void): this;
+                                                           title: string,
+                                                           explicitSet: boolean) => void): this;
     /**
      * Emitted when a new frame is generated. Only the dirty area is passed in the
      * buffer.
@@ -9354,23 +9354,23 @@ The usage is the same with the `login` event of `app`.
                                    */
                                   image: NativeImage) => void): this;
     once(event: 'paint', listener: (event: Event,
-                                  dirtyRect: Rectangle,
-                                  /**
-                                   * The image data of the whole frame.
-                                   */
-                                  image: NativeImage) => void): this;
+                                    dirtyRect: Rectangle,
+                                    /**
+                                     * The image data of the whole frame.
+                                     */
+                                    image: NativeImage) => void): this;
     addListener(event: 'paint', listener: (event: Event,
-                                  dirtyRect: Rectangle,
-                                  /**
-                                   * The image data of the whole frame.
-                                   */
-                                  image: NativeImage) => void): this;
+                                           dirtyRect: Rectangle,
+                                           /**
+                                            * The image data of the whole frame.
+                                            */
+                                           image: NativeImage) => void): this;
     removeListener(event: 'paint', listener: (event: Event,
-                                  dirtyRect: Rectangle,
-                                  /**
-                                   * The image data of the whole frame.
-                                   */
-                                  image: NativeImage) => void): this;
+                                              dirtyRect: Rectangle,
+                                              /**
+                                               * The image data of the whole frame.
+                                               */
+                                              image: NativeImage) => void): this;
     /**
      * Emitted when a plugin process has crashed.
      */
@@ -9378,14 +9378,14 @@ The usage is the same with the `login` event of `app`.
                                            name: string,
                                            version: string) => void): this;
     once(event: 'plugin-crashed', listener: (event: Event,
-                                           name: string,
-                                           version: string) => void): this;
+                                             name: string,
+                                             version: string) => void): this;
     addListener(event: 'plugin-crashed', listener: (event: Event,
-                                           name: string,
-                                           version: string) => void): this;
+                                                    name: string,
+                                                    version: string) => void): this;
     removeListener(event: 'plugin-crashed', listener: (event: Event,
-                                           name: string,
-                                           version: string) => void): this;
+                                                       name: string,
+                                                       version: string) => void): this;
     /**
      * Emitted when the preload script `preloadPath` throws an unhandled exception
      * `error`.
@@ -9394,14 +9394,14 @@ The usage is the same with the `login` event of `app`.
                                           preloadPath: string,
                                           error: Error) => void): this;
     once(event: 'preload-error', listener: (event: Event,
-                                          preloadPath: string,
-                                          error: Error) => void): this;
+                                            preloadPath: string,
+                                            error: Error) => void): this;
     addListener(event: 'preload-error', listener: (event: Event,
-                                          preloadPath: string,
-                                          error: Error) => void): this;
+                                                   preloadPath: string,
+                                                   error: Error) => void): this;
     removeListener(event: 'preload-error', listener: (event: Event,
-                                          preloadPath: string,
-                                          error: Error) => void): this;
+                                                      preloadPath: string,
+                                                      error: Error) => void): this;
     /**
      * Emitted when `remote.getBuiltin()` is called in the renderer process. Calling
      * `event.preventDefault()` will prevent the module from being returned. Custom
@@ -9410,11 +9410,11 @@ The usage is the same with the `login` event of `app`.
     on(event: 'remote-get-builtin', listener: (event: IpcMainEvent,
                                                moduleName: string) => void): this;
     once(event: 'remote-get-builtin', listener: (event: IpcMainEvent,
-                                               moduleName: string) => void): this;
+                                                 moduleName: string) => void): this;
     addListener(event: 'remote-get-builtin', listener: (event: IpcMainEvent,
-                                               moduleName: string) => void): this;
+                                                        moduleName: string) => void): this;
     removeListener(event: 'remote-get-builtin', listener: (event: IpcMainEvent,
-                                               moduleName: string) => void): this;
+                                                           moduleName: string) => void): this;
     /**
      * Emitted when `remote.getCurrentWebContents()` is called in the renderer process.
      * Calling `event.preventDefault()` will prevent the object from being returned.
@@ -9441,11 +9441,11 @@ The usage is the same with the `login` event of `app`.
     on(event: 'remote-get-global', listener: (event: IpcMainEvent,
                                               globalName: string) => void): this;
     once(event: 'remote-get-global', listener: (event: IpcMainEvent,
-                                              globalName: string) => void): this;
+                                                globalName: string) => void): this;
     addListener(event: 'remote-get-global', listener: (event: IpcMainEvent,
-                                              globalName: string) => void): this;
+                                                       globalName: string) => void): this;
     removeListener(event: 'remote-get-global', listener: (event: IpcMainEvent,
-                                              globalName: string) => void): this;
+                                                          globalName: string) => void): this;
     /**
      * Emitted when `remote.require()` is called in the renderer process. Calling
      * `event.preventDefault()` will prevent the module from being returned. Custom
@@ -9454,11 +9454,11 @@ The usage is the same with the `login` event of `app`.
     on(event: 'remote-require', listener: (event: IpcMainEvent,
                                            moduleName: string) => void): this;
     once(event: 'remote-require', listener: (event: IpcMainEvent,
-                                           moduleName: string) => void): this;
+                                             moduleName: string) => void): this;
     addListener(event: 'remote-require', listener: (event: IpcMainEvent,
-                                           moduleName: string) => void): this;
+                                                    moduleName: string) => void): this;
     removeListener(event: 'remote-require', listener: (event: IpcMainEvent,
-                                           moduleName: string) => void): this;
+                                                       moduleName: string) => void): this;
     /**
      * Emitted when the renderer process unexpectedly disappears.  This is normally
      * because it was crashed or killed.
@@ -9466,11 +9466,11 @@ The usage is the same with the `login` event of `app`.
     on(event: 'render-process-gone', listener: (event: Event,
                                                 details: RenderProcessGoneDetails) => void): this;
     once(event: 'render-process-gone', listener: (event: Event,
-                                                details: RenderProcessGoneDetails) => void): this;
+                                                  details: RenderProcessGoneDetails) => void): this;
     addListener(event: 'render-process-gone', listener: (event: Event,
-                                                details: RenderProcessGoneDetails) => void): this;
+                                                         details: RenderProcessGoneDetails) => void): this;
     removeListener(event: 'render-process-gone', listener: (event: Event,
-                                                details: RenderProcessGoneDetails) => void): this;
+                                                            details: RenderProcessGoneDetails) => void): this;
     /**
      * Emitted when the unresponsive web page becomes responsive again.
      */
@@ -9489,35 +9489,35 @@ The usage is the same with the `login` event of `app`.
                                                     devices: BluetoothDevice[],
                                                     callback: (deviceId: string) => void) => void): this;
     once(event: 'select-bluetooth-device', listener: (event: Event,
-                                                    devices: BluetoothDevice[],
-                                                    callback: (deviceId: string) => void) => void): this;
+                                                      devices: BluetoothDevice[],
+                                                      callback: (deviceId: string) => void) => void): this;
     addListener(event: 'select-bluetooth-device', listener: (event: Event,
-                                                    devices: BluetoothDevice[],
-                                                    callback: (deviceId: string) => void) => void): this;
+                                                             devices: BluetoothDevice[],
+                                                             callback: (deviceId: string) => void) => void): this;
     removeListener(event: 'select-bluetooth-device', listener: (event: Event,
-                                                    devices: BluetoothDevice[],
-                                                    callback: (deviceId: string) => void) => void): this;
+                                                                devices: BluetoothDevice[],
+                                                                callback: (deviceId: string) => void) => void): this;
     /**
      * Emitted when a client certificate is requested.
-     * 
-The usage is the same with the `select-client-certificate` event of `app`.
+     *
+     The usage is the same with the `select-client-certificate` event of `app`.
      */
     on(event: 'select-client-certificate', listener: (event: Event,
                                                       url: string,
                                                       certificateList: Certificate[],
                                                       callback: (certificate: Certificate) => void) => void): this;
     once(event: 'select-client-certificate', listener: (event: Event,
-                                                      url: string,
-                                                      certificateList: Certificate[],
-                                                      callback: (certificate: Certificate) => void) => void): this;
+                                                        url: string,
+                                                        certificateList: Certificate[],
+                                                        callback: (certificate: Certificate) => void) => void): this;
     addListener(event: 'select-client-certificate', listener: (event: Event,
-                                                      url: string,
-                                                      certificateList: Certificate[],
-                                                      callback: (certificate: Certificate) => void) => void): this;
+                                                               url: string,
+                                                               certificateList: Certificate[],
+                                                               callback: (certificate: Certificate) => void) => void): this;
     removeListener(event: 'select-client-certificate', listener: (event: Event,
-                                                      url: string,
-                                                      certificateList: Certificate[],
-                                                      callback: (certificate: Certificate) => void) => void): this;
+                                                                  url: string,
+                                                                  certificateList: Certificate[],
+                                                                  callback: (certificate: Certificate) => void) => void): this;
     /**
      * Emitted when the web page becomes unresponsive.
      */
@@ -9531,11 +9531,11 @@ The usage is the same with the `select-client-certificate` event of `app`.
     on(event: 'update-target-url', listener: (event: Event,
                                               url: string) => void): this;
     once(event: 'update-target-url', listener: (event: Event,
-                                              url: string) => void): this;
+                                                url: string) => void): this;
     addListener(event: 'update-target-url', listener: (event: Event,
-                                              url: string) => void): this;
+                                                       url: string) => void): this;
     removeListener(event: 'update-target-url', listener: (event: Event,
-                                              url: string) => void): this;
+                                                          url: string) => void): this;
     /**
      * Emitted when a `<webview>`'s web contents is being attached to this web
      * contents. Calling `event.preventDefault()` will destroy the guest page.
@@ -9559,38 +9559,38 @@ The usage is the same with the `select-client-certificate` event of `app`.
                                                  */
                                                 params: Record<string, string>) => void): this;
     once(event: 'will-attach-webview', listener: (event: Event,
-                                                /**
-                                                 * The web preferences that will be used by the guest page. This object can be
-                                                 * modified to adjust the preferences for the guest page.
-                                                 */
-                                                webPreferences: WebPreferences,
-                                                /**
-                                                 * The other `<webview>` parameters such as the `src` URL. This object can be
-                                                 * modified to adjust the parameters of the guest page.
-                                                 */
-                                                params: Record<string, string>) => void): this;
+                                                  /**
+                                                   * The web preferences that will be used by the guest page. This object can be
+                                                   * modified to adjust the preferences for the guest page.
+                                                   */
+                                                  webPreferences: WebPreferences,
+                                                  /**
+                                                   * The other `<webview>` parameters such as the `src` URL. This object can be
+                                                   * modified to adjust the parameters of the guest page.
+                                                   */
+                                                  params: Record<string, string>) => void): this;
     addListener(event: 'will-attach-webview', listener: (event: Event,
-                                                /**
-                                                 * The web preferences that will be used by the guest page. This object can be
-                                                 * modified to adjust the preferences for the guest page.
-                                                 */
-                                                webPreferences: WebPreferences,
-                                                /**
-                                                 * The other `<webview>` parameters such as the `src` URL. This object can be
-                                                 * modified to adjust the parameters of the guest page.
-                                                 */
-                                                params: Record<string, string>) => void): this;
+                                                         /**
+                                                          * The web preferences that will be used by the guest page. This object can be
+                                                          * modified to adjust the preferences for the guest page.
+                                                          */
+                                                         webPreferences: WebPreferences,
+                                                         /**
+                                                          * The other `<webview>` parameters such as the `src` URL. This object can be
+                                                          * modified to adjust the parameters of the guest page.
+                                                          */
+                                                         params: Record<string, string>) => void): this;
     removeListener(event: 'will-attach-webview', listener: (event: Event,
-                                                /**
-                                                 * The web preferences that will be used by the guest page. This object can be
-                                                 * modified to adjust the preferences for the guest page.
-                                                 */
-                                                webPreferences: WebPreferences,
-                                                /**
-                                                 * The other `<webview>` parameters such as the `src` URL. This object can be
-                                                 * modified to adjust the parameters of the guest page.
-                                                 */
-                                                params: Record<string, string>) => void): this;
+                                                            /**
+                                                             * The web preferences that will be used by the guest page. This object can be
+                                                             * modified to adjust the preferences for the guest page.
+                                                             */
+                                                            webPreferences: WebPreferences,
+                                                            /**
+                                                             * The other `<webview>` parameters such as the `src` URL. This object can be
+                                                             * modified to adjust the parameters of the guest page.
+                                                             */
+                                                            params: Record<string, string>) => void): this;
     /**
      * Emitted when a user or the page wants to start navigation. It can happen when
      * the `window.location` object is changed or a user clicks a link in the page.
@@ -9602,16 +9602,16 @@ The usage is the same with the `select-client-certificate` event of `app`.
      * updating the `window.location.hash`. Use `did-navigate-in-page` event for this
      * purpose.
 
-Calling `event.preventDefault()` will prevent the navigation.
+     Calling `event.preventDefault()` will prevent the navigation.
      */
     on(event: 'will-navigate', listener: (event: Event,
                                           url: string) => void): this;
     once(event: 'will-navigate', listener: (event: Event,
-                                          url: string) => void): this;
+                                            url: string) => void): this;
     addListener(event: 'will-navigate', listener: (event: Event,
-                                          url: string) => void): this;
+                                                   url: string) => void): this;
     removeListener(event: 'will-navigate', listener: (event: Event,
-                                          url: string) => void): this;
+                                                      url: string) => void): this;
     /**
      * Emitted when a `beforeunload` event handler is attempting to cancel a page
      * unload.
@@ -9640,23 +9640,23 @@ Calling `event.preventDefault()` will prevent the navigation.
                                           frameProcessId: number,
                                           frameRoutingId: number) => void): this;
     once(event: 'will-redirect', listener: (event: Event,
-                                          url: string,
-                                          isInPlace: boolean,
-                                          isMainFrame: boolean,
-                                          frameProcessId: number,
-                                          frameRoutingId: number) => void): this;
+                                            url: string,
+                                            isInPlace: boolean,
+                                            isMainFrame: boolean,
+                                            frameProcessId: number,
+                                            frameRoutingId: number) => void): this;
     addListener(event: 'will-redirect', listener: (event: Event,
-                                          url: string,
-                                          isInPlace: boolean,
-                                          isMainFrame: boolean,
-                                          frameProcessId: number,
-                                          frameRoutingId: number) => void): this;
+                                                   url: string,
+                                                   isInPlace: boolean,
+                                                   isMainFrame: boolean,
+                                                   frameProcessId: number,
+                                                   frameRoutingId: number) => void): this;
     removeListener(event: 'will-redirect', listener: (event: Event,
-                                          url: string,
-                                          isInPlace: boolean,
-                                          isMainFrame: boolean,
-                                          frameProcessId: number,
-                                          frameRoutingId: number) => void): this;
+                                                      url: string,
+                                                      isInPlace: boolean,
+                                                      isMainFrame: boolean,
+                                                      frameProcessId: number,
+                                                      frameRoutingId: number) => void): this;
     /**
      * Emitted when the user is requesting to change the zoom level using the mouse
      * wheel.
@@ -9667,20 +9667,20 @@ Calling `event.preventDefault()` will prevent the navigation.
                                           */
                                          zoomDirection: ('in' | 'out')) => void): this;
     once(event: 'zoom-changed', listener: (event: Event,
-                                         /**
-                                          * Can be `in` or `out`.
-                                          */
-                                         zoomDirection: ('in' | 'out')) => void): this;
+                                           /**
+                                            * Can be `in` or `out`.
+                                            */
+                                           zoomDirection: ('in' | 'out')) => void): this;
     addListener(event: 'zoom-changed', listener: (event: Event,
-                                         /**
-                                          * Can be `in` or `out`.
-                                          */
-                                         zoomDirection: ('in' | 'out')) => void): this;
+                                                  /**
+                                                   * Can be `in` or `out`.
+                                                   */
+                                                  zoomDirection: ('in' | 'out')) => void): this;
     removeListener(event: 'zoom-changed', listener: (event: Event,
-                                         /**
-                                          * Can be `in` or `out`.
-                                          */
-                                         zoomDirection: ('in' | 'out')) => void): this;
+                                                     /**
+                                                      * Can be `in` or `out`.
+                                                      */
+                                                     zoomDirection: ('in' | 'out')) => void): this;
     /**
      * Adds the specified path to DevTools workspace. Must be used after DevTools
      * creation:
@@ -9787,14 +9787,14 @@ Calling `event.preventDefault()` will prevent the navigation.
      * invoked by a gesture from the user. Setting `userGesture` to `true` will remove
      * this limitation.
 
-Code execution will be suspended until web page stop loading.
+     Code execution will be suspended until web page stop loading.
      */
     executeJavaScript(code: string, userGesture?: boolean): Promise<any>;
     /**
      * A promise that resolves with the result of the executed code or is rejected if
      * the result of the code is a rejected promise.
-     * 
-Works like `executeJavaScript` but evaluates `scripts` in an isolated context.
+     *
+     Works like `executeJavaScript` but evaluates `scripts` in an isolated context.
      */
     executeJavaScriptInIsolatedWorld(worldId: number, scripts: WebSource[], userGesture?: boolean): Promise<any>;
     /**
@@ -9896,8 +9896,8 @@ Works like `executeJavaScript` but evaluates `scripts` in an isolated context.
      * Increase the capturer count by one. The page is considered visible when its
      * browser window is hidden and the capturer count is non-zero. If you would like
      * the page to stay hidden, you should ensure that `stayHidden` is set to true.
-     * 
-This also affects the Page Visibility API.
+     *
+     This also affects the Page Visibility API.
      */
     incrementCapturerCount(size?: Size, stayHidden?: boolean): void;
     /**
@@ -9998,7 +9998,7 @@ This also affects the Page Visibility API.
      * relative to the root of your application.  For instance an app structure like
      * this:
 
-Would require code like this
+     Would require code like this
      */
     loadFile(filePath: string, options?: LoadFileOptions): Promise<void>;
     /**
@@ -10035,7 +10035,7 @@ Would require code like this
      * process by accessing the `ports` property of the emitted event. When they arrive
      * in the renderer, they will be native DOM `MessagePort` objects.
 
-For example:
+     For example:
      */
     postMessage(channel: string, message: any, transfer?: MessagePortMain[]): void;
     /**
@@ -10049,8 +10049,8 @@ For example:
      * printing.
      *
      * Use `page-break-before: always;` CSS style to force to print to a new page.
-     * 
-Example usage:
+     *
+     Example usage:
      */
     print(options?: WebContentsPrintOptions, callback?: (success: boolean, failureReason: string) => void): void;
     /**
@@ -10064,8 +10064,8 @@ Example usage:
      * By default, an empty `options` will be regarded as:
      *
      * Use `page-break-before: always; ` CSS style to force to print to a new page.
-     * 
-An example of `webContents.printToPDF`:
+     *
+     An example of `webContents.printToPDF`:
      */
     printToPDF(options: PrintToPDFOptions): Promise<Buffer>;
     /**
@@ -10119,8 +10119,8 @@ An example of `webContents.printToPDF`:
      *
      * The renderer process can handle the message by listening to `channel` with the
      * `ipcRenderer` module.
-     * 
-An example of sending messages from the main process to the renderer process:
+     *
+     An example of sending messages from the main process to the renderer process:
      */
     send(channel: string, ...args: any[]): void;
     /**
@@ -10144,8 +10144,8 @@ An example of sending messages from the main process to the renderer process:
      *
      * If you want to get the `frameId` of a given renderer context you should use the
      * `webFrame.routingId` value.  E.g.
-     * 
-You can also read `frameId` from all incoming IPC messages in the main process.
+     *
+     You can also read `frameId` from all incoming IPC messages in the main process.
      */
     sendToFrame(frameId: number, channel: string, ...args: any[]): void;
     /**
@@ -10173,8 +10173,8 @@ You can also read `frameId` from all incoming IPC messages in the main process.
      * caller's responsibility to destroy `devToolsWebContents`.
      *
      * An example of showing devtools in a `<webview>` tag:
-     * 
-An example of showing devtools in a `BrowserWindow`:
+     *
+     An example of showing devtools in a `BrowserWindow`:
      */
     setDevToolsWebContents(devToolsWebContents: WebContents): void;
     /**
@@ -10206,7 +10206,7 @@ An example of showing devtools in a `BrowserWindow`:
      * Changes the zoom factor to the specified factor. Zoom factor is zoom percent
      * divided by 100, so 300% = 3.0.
 
-The factor must be greater than 0.0.
+     The factor must be greater than 0.0.
      */
     setZoomFactor(factor: number): void;
     /**
@@ -10246,8 +10246,8 @@ The factor must be greater than 0.0.
     stopPainting(): void;
     /**
      * Indicates whether the snapshot has been created successfully.
-     * 
-Takes a V8 heap snapshot and saves it to `filePath`.
+     *
+     Takes a V8 heap snapshot and saves it to `filePath`.
      */
     takeHeapSnapshot(filePath: string): Promise<void>;
     /**
@@ -10338,7 +10338,7 @@ Takes a V8 heap snapshot and saves it to `filePath`.
      * Returns an object describing usage information of Blink's internal memory
      * caches.
 
-This will generate:
+     This will generate:
      */
     getResourceUsage(): ResourceUsage;
     /**
@@ -10383,7 +10383,7 @@ This will generate:
      * asynchronously and calls the `callback` function with an array of misspelt words
      * when complete.
 
-An example of using node-spellchecker as provider:
+     An example of using node-spellchecker as provider:
      */
     setSpellCheckProvider(language: string, provider: Provider): void;
     /**
@@ -10397,7 +10397,7 @@ An example of using node-spellchecker as provider:
      * Changes the zoom factor to the specified factor. Zoom factor is zoom percent
      * divided by 100, so 300% = 3.0.
 
-The factor must be greater than 0.0.
+     The factor must be greater than 0.0.
      */
     setZoomFactor(factor: number): void;
     /**
@@ -10470,8 +10470,8 @@ The factor must be greater than 0.0.
      * The `uploadData` is an array of `UploadData` objects.
      *
      * The `callback` has to be called with an `response` object.
-     * 
-Some examples of valid `urls`:
+     *
+     Some examples of valid `urls`:
      */
     onBeforeRequest(filter: Filter, listener: ((details: OnBeforeRequestListenerDetails, callback: (response: Response) => void) => void) | (null)): void;
     /**
@@ -10481,24 +10481,24 @@ Some examples of valid `urls`:
      * The `uploadData` is an array of `UploadData` objects.
      *
      * The `callback` has to be called with an `response` object.
-     * 
-Some examples of valid `urls`:
+     *
+     Some examples of valid `urls`:
      */
     onBeforeRequest(listener: ((details: OnBeforeRequestListenerDetails, callback: (response: Response) => void) => void) | (null)): void;
     /**
      * The `listener` will be called with `listener(details, callback)` before sending
      * an HTTP request, once the request headers are available. This may occur after a
      * TCP connection is made to the server, but before any http data is sent.
-     * 
-The `callback` has to be called with a `response` object.
+     *
+     The `callback` has to be called with a `response` object.
      */
     onBeforeSendHeaders(filter: Filter, listener: ((details: OnBeforeSendHeadersListenerDetails, callback: (beforeSendResponse: BeforeSendResponse) => void) => void) | (null)): void;
     /**
      * The `listener` will be called with `listener(details, callback)` before sending
      * an HTTP request, once the request headers are available. This may occur after a
      * TCP connection is made to the server, but before any http data is sent.
-     * 
-The `callback` has to be called with a `response` object.
+     *
+     The `callback` has to be called with a `response` object.
      */
     onBeforeSendHeaders(listener: ((details: OnBeforeSendHeadersListenerDetails, callback: (beforeSendResponse: BeforeSendResponse) => void) => void) | (null)): void;
     /**
@@ -10522,15 +10522,15 @@ The `callback` has to be called with a `response` object.
     /**
      * The `listener` will be called with `listener(details, callback)` when HTTP
      * response headers of a request have been received.
-     * 
-The `callback` has to be called with a `response` object.
+     *
+     The `callback` has to be called with a `response` object.
      */
     onHeadersReceived(filter: Filter, listener: ((details: OnHeadersReceivedListenerDetails, callback: (headersReceivedResponse: HeadersReceivedResponse) => void) => void) | (null)): void;
     /**
      * The `listener` will be called with `listener(details, callback)` when HTTP
      * response headers of a request have been received.
-     * 
-The `callback` has to be called with a `response` object.
+     *
+     The `callback` has to be called with a `response` object.
      */
     onHeadersReceived(listener: ((details: OnHeadersReceivedListenerDetails, callback: (headersReceivedResponse: HeadersReceivedResponse) => void) => void) | (null)): void;
     /**
@@ -10650,8 +10650,8 @@ The `callback` has to be called with a `response` object.
     removeEventListener(event: 'found-in-page', listener: (event: FoundInPageEvent) => void): this;
     /**
      * Fired when the guest page attempts to open a new browser window.
-     * 
-The following example code opens the new url in system's default browser.
+     *
+     The following example code opens the new url in system's default browser.
      */
     addEventListener(event: 'new-window', listener: (event: NewWindowEvent) => void, useCapture?: boolean): this;
     removeEventListener(event: 'new-window', listener: (event: NewWindowEvent) => void): this;
@@ -10666,7 +10666,7 @@ The following example code opens the new url in system's default browser.
      * or updating the `window.location.hash`. Use `did-navigate-in-page` event for
      * this purpose.
 
-Calling `event.preventDefault()` does __NOT__ have any effect.
+     Calling `event.preventDefault()` does __NOT__ have any effect.
      */
     addEventListener(event: 'will-navigate', listener: (event: WillNavigateEvent) => void, useCapture?: boolean): this;
     removeEventListener(event: 'will-navigate', listener: (event: WillNavigateEvent) => void): this;
@@ -10942,8 +10942,8 @@ Calling `event.preventDefault()` does __NOT__ have any effect.
     print(options?: WebviewTagPrintOptions): Promise<void>;
     /**
      * Resolves with the generated PDF data.
-     * 
-Prints `webview`'s web page as PDF, Same as `webContents.printToPDF(options)`.
+     *
+     Prints `webview`'s web page as PDF, Same as `webContents.printToPDF(options)`.
      */
     printToPDF(options: PrintToPDFOptions): Promise<Uint8Array>;
     /**
@@ -10981,14 +10981,14 @@ Prints `webview`'s web page as PDF, Same as `webContents.printToPDF(options)`.
      * Send an asynchronous message to renderer process via `channel`, you can also
      * send arbitrary arguments. The renderer process can handle the message by
      * listening to the `channel` event with the `ipcRenderer` module.
-     * 
-See webContents.send for examples.
+     *
+     See webContents.send for examples.
      */
     send(channel: string, ...args: any[]): Promise<void>;
     /**
      * Sends an input `event` to the page.
-     * 
-See webContents.sendInputEvent for detailed description of `event` object.
+     *
+     See webContents.sendInputEvent for detailed description of `event` object.
      */
     sendInputEvent(event: (MouseInputEvent) | (MouseWheelInputEvent) | (KeyboardInputEvent)): Promise<void>;
     /**
@@ -15059,9 +15059,9 @@ interface NodeRequireFunction {
 }
 
 interface File {
- /**
-  * The real path to the file on the users filesystem
-  */
+  /**
+   * The real path to the file on the users filesystem
+   */
   path: string;
 }
 
@@ -15082,7 +15082,7 @@ declare namespace NodeJS {
     /**
      * Emitted when Electron has loaded its internal initialization script and is
      * beginning to load the web page or the main script.
-     * 
+     *
      * It can be used by the preload script to add removed Node global symbols back to
      * the global scope when node integration is turned off:
      */
@@ -15098,7 +15098,7 @@ declare namespace NodeJS {
      * * `allocated` Integer - Size of all allocated objects in Kilobytes.
      * * `marked` Integer - Size of all marked objects in Kilobytes.
      * * `total` Integer - Total allocated space in Kilobytes.
-     * 
+     *
      * Returns an object with Blink memory information. It can be useful for debugging
      * rendering / DOM related memory issues. Note that all values are reported in
      * Kilobytes.
@@ -15108,7 +15108,7 @@ declare namespace NodeJS {
     /**
      * The number of milliseconds since epoch, or `null` if the information is
      * unavailable
-     * 
+     *
      * Indicates the creation time of the application. The time is represented as
      * number of milliseconds since epoch. It returns null if it is unable to get the
      * process creation time.
@@ -15124,7 +15124,7 @@ declare namespace NodeJS {
      * * `mallocedMemory` Integer
      * * `peakMallocedMemory` Integer
      * * `doesZapGarbage` Boolean
-     * 
+     *
      * Returns an object with V8 heap statistics. Note that all statistics are reported
      * in Kilobytes.
      */
@@ -15132,11 +15132,11 @@ declare namespace NodeJS {
     getIOCounters(): Electron.IOCounters;
     /**
      * Resolves with a ProcessMemoryInfo
-     * 
+     *
      * Returns an object giving memory usage statistics about the current process. Note
      * that all statistics are reported in Kilobytes. This api should be called after
      * app ready.
-     * 
+     *
      * Chromium does not provide `residentSet` value for macOS. This is because macOS
      * performs in-memory compression of pages that haven't been recently used. As a
      * result the resident set size value is not what one would expect. `private`
@@ -15153,16 +15153,16 @@ declare namespace NodeJS {
      * Kilobytes available to the system.
      * * `swapFree` Integer _Windows_ _Linux_ - The free amount of swap memory in
      * Kilobytes available to the system.
-     * 
+     *
      * Returns an object giving memory usage statistics about the entire system. Note
      * that all statistics are reported in Kilobytes.
      */
     getSystemMemoryInfo(): Electron.SystemMemoryInfo;
     /**
      * The version of the host operating system.
-     * 
+     *
      * Example:
-     * 
+     *
      * **Note:** It returns the actual operating system version instead of kernel
      * version on macOS unlike `os.release()`.
      */
@@ -15180,8 +15180,8 @@ declare namespace NodeJS {
     setFdLimit(maxDescriptors: number): void;
     /**
      * Indicates whether the snapshot has been created successfully.
-     * 
-Takes a V8 heap snapshot and saves it to `filePath`.
+     *
+     Takes a V8 heap snapshot and saves it to `filePath`.
      */
     takeHeapSnapshot(filePath: string): boolean;
     /**
@@ -15257,10 +15257,10 @@ Takes a V8 heap snapshot and saves it to `filePath`.
     traceProcessWarnings: boolean;
     /**
      * A `String` representing the current process's type, can be:
-     * 
+     *
      * * `browser` - The main process
      * * `renderer` - A renderer process
-* `worker` - In a web worker
+     * `worker` - In a web worker
      *
      */
     readonly type: ('browser' | 'renderer' | 'worker');
