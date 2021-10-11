@@ -6,11 +6,12 @@ angular.module('ngdesktopui',['servoy'])
 	var os = null;
 	var BrowserWindow = null;
 	var isMacOS = false;
-	var window = null
+	var win = null
 	var isMacDefaultMenu = false;
 	
 	if (typeof require == "function") {
 		remote = require('@electron/remote');
+		webFrame = require('electron').webFrame;
 		Menu = remote.Menu;
 		BrowserWindow = remote.BrowserWindow;
 		win = remote.getCurrentWindow();
@@ -528,9 +529,55 @@ angular.module('ngdesktopui',['servoy'])
 						if (callback) $window.executeInlineScript(callback.formname, callback.script, [null, e.message]);
 					})
 				}
+			},
+			/**
+ 			 * Get the zoom factor of the current window
+ 			 *
+			 * @return {number} The zoom factor of the current window
+			 */
+			getZoomFactor: function () {
+				return webFrame.getZoomFactor();
+			},
+			/**
+			 * Set the zoom factor of the current window
+			 * 1 == 100%. 0.5 == 50%.
+			 *
+			 * @param {number} factor (values greater than 0.0 and smaller or equal to 5.0)
+			 * @return {boolean}
+			 */
+			setZoomFactor: function (factor) {
+				if (factor && (typeof factor === 'number') && factor > 0.0 && factor <= 5.0) {
+					webFrame.setZoomFactor(factor);
+					return true;
+				} else {
+					return false;
+				}
+			},
+
+			/**
+			 * Show and gives focus to the window
+			 */
+			showWindow: function () {
+				win.show();
+			},
+			/**
+			 * Hide the window
+			 */
+			hideWindow: function () {
+				win.hide();
+			},
+			/**
+			 * Maximize the window
+			 */
+			maximizeWindow: function () {
+				win.maximize();
+			},
+			/**
+			 * Unmaximize the window
+			 */
+			unmaximizeWindow: function () {
+				win.unmaximize();
 			}
-
-
 		}
 	} else {
 		return {
@@ -549,12 +596,19 @@ angular.module('ngdesktopui',['servoy'])
 			addCheckBox: function() {console.log("not in ngdesktop");},
 			addRadioButton: function() {console.log("not in ngdesktop");},
 			addRoleItem: function() {console.log("not in ngdesktop");},
-			addDevToolsItem: function() {console.log("not in ngdesktop")},
+			addDevToolsItem: function() {console.log("not in ngdesktop");},
 			getMenuItemIndexByText: function() {console.log("not in ngdesktop");},
 			getMenuItemText: function() {console.log("not in ngdesktop");},
 			createBrowserView: function() {console.log("not in electron");},
 			closeBrowserView: function() {console.log("not in electron");},
-			injectJSIntoBrowserView: function() {console.log("not in electron");}
+			injectJSIntoBrowserView: function() {console.log("not in electron");},
+			injectJSIntoBrowserView: function () { console.log("not in electron"); },
+			getZoomFactor: function () { console.log("not in electron"); },
+			setZoomFactor: function () { console.log("not in electron"); },
+			showWindow: function () { console.log("not in electron"); },
+			hideWindow: function () { console.log("not in electron"); },
+			maximizeWindow: function () { console.log("not in electron"); },
+			unmaximizeWindow: function () { console.log("not in electron"); }
 		}
 	}
 })

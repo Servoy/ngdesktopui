@@ -5,10 +5,12 @@ import * as electron from 'electron';
 
 @Injectable()
 export class NGDesktopUIService {
-    private log: LoggerService;
-    private remote: electron.Remote;
+    private electron: typeof electron;
+    private remote: typeof electron.remote;
     private Menu: typeof electron.Menu;
+    private log: LoggerService;
     private window: electron.BrowserWindow;
+    private webFrame = electron.webFrame;
     private isMacOS = false;
     private isMacDefaultMenu = false;
     private browserViews = {};
@@ -19,7 +21,9 @@ export class NGDesktopUIService {
         const userAgent = navigator.userAgent.toLowerCase();
         const r = windowRef.nativeWindow['require'];
         if (userAgent.indexOf(' electron/') > -1 && r) {
+            this.electron = r('@electron');
             this.remote = r('@electron/remote');
+            this.webFrame = this.electron.webFrame;
             this.Menu = this.remote.Menu;
             this.window = this.remote.getCurrentWindow();
             this.isMacOS = ( r('os').platform() === 'darwin');
@@ -151,7 +155,8 @@ export class NGDesktopUIService {
                     label: 'DefaultMacMenu',
                     submenu: [
                         { role: 'quit' }
-                    ]}
+                    ]
+                }
             ];
             this.isMacDefaultMenu = true;
         } else {
@@ -537,5 +542,58 @@ export class NGDesktopUIService {
             }
         }
         return addResultIndex;
+    }
+
+    /**
+     * Get the zoom factor of the current window
+     *
+     * @return number - The zoom factor of the current window
+     */
+    getZoomFactor() {
+        return this.webFrame.getZoomFactor();
+    }
+
+    /**
+     * Set the zoom factor of the current window
+     * 1 == 100%. 0.5 == 50%.
+     *
+     * @param factor - (values between 0.1 and 5)
+     * @return boolean
+     */
+    setZoomFactor(factor: number) {
+        if (factor && (typeof factor === 'number') && factor > 0.0 && factor <= 5.0) {
+            this.webFrame.setZoomFactor(factor);
+        return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Shows and gives focus to the window
+     */
+    showWindow() {
+        this.window.show();
+    }
+
+    /**
+     * Hides the window
+     */
+    hideWindow() {
+        this.window.hide();
+    }
+
+    /**
+     * Maximizes the window
+     */
+    maximizeWindow() {
+        this.window.maximize();
+    }
+
+    /**
+     * Unmaximizes the window
+     */
+    unmaximizeWindow() {
+        this.window.unmaximize();
     }
 }

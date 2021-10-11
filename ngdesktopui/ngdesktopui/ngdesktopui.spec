@@ -150,6 +150,19 @@
 				{"name":"js", "type":"string"},
 				{"name":"callback", "type":"function"}
 			]
-		}	
+		},
+		"getZoomFactor": {
+			"returns": "number"
+		},
+		"setZoomFactor": {
+			"parameters" : [
+				{"name": "factor", "type": "number"}
+			],
+			"returns": "boolean"
+		},
+		"showWindow": {},
+		"hideWindow": {},
+		"maximizeWindow": {},
+		"unmaximizeWindow": {}
  	}
  }
