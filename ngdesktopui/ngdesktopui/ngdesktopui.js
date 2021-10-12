@@ -564,7 +564,13 @@ angular.module('ngdesktopui',['servoy'])
 			 * Hide the window
 			 */
 			hideWindow: function () {
-				win.hide();
+				if (isMacOS) {
+					//on MacOS calling after calling win.hide() - the main window is no longer receiving events
+					//calling win.show() has no effect; electron issue?
+					win.minimize();
+				} else {
+					win.hide();
+				}
 			},
 			/**
 			 * Maximize the window
@@ -577,7 +583,85 @@ angular.module('ngdesktopui',['servoy'])
 			 */
 			unmaximizeWindow: function () {
 				win.unmaximize();
+			},
+			/**
+			 * Minimize the window
+			 */
+			 minimizeWindow: function () {
+				win.minimize();
+			},
+			/**
+			 * Restore the window
+			 */
+			restoreWindow: function () {
+				win.restore();
+			},
+			/**
+			 * Set window size to the specified dimensions
+			 * 
+			 * @param{int} - width (integer value greater than zero)
+			 * @param{int} - height (integer value greater than zero)
+			 */
+			setWindowSize: function(width, height) {
+				win.setSize(width, height);
+			},
+			/**
+			 * Set window to full screen mode
+			 * 
+			 * @param{boolean} -  whether the window should be in fullscreen mode
+			 */
+			 setFullScreen: function(flag) {
+				win.setFullScreen(flag);
+			},
+			/**
+			 * Get window size 
+			 * 
+			 * @return{int[]} - an array containing window's width and height
+			 */
+			getWindowSize: function() {
+				return win.getSize();
+			},
+			/**
+			 * Return true if window is in minimized state
+			 * 
+			 * @return{Boolean}
+			 */
+			isMinimized: function() {
+				return win.isMinimized();
+			},
+			/**
+			 * Return true if window is in maximized state
+			 * 
+			 * @return{Boolean}
+			 */
+			 isMaximized: function() {
+				return win.isMaximized();
+			},
+			/**
+			 * Return true if window is in full screen state
+			 * 
+			 * @return{Boolean}
+			 */
+			 isFullScreen: function() {
+				return win.isFullScreen();
+			},
+			/**
+			 * Return true whether the window is in normal state (not maximized, not minimized, not in fullscreen mode)
+			 * 
+			 * @return{Boolean}
+			 */
+			 isNormal: function() {
+				return win.isNormal();
+			},
+			/**
+			 * Return true if window is in visible to the user
+			 * 
+			 * @return{Boolean}
+			 */
+			 isVisible: function() {
+				return win.isVisible();
 			}
+
 		}
 	} else {
 		return {
@@ -599,16 +683,26 @@ angular.module('ngdesktopui',['servoy'])
 			addDevToolsItem: function() {console.log("not in ngdesktop");},
 			getMenuItemIndexByText: function() {console.log("not in ngdesktop");},
 			getMenuItemText: function() {console.log("not in ngdesktop");},
-			createBrowserView: function() {console.log("not in electron");},
-			closeBrowserView: function() {console.log("not in electron");},
-			injectJSIntoBrowserView: function() {console.log("not in electron");},
-			injectJSIntoBrowserView: function () { console.log("not in electron"); },
-			getZoomFactor: function () { console.log("not in electron"); },
-			setZoomFactor: function () { console.log("not in electron"); },
-			showWindow: function () { console.log("not in electron"); },
-			hideWindow: function () { console.log("not in electron"); },
-			maximizeWindow: function () { console.log("not in electron"); },
-			unmaximizeWindow: function () { console.log("not in electron"); }
+			createBrowserView: function() {console.log("not in ngdesktop");},
+			closeBrowserView: function() {console.log("not in ngdesktop");},
+			injectJSIntoBrowserView: function() {console.log("not in ngdesktop");},
+			injectJSIntoBrowserView: function () { console.log("not in ngdesktop"); },
+			getZoomFactor: function () { console.log("not in ngdesktop"); },
+			setZoomFactor: function () { console.log("not in ngdesktop"); },
+			showWindow: function () { console.log("not in ngdesktop"); },
+			hideWindow: function () { console.log("not in ngdesktop"); },
+			maximizeWindow: function () { console.log("not in ngdesktop"); },
+			unmaximizeWindow: function () { console.log("not in ngdesktop"); },
+			minimizeWindow: function () { console.log("not in ngdesktop"); },
+			restoreWindow: function () { console.log("not in ngdesktop"); },
+			setWindowSize: function () { console.log("not in ngdesktop"); },
+			setFullScreen: function () { console.log("not in ngdesktop"); },
+			getWindowSize: function () { console.log("not in ngdesktop"); },
+			isMinimized: function () { console.log("not in ngdesktop"); },
+			isMaximized: function () { console.log("not in ngdesktop"); },
+			isFullScreen: function () { console.log("not in ngdesktop"); },
+			isNormal: function () { console.log("not in ngdesktop"); },
+			isVisible: function () { console.log("not in ngdesktop"); },
 		}
 	}
 })

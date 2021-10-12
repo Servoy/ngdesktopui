@@ -163,6 +163,37 @@
 		"showWindow": {},
 		"hideWindow": {},
 		"maximizeWindow": {},
-		"unmaximizeWindow": {}
+		"unmaximizeWindow": {},
+		"minimizeWindow": {},
+		"restoreWindow": {},
+		"setWindowSize": {
+			"parameters" : [
+				{"name":"width", "type":"int"},
+				{"name":"height", "type":"int"}
+			]
+		},
+		"setFullScreen": {
+			"parameters" : [
+				{"name":"flag", "type":"boolean"}
+			]
+		},
+		"getWindowSize": {
+			"returns": "int[]"
+		},
+		"isMinimized": {
+			"returns": "boolean"
+		},
+		"isMaximized": {
+			"returns": "boolean"
+		},
+		"isFullScreen": {
+			"returns": "boolean"
+		},
+		"isNormal": {
+			"returns": "boolean"
+		},
+		"isVisible": {
+			"returns": "boolean"
+		}
  	}
  }

@@ -547,9 +547,9 @@ export class NGDesktopUIService {
     /**
      * Get the zoom factor of the current window
      *
-     * @return number - The zoom factor of the current window
+     * @return{number} - The zoom factor of the current window
      */
-    getZoomFactor() {
+    getZoomFactor(): number {
         return this.webFrame.getZoomFactor();
     }
 
@@ -560,7 +560,7 @@ export class NGDesktopUIService {
      * @param factor - (values between 0.1 and 5)
      * @return boolean
      */
-    setZoomFactor(factor: number) {
+    setZoomFactor(factor: number): boolean {
         if (factor && (typeof factor === 'number') && factor > 0.0 && factor <= 5.0) {
             this.webFrame.setZoomFactor(factor);
         return true;
@@ -580,7 +580,13 @@ export class NGDesktopUIService {
      * Hides the window
      */
     hideWindow() {
-        this.window.hide();
+        if (this.isMacOS) {
+            //on MacOS calling after calling win.hide() - the main window is no longer receiving events
+            //calling win.show() has no effect; electron issue?
+            this.window.minimize();
+        } else {
+            this.window.hide();
+        }
     }
 
     /**
@@ -596,4 +602,92 @@ export class NGDesktopUIService {
     unmaximizeWindow() {
         this.window.unmaximize();
     }
+
+    /**
+     * Maximizes the window
+     */
+     minimmizeWindow() {
+        this.window.minimize();
+    }
+
+    /**
+     * Unmaximizes the window
+     */
+    restoreWindow() {
+        this.window.restore();
+    }
+
+    /**
+	 * Set window size to the specified dimensions
+	 * 
+	 * @param{int} - width (integer value greater than zero)
+	 * @param{int} - height (integer value greater than zero)
+	 */
+	setWindowSize(width: number, height: number) {
+		this.window.setSize(width, height);
+	}
+
+    /**
+			 * Set window to full screen mode
+			 * 
+			 * @param{boolean} -  whether the window should be in fullscreen mode
+			 */
+	setFullScreen(flag: boolean) {
+		this.window.setFullScreen(flag);
+	}
+
+
+    /**
+	 * Get window size 
+	 * 
+	 * @return{int[]} - an array containing window's width and height
+	 */
+	getWindowSize() {
+		return this.window.getSize();
+	}
+
+    /**
+	 * Return true if window is in minimized state
+	 * 
+	 * @return{Boolean}
+	 */
+	isMinimized(): boolean {
+		return this.window.isMinimized();
+	}
+
+    /**
+	 * Return true if window is in maximized state
+	 * 
+	 * @return{Boolean}
+	 */
+	isMaximized(): boolean {
+		return this.window.isMaximized();
+	}
+
+	/**
+	 * Return true if window is in full screen state
+	 * 
+	 * @return{Boolean}
+	 */
+	isFullScreen(): boolean {
+		return this.window.isFullScreen();
+	}
+
+	/**
+	 * Return true whether the window is in normal state (not maximized, not minimized, not in fullscreen mode)
+	 * 
+	 * @return{Boolean}
+	 */
+	 isNormal(): boolean {
+		return this.window.isNormal();
+	}
+
+	/**
+	 * Return true if window is in visible to the user
+	 * 
+	 * @return{Boolean}
+	 */
+	 isVisible(): boolean {
+		return this.window.isVisible();
+	}
 }
