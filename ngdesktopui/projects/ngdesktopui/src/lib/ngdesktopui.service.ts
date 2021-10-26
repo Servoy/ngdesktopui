@@ -10,7 +10,6 @@ export class NGDesktopUIService {
     private Menu: typeof electron.Menu;
     private log: LoggerService;
     private window: electron.BrowserWindow;
-    private webFrame = electron.webFrame;
     private isMacOS = false;
     private isMacDefaultMenu = false;
     private browserViews = {};
@@ -21,9 +20,8 @@ export class NGDesktopUIService {
         const userAgent = navigator.userAgent.toLowerCase();
         const r = windowRef.nativeWindow['require'];
         if (userAgent.indexOf(' electron/') > -1 && r) {
-            this.electron = r('@electron');
+            this.electron = r('electron');
             this.remote = r('@electron/remote');
-            this.webFrame = this.electron.webFrame;
             this.Menu = this.remote.Menu;
             this.window = this.remote.getCurrentWindow();
             this.isMacOS = ( r('os').platform() === 'darwin');
@@ -550,7 +548,7 @@ export class NGDesktopUIService {
      * @return{number} - The zoom factor of the current window
      */
     getZoomFactor(): number {
-        return this.webFrame.getZoomFactor();
+        return this.electron.webFrame.getZoomFactor();
     }
 
     /**
@@ -562,10 +560,10 @@ export class NGDesktopUIService {
      */
     setZoomFactor(factor: number): boolean {
         if (factor && (typeof factor === 'number') && factor > 0.0 && factor <= 5.0) {
-            this.webFrame.setZoomFactor(factor);
-        return true;
+             this.electron.webFrame.setZoomFactor(factor);
+        	 return true;
         } else {
-            return false;
+             return false;
         }
     }
 
