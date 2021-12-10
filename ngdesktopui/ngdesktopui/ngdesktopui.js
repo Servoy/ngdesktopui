@@ -685,7 +685,6 @@ angular.module('ngdesktopui',['servoy'])
 			getMenuItemText: function() {console.log("not in ngdesktop");},
 			createBrowserView: function() {console.log("not in ngdesktop");},
 			closeBrowserView: function() {console.log("not in ngdesktop");},
-			injectJSIntoBrowserView: function() {console.log("not in ngdesktop");},
 			injectJSIntoBrowserView: function () { console.log("not in ngdesktop"); },
 			getZoomFactor: function () { console.log("not in ngdesktop"); },
 			setZoomFactor: function () { console.log("not in ngdesktop"); },
