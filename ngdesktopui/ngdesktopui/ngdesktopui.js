@@ -533,7 +533,7 @@ angular.module('ngdesktopui',['servoy'])
 			/**
  			 * Get the zoom factor of the current window
  			 *
-			 * @return {number} The zoom factor of the current window
+			 * @return {double} The zoom factor of the current window
 			 */
 			getZoomFactor: function () {
 				return webFrame.getZoomFactor();
@@ -542,7 +542,7 @@ angular.module('ngdesktopui',['servoy'])
 			 * Set the zoom factor of the current window
 			 * 1 == 100%. 0.5 == 50%.
 			 *
-			 * @param {number} factor (values greater than 0.0 and smaller or equal to 5.0)
+			 * @param {double} factor (values greater than 0.0 and smaller or equal to 5.0)
 			 * @return {boolean}
 			 */
 			setZoomFactor: function (factor) {

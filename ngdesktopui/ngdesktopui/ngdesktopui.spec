@@ -152,11 +152,11 @@
 			]
 		},
 		"getZoomFactor": {
-			"returns": "number"
+			"returns": "double"
 		},
 		"setZoomFactor": {
 			"parameters" : [
-				{"name": "factor", "type": "number"}
+				{"name": "factor", "type": "double"}
 			],
 			"returns": "boolean"
 		},
