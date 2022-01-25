@@ -21,16 +21,39 @@ angular.module('ngdesktopui',['servoy'])
 	if (remote) {
 		var mainMenuTemplate = [];
 		isMacOS = (os.platform() === 'darwin');
+		if (isMacOS) {
+			mainMenuTemplate = [
+				{
+					label: 'AppMenu', //this is overwritten by MacOS
+					role: 'appMenu' 
+				},
+				{
+					label: 'Edit',
+					role: 'editMenu' 
+				},
+				{
+					label: 'WIndow',
+					role: 'windowMenu' 
+				}
+			];
+			isMacDefaultMenu = true;
+		}
 		function clearMenu() {
 			if (isMacOS) {
 				mainMenuTemplate = [
 					{
-						label: 'DefaultMacMenu',
-						submenu: [
-							{ role: 'quit' }
-						]
+						label: 'AppMenu', //this is overwritten by MacOS
+						role: 'appMenu' 
+					},
+					{
+						label: 'Edit',
+						role: 'editMenu' 
+					},
+					{
+						label: 'WIndow',
+						role: 'windowMenu' 
 					}
-				]
+				];
 				isMacDefaultMenu = true;
 			} else {
 				mainMenuTemplate = [];
@@ -40,7 +63,7 @@ angular.module('ngdesktopui',['servoy'])
 		function addMenu(text, index) {
 			var addResultIndex = -1;
 			if (isMacDefaultMenu) {
-				mainMenuTemplate = [];
+				mainMenuTemplate = [];//add first item on an empty playground
 				isMacDefaultMenu = false;
 			}
 			var myMenu = {
@@ -59,7 +82,6 @@ angular.module('ngdesktopui',['servoy'])
 		function addDevToolsMenu() {
 			var addResultIndex = -1;
 			if (isMacDefaultMenu) {
-				mainMenuTemplate = [];
 				isMacDefaultMenu = false;
 			}
 			var myMenu = {
@@ -214,6 +236,29 @@ angular.module('ngdesktopui',['servoy'])
 			 * @return {int} - the index of the added menu
 			 */
 			addDevToolsMenu: function() {
+				//on Mac, default menu can't be dynamically modified
+				if (isMacDefaultMenu) {
+					var myMenu = Menu.getApplicationMenu();
+					//check for existing dev tools menu
+					if (myMenu != null && myMenu.getItemCount() > 0) {
+						var itemsCount = myMenu.getItemCount();
+						for (var index = 0; index < itemsCount; index++) {
+							if (myMenu.items[index].label.includes("Developer Tools")) {
+								return -1;
+							} else if (myMenu.items[index].submenu != null && myMenu.items[index].submenu.getItemCount() > 0) { 
+								//we have a submenu which may contan developer tools
+								//this is the case when running from Servoy Developer
+								var submenu = myMenu.items[index].submenu;
+								var subItemsCount = submenu.getItemCount();
+								for (var subIndex = 0; subIndex < subItemsCount; subIndex++) {
+									if (submenu.items[subIndex].label.includes("Developer Tools")) {
+										return -1;
+									}
+								}
+							}
+						}
+					}
+				}
 				var result = addDevToolsMenu();
 				Menu.setApplicationMenu(Menu.buildFromTemplate(result[0]));
 				return result[1];
@@ -680,7 +725,7 @@ angular.module('ngdesktopui',['servoy'])
 			addCheckBox: function() {console.log("not in ngdesktop");},
 			addRadioButton: function() {console.log("not in ngdesktop");},
 			addRoleItem: function() {console.log("not in ngdesktop");},
-			addDevToolsItem: function() {console.log("not in ngdesktop");},
+			addDevToolsMenu: function() {console.log("not in ngdesktop");},
 			getMenuItemIndexByText: function() {console.log("not in ngdesktop");},
 			getMenuItemText: function() {console.log("not in ngdesktop");},
 			createBrowserView: function() {console.log("not in ngdesktop");},

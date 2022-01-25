@@ -25,6 +25,23 @@ export class NGDesktopUIService {
             this.Menu = this.remote.Menu;
             this.window = this.remote.getCurrentWindow();
             this.isMacOS = ( r('os').platform() === 'darwin');
+            if (this.isMacOS) {
+                this.mainMenuTemplate = [
+                    {
+                        label: 'AppMenu', //this is overwritten by MacOS
+                        role: 'appMenu' 
+                    },
+                    {
+                        label: 'Edit',
+                        role: 'editMenu' 
+                    },
+                    {
+                        label: 'WIndow',
+                        role: 'windowMenu' 
+                    }
+                ];
+                this.isMacDefaultMenu = true;
+            }
         } else {
             this.log.warn('ngdesktopui service/plugin loaded in a none electron environment');
         }
@@ -52,10 +69,27 @@ export class NGDesktopUIService {
      * @return - the index of the added menu
      */
     addDevToolsMenu() {
-        if (this.isMacDefaultMenu) {
-            this.mainMenuTemplate = [];
-            this.isMacDefaultMenu = false;
-        }
+        //on Mac, default menu can't be dynamically modified
+		if (this.isMacDefaultMenu) {
+		    let myMenu = this.Menu.getApplicationMenu();
+			//check for existing dev tools menu
+			if (myMenu != null && myMenu.items.length > 0) {
+				for (var index = 0; index < myMenu.items.length; index++) {
+					if (myMenu.items[index].label.includes("Developer Tools")) {
+						return -1;
+					} else if (myMenu.items[index].submenu != null && myMenu.items[index].submenu.items.length > 0) { 
+						//we have a submenu which may contan developer tools
+						//this is the case when running from Servoy Developer
+						var submenu = myMenu.items[index].submenu;
+						for (var subIndex = 0; subIndex < submenu.items.length; subIndex++) {
+							if (submenu.items[subIndex].label.includes("Developer Tools")) {
+								return -1;
+							}
+						}
+					}
+				}
+			}
+		}
         const myMenu = {
             label: 'Developer Tools',
             submenu: [
@@ -75,6 +109,9 @@ export class NGDesktopUIService {
                 }
             ]
         };
+        if (this.isMacDefaultMenu) {
+            this.isMacDefaultMenu = false;
+        }
 
         this.mainMenuTemplate.push(myMenu);
 
@@ -147,13 +184,19 @@ export class NGDesktopUIService {
      * Cleanup the menubar. For MacOS that means to display a minimal menu
      */
     removeAllMenus() {
-        if (this.isMacOS) {
+        if (this.isMacOS) {//reset to default
             this.mainMenuTemplate = [
                 {
-                    label: 'DefaultMacMenu',
-                    submenu: [
-                        { role: 'quit' }
-                    ]
+                    label: 'AppMenu', //this is overwritten by MacOS
+                    role: 'appMenu' 
+                },
+                {
+                    label: 'Edit',
+                    role: 'editMenu' 
+                },
+                {
+                    label: 'WIndow',
+                    role: 'windowMenu' 
                 }
             ];
             this.isMacDefaultMenu = true;
@@ -436,7 +479,7 @@ export class NGDesktopUIService {
     private addMenuImpl(text: string, index: number) {
         let addResultIndex = -1;
         if (this.isMacDefaultMenu) {
-            this.mainMenuTemplate = [];
+            this.mainMenuTemplate = [];//add first item to an ampty playground
             this.isMacDefaultMenu = false;
         }
         const myMenu = {
