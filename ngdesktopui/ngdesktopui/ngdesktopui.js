@@ -8,6 +8,8 @@ angular.module('ngdesktopui',['servoy'])
 	var isMacOS = false;
 	var win = null
 	var isMacDefaultMenu = false;
+	var callbackOnClose = null;
+	var closeDefault = true;
 	
 	if (typeof require == "function") {
 		remote = require('@electron/remote');
@@ -21,6 +23,20 @@ angular.module('ngdesktopui',['servoy'])
 	if (remote) {
 		var mainMenuTemplate = [];
 		isMacOS = (os.platform() === 'darwin');
+		var ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+		ipcRenderer.on('ngdesktop-close-request', function(event) {
+			if (callbackOnClose != null) {
+				$window.executeInlineScript(callbackOnClose.formname, callbackOnClose.script).then(function(result) {
+					ipcRenderer.send('ngdesktop-close-response', result);
+				}).catch(function(err) {
+					console.log(err);
+					ipcRenderer.send('ngdesktop-close-response', closeDefault);
+					throw(err);
+				});
+			} else {
+				ipcRenderer.send('ngdesktop-close-response', true);
+			}
+		})
 		if (isMacOS) {
 			mainMenuTemplate = [
 				{
@@ -705,8 +721,20 @@ angular.module('ngdesktopui',['servoy'])
 			 */
 			 isVisible: function() {
 				return win.isVisible();
-			}
+			},
 
+			/**
+			 * Register callback to be executed before closing ngdesktop
+			 * 
+			 * @param {function} callback - function to be executed before closing ngdesktop. Must return a boolean value: 
+			 *                         true: ngdesktop will close
+			 *                         false: ngdesktop will not close
+			 * @param {boolean} closeOnError- set the ngdesktop default close on callback error
+			 */
+			registerOnCloseMethod: function(callback, closeOnError){
+				callbackOnClose = callback;
+				closeDefault = closeOnError;
+			}
 		}
 	} else {
 		return {
@@ -747,6 +775,7 @@ angular.module('ngdesktopui',['servoy'])
 			isFullScreen: function () { console.log("not in ngdesktop"); },
 			isNormal: function () { console.log("not in ngdesktop"); },
 			isVisible: function () { console.log("not in ngdesktop"); },
+			registerOnCloseMethod: function () { console.log("not in ngdesktop"); }
 		}
 	}
 })

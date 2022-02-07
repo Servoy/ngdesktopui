@@ -194,6 +194,12 @@
 		},
 		"isVisible": {
 			"returns": "boolean"
+		},
+		"registerOnCloseMethod": {
+			"parameters": [
+				{"name": "callback", "type": "function"},
+				{"name": "closeOnError", "type": "boolean"}
+			]
 		}
  	}
  }

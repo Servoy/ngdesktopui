@@ -15,6 +15,9 @@ export class NGDesktopUIService {
     private browserViews = {};
     private browserViewCounter = 0;
     private mainMenuTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
+    private ipcRenderer: typeof electron.ipcRenderer
+    private callbackOnClose = null;
+    private closeDefault = true;
     constructor(private servoyService: ServoyPublicService, windowRef: WindowRefService, logFactory: LoggerFactory) {
         this.log = logFactory.getLogger('NGDesktopUtilsService');
         const userAgent = navigator.userAgent.toLowerCase();
@@ -25,6 +28,20 @@ export class NGDesktopUIService {
             this.Menu = this.remote.Menu;
             this.window = this.remote.getCurrentWindow();
             this.isMacOS = ( r('os').platform() === 'darwin');
+            this.ipcRenderer = r('electron').ipcRenderer;
+            this.ipcRenderer.on('ngdesktop-close-request', (event) => {
+                if (this.callbackOnClose != null) {
+                    this.servoyService.executeInlineScript(this.callbackOnClose.formname, this.callbackOnClose.script, null).then((result) => {
+                        this.ipcRenderer.send('ngdesktop-close-response', result);
+                    }).catch((err) => {
+                        console.log(err);
+                        this.ipcRenderer.send('ngdesktop-close-response', this.closeDefault);
+                        throw(err);
+                    });
+                } else {
+                    this.ipcRenderer.send('ngdesktop-close-response', true);
+                }
+            })
             if (this.isMacOS) {
                 this.mainMenuTemplate = [
                     {
@@ -677,7 +694,6 @@ export class NGDesktopUIService {
 		this.window.setFullScreen(flag);
 	}
 
-
     /**
 	 * Get window size 
 	 * 
@@ -730,5 +746,18 @@ export class NGDesktopUIService {
 	 */
 	 isVisible(): boolean {
 		return this.window.isVisible();
+	}
+
+    /**
+	 * Register callback to be executed before closing ngdesktop
+	 * 
+	 * @param {function} callback - function to be executed before closing ngdesktop. Must return a boolean value: 
+	 *                         true: ngdesktop will close
+	 *                         false: ngdesktop will not close
+	 * @param {boolean} closeOnError- set the ngdesktop default close on callback error
+	 */
+	registerOnCloseMethod(callback: {formname: string; script: string}, closeOnError: boolean){ 
+		this.callbackOnClose = callback;
+		this.closeDefault = closeOnError;
 	}
 }
