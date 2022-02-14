@@ -37,6 +37,9 @@ angular.module('ngdesktopui',['servoy'])
 				ipcRenderer.send('ngdesktop-close-response', true);
 			}
 		})
+
+		ipcRenderer.send('ngdesktop-enable-closeOnRequest', null);
+		
 		if (isMacOS) {
 			mainMenuTemplate = [
 				{
