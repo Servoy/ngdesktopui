@@ -9,7 +9,7 @@ angular.module('ngdesktopui',['servoy'])
 	var win = null
 	var isMacDefaultMenu = false;
 	var callbackOnClose = null;
-	var closeDefault = true;
+	var ipcRenderer = null;
 	
 	if (typeof require == "function") {
 		remote = require('@electron/remote');
@@ -23,23 +23,6 @@ angular.module('ngdesktopui',['servoy'])
 	if (remote) {
 		var mainMenuTemplate = [];
 		isMacOS = (os.platform() === 'darwin');
-		var ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
-		ipcRenderer.on('ngdesktop-close-request', function(event) {
-			if (callbackOnClose != null) {
-				$window.executeInlineScript(callbackOnClose.formname, callbackOnClose.script).then(function(result) {
-					ipcRenderer.send('ngdesktop-close-response', result);
-				}).catch(function(err) {
-					console.log(err);
-					ipcRenderer.send('ngdesktop-close-response', closeDefault);
-					throw(err);
-				});
-			} else {
-				ipcRenderer.send('ngdesktop-close-response', true);
-			}
-		})
-
-		ipcRenderer.send('ngdesktop-enable-closeOnRequest', null);
-		
 		if (isMacOS) {
 			mainMenuTemplate = [
 				{
@@ -230,6 +213,17 @@ angular.module('ngdesktopui',['servoy'])
 				}
 			}
 			return [mainMenuTemplate, addResultIndex];
+		}
+		function executeOnCloseCallback() {
+			if (callbackOnClose) {
+				$window.executeInlineScript(callbackOnClose.formname, callbackOnClose.script).then(function(result) {
+					ipcRenderer.send('ngdesktop-close-response', result);
+				}).catch(function(err) {
+					console.log(err);
+					ipcRenderer.send('ngdesktop-close-response', true);
+					throw(err);
+				})
+			}
 		}
 		var browserViews = {};
 		var browserViewCounter = 0;
@@ -732,11 +726,29 @@ angular.module('ngdesktopui',['servoy'])
 			 * @param {function} callback - function to be executed before closing ngdesktop. Must return a boolean value: 
 			 *                         true: ngdesktop will close
 			 *                         false: ngdesktop will not close
-			 * @param {boolean} closeOnError- set the ngdesktop default close on callback error
+			 * @returns {boolean} - whether function executed succesfully or not
 			 */
-			registerOnCloseMethod: function(callback, closeOnError){
-				callbackOnClose = callback;
-				closeDefault = closeOnError;
+			registerOnCloseMethod: function(callback){
+				if (!callbackOnClose) {
+					callbackOnClose = callback;
+					ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+					ipcRenderer.on('ngdesktop-close-request', executeOnCloseCallback);
+					ipcRenderer.send('ngdesktop-enable-closeOnRequest', true);
+					return true;
+				}			
+				return false;
+			},
+
+			/**
+			 * Unregister the callback to be executed before closing ngdesktop.
+			 */ 
+			unregisterOnCloseMethod: function(){
+				if (ipcRenderer && callbackOnClose) {
+					ipcRenderer.removeListener('ngdesktop-close-request', executeOnCloseCallback);
+					ipcRenderer.send('ngdesktop-enable-closeOnRequest', false);
+					callbackOnClose = null;
+					ipcRenderer = null;
+				}
 			}
 		}
 	} else {
@@ -778,7 +790,8 @@ angular.module('ngdesktopui',['servoy'])
 			isFullScreen: function () { console.log("not in ngdesktop"); },
 			isNormal: function () { console.log("not in ngdesktop"); },
 			isVisible: function () { console.log("not in ngdesktop"); },
-			registerOnCloseMethod: function () { console.log("not in ngdesktop"); }
+			registerOnCloseMethod: function () { console.log("not in ngdesktop"); },
+			unregisterOnCloseMethod: function () { console.log("not in ngdesktop"); }
 		}
 	}
 })

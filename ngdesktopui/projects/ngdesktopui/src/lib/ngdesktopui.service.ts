@@ -17,7 +17,20 @@ export class NGDesktopUIService {
     private mainMenuTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
     private ipcRenderer: typeof electron.ipcRenderer
     private callbackOnClose = null;
-    private closeDefault = true;
+
+    private executeOnCloseCallback = () => { 
+        if (!!this.callbackOnClose) {// not (null || undefined)
+            this.servoyService.executeInlineScript(this.callbackOnClose.formname, this.callbackOnClose.script, []).then((result: any) => {
+                this.ipcRenderer.send('ngdesktop-close-response', result);
+            }).catch((err) => {
+                console.log(err);
+                this.ipcRenderer.send('ngdesktop-close-response', true);
+                throw(err);
+            })		
+        }
+    }
+
+
     constructor(private servoyService: ServoyPublicService, windowRef: WindowRefService, logFactory: LoggerFactory) {
         this.log = logFactory.getLogger('NGDesktopUtilsService');
         const userAgent = navigator.userAgent.toLowerCase();
@@ -27,21 +40,8 @@ export class NGDesktopUIService {
             this.remote = r('@electron/remote');
             this.Menu = this.remote.Menu;
             this.window = this.remote.getCurrentWindow();
+            this.ipcRenderer = r('electron').ipcRenderer; //we must initialize renderer here
             this.isMacOS = ( r('os').platform() === 'darwin');
-            this.ipcRenderer = r('electron').ipcRenderer;
-            this.ipcRenderer.on('ngdesktop-close-request', (event) => {
-                if (this.callbackOnClose != null) {
-                    this.servoyService.executeInlineScript(this.callbackOnClose.formname, this.callbackOnClose.script, null).then((result) => {
-                        this.ipcRenderer.send('ngdesktop-close-response', result);
-                    }).catch((err) => {
-                        console.log(err);
-                        this.ipcRenderer.send('ngdesktop-close-response', this.closeDefault);
-                        throw(err);
-                    });
-                } else {
-                    this.ipcRenderer.send('ngdesktop-close-response', true);
-                }
-            })
             if (this.isMacOS) {
                 this.mainMenuTemplate = [
                     {
@@ -754,10 +754,26 @@ export class NGDesktopUIService {
 	 * @param {function} callback - function to be executed before closing ngdesktop. Must return a boolean value: 
 	 *                         true: ngdesktop will close
 	 *                         false: ngdesktop will not close
-	 * @param {boolean} closeOnError- set the ngdesktop default close on callback error
+	 * @returns {boolean} - whether function executed succesfully or not
 	 */
-	registerOnCloseMethod(callback: {formname: string; script: string}, closeOnError: boolean){ 
-		this.callbackOnClose = callback;
-		this.closeDefault = closeOnError;
+	registerOnCloseMethod(callback: {formname: string; script: string}): boolean{ 
+        if (this.callbackOnClose == null) { //null or undefined
+            this.callbackOnClose = callback;
+            this.ipcRenderer.on('ngdesktop-close-request', this.executeOnCloseCallback);
+            this.ipcRenderer.send('ngdesktop-enable-closeOnRequest', true);
+            return true;
+        }			
+        return false;
+    }
+
+    /**
+	 * Unregister the callback to be executed before closing ngdesktop.
+	 */ 
+	unregisterOnCloseMethod() {
+		if (!!this.callbackOnClose) { // not (null || undefined)
+			this.ipcRenderer.removeListener('ngdesktop-close-request', this.executeOnCloseCallback);
+			this.ipcRenderer.send('ngdesktop-enable-closeOnRequest', false);
+			this.callbackOnClose = null;
+		}
 	}
 }

@@ -197,9 +197,10 @@
 		},
 		"registerOnCloseMethod": {
 			"parameters": [
-				{"name": "callback", "type": "function"},
-				{"name": "closeOnError", "type": "boolean"}
-			]
-		}
+				{"name": "callback", "type": "function"}
+			],
+			"returns": "boolean"
+		},
+		"unregisterOnCloseMethod": {}
  	}
  }
