@@ -6,10 +6,20 @@ angular.module('ngdesktopui',['servoy'])
 	var os = null;
 	var BrowserWindow = null;
 	var isMacOS = false;
-	var win = null
-	var isMacDefaultMenu = false;
+	var win = null;
 	var callbackOnClose = null;
 	var ipcRenderer = null;
+	var cleanMenu = [
+		{
+			label: 'App name', //overwritten by MacOS
+			submenu: [
+				{
+					label: 'Quit',
+					role: 'quit'
+				}
+			]
+		}
+	];
 	
 	if (typeof require == "function") {
 		remote = require('@electron/remote');
@@ -21,53 +31,86 @@ angular.module('ngdesktopui',['servoy'])
 	}
 
 	if (remote) {
+		isMacOS = (os.platform() == 'darwin');
+		ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+		var menuJSON = ipcRenderer.sendSync('ngdesktop-menu', true);
+		var defaultTemplate = [];
 		var mainMenuTemplate = [];
-		isMacOS = (os.platform() === 'darwin');
-		if (isMacOS) {
-			mainMenuTemplate = [
-				{
-					label: 'AppMenu', //this is overwritten by MacOS
-					role: 'appMenu' 
-				},
-				{
-					label: 'Edit',
-					role: 'editMenu' 
-				},
-				{
-					label: 'WIndow',
-					role: 'windowMenu' 
+		currentMenu = 'default';
+		
+		if (menuJSON.length > 0) {
+			defaultTemplate =JSON.parse(menuJSON);
+			mainMenuTemplate = JSON.parse(menuJSON);
+			defaultTemplate = resetDevToolWindow(defaultTemplate);
+			mainMenuTemplate = resetDevToolWindow(mainMenuTemplate);
+		} else if (isMacOS) {
+			currentMenu = 'clean';
+			defaultTemplate =JSON.parse(JSON.stringify(cleanMenu));
+			mainMenuTemplate = JSON.parse(JSON.stringify(cleanMenu));
+		} else { //windows, Linux
+			currentMenu = 'clean';
+			defaultTemplate = [];
+			mainMenuTemplate = [];
+		};
+
+		function isDevToolsAdded(templateArray) {
+			var result = false;
+			for (var index = 0; index < templateArray.length; index ++) {
+				if (templateArray[index].submenu != null && templateArray[index].submenu.length > 0) {
+					result = isDevToolsAdded(templateArray[index].submenu);
+					if (result) break;
+				} else if (templateArray[index].label != null && templateArray[index].label.includes('Developer Tools')) {
+					result = true;
+					break;
 				}
-			];
-			isMacDefaultMenu = true;
+			}
+			return result;
+		}
+		
+		function resetDevToolWindow(templateArray) {
+			for (var index = 0; index < templateArray.length; index ++) {
+				if (templateArray[index].submenu != null && templateArray[index].submenu.length > 0) {
+					templateArray[index].submenu = resetDevToolWindow(templateArray[index].submenu);
+				} else if (templateArray[index].label != null && templateArray[index].label.includes('Detach Developer')) {
+					templateArray[index].click = function() {
+						var devTools = new BrowserWindow();
+						win.webContents.setDevToolsWebContents(devTools.webContents);
+						win.webContents.openDevTools({mode: 'detach'});
+					}
+					break;
+				}
+			}
+			return templateArray
 		}
 		function clearMenu() {
+			mainMenuTemplate = [];
 			if (isMacOS) {
-				mainMenuTemplate = [
-					{
-						label: 'AppMenu', //this is overwritten by MacOS
-						role: 'appMenu' 
-					},
-					{
-						label: 'Edit',
-						role: 'editMenu' 
-					},
-					{
-						label: 'WIndow',
-						role: 'windowMenu' 
-					}
-				];
-				isMacDefaultMenu = true;
+				mainMenuTemplate = JSON.parse(JSON.stringify(cleanMenu));
+			};
+			currentMenu = 'clean';
+			return mainMenuTemplate;
+		}
+		function isCleanMenu() {
+			return currentMenu == 'clean'
+		}
+		function resetMenuToDefault() {
+			currentMenu = 'default';
+			mainMenuTemplate = JSON.parse(JSON.stringify(defaultTemplate));
+
+			if (mainMenuTemplate.length > 0) {
+				mainMenuTemplate = resetDevToolWindow(mainMenuTemplate);
 			} else {
 				mainMenuTemplate = [];
+				currentMenu = 'clean';
 			}
 			return mainMenuTemplate;
 		}
 		function addMenu(text, index) {
-			var addResultIndex = -1;
-			if (isMacDefaultMenu) {
-				mainMenuTemplate = [];//add first item on an empty playground
-				isMacDefaultMenu = false;
+			if (isCleanMenu()) {
+				mainMenuTemplate = [];
+				currentMenu = 'custom';
 			}
+			var addResultIndex = -1;
 			var myMenu = {
 				label: text,
 				submenu: []
@@ -83,29 +126,32 @@ angular.module('ngdesktopui',['servoy'])
 		}
 		function addDevToolsMenu() {
 			var addResultIndex = -1;
-			if (isMacDefaultMenu) {
-				isMacDefaultMenu = false;
+			if (isCleanMenu()) {
+				mainMenuTemplate = [];
+				currentMenu = 'custom';
 			}
-			var myMenu = {
-				label: "Developer Tools",
-				submenu: [
-					{
-						label: "Open Developer Tools",
-						click: function() {
-							var devTools = new BrowserWindow();
-							win.webContents.setDevToolsWebContents(devTools.webContents);
-							win.webContents.openDevTools({mode: 'detach'});
+			if (!isDevToolsAdded(mainMenuTemplate)) {
+				var myMenu = {
+					label: "Developer Tools",
+					submenu: [
+						{
+							label: "Open Developer Tools",
+							click: function() {
+								var devTools = new BrowserWindow();
+								win.webContents.setDevToolsWebContents(devTools.webContents);
+								win.webContents.openDevTools({mode: 'detach'});
+							}
 						}
-					}
-				]
+					]
+				}			
+				mainMenuTemplate.push(myMenu)
+				addResultIndex = mainMenuTemplate.length - 1;
 			}
-			
-			mainMenuTemplate.push(myMenu)
-			addResultIndex = mainMenuTemplate.length - 1;
 			return [mainMenuTemplate, addResultIndex];
 		}
 		function removeMenu(index) {
 			if (Number.isInteger(index)) {			
+				currentMenu = 'custom';
 				mainMenuTemplate.splice(index,1);
 				if (mainMenuTemplate.length == 0) {
 					mainMenuTemplate = clearMenu();
@@ -115,6 +161,7 @@ angular.module('ngdesktopui',['servoy'])
 		}
 		function removeAllMenuItems(menuIndex, itemIndex) {
 			if (Number.isInteger(menuIndex) && (menuIndex >=0 && menuIndex< mainMenuTemplate.length)) {
+				currentMenu = 'custom';
 				if (Number.isInteger(itemIndex)) {//submenu wanted
 					if (itemIndex >=0 && itemIndex < mainMenuTemplate[menuIndex].submenu.length) {
 						mainMenuTemplate[menuIndex].submenu[itemIndex].submenu = [];
@@ -123,7 +170,7 @@ angular.module('ngdesktopui',['servoy'])
 				} else {//
 					mainMenuTemplate[menuIndex].submenu = [];
 					if (mainMenuTemplate.length == 1 && isMacOS) {
-						mainMenuTemplate = clearMenu(); // create default MacOS menu
+						mainMenuTemplate = clearMenu();
 					} 
 				}
 			}
@@ -131,6 +178,7 @@ angular.module('ngdesktopui',['servoy'])
 		}
 		function removeMenuItem(menuIndex, position, itemIndex) {
 			if (Number.isInteger(menuIndex) && (menuIndex >=0 && menuIndex < mainMenuTemplate.length)) {
+				currentMenu = 'custom';
 				var submenu = mainMenuTemplate[menuIndex].submenu;
 				var isSubmenu = false;
 				if (Number.isInteger(itemIndex) && (itemIndex >=0 && itemIndex < mainMenuTemplate[menuIndex].submenu.length)) {
@@ -153,7 +201,12 @@ angular.module('ngdesktopui',['servoy'])
 		}
 		function addMenuItem(menuIndex, text, role, checked, callback, position, itemIndex, type) {
 			var addResultIndex = -1;
+			if (isCleanMenu()) {
+				mainMenuTemplate = [];
+				currentMenu = 'custom';
+			}
 			if (Number.isInteger(menuIndex) && (menuIndex >=0 && menuIndex < mainMenuTemplate.length)) {
+				currentMenu = 'custom';
 				var submenu = mainMenuTemplate[menuIndex].submenu;
 				var isSubmenu = false;
 				if (Number.isInteger(itemIndex) && (itemIndex >=0 && itemIndex < mainMenuTemplate[menuIndex].submenu.length)) {
@@ -243,35 +296,12 @@ angular.module('ngdesktopui',['servoy'])
 			},
 			/**
 			 * Add Developer Tools menu to the menu bar
-			 * This function is adding Developer Tools menu. 
+			 * 
 			 * Use it just for debugging. Remove any call to this function once you're done.  
 			 * 
-			 * @return {int} - the index of the added menu
+			 * @return {int} - the index of the added menu or -1 if nothing has changed
 			 */
 			addDevToolsMenu: function() {
-				//on Mac, default menu can't be dynamically modified
-				if (isMacDefaultMenu) {
-					var myMenu = Menu.getApplicationMenu();
-					//check for existing dev tools menu
-					if (myMenu != null && myMenu.getItemCount() > 0) {
-						var itemsCount = myMenu.getItemCount();
-						for (var index = 0; index < itemsCount; index++) {
-							if (myMenu.items[index].label.includes("Developer Tools")) {
-								return -1;
-							} else if (myMenu.items[index].submenu != null && myMenu.items[index].submenu.getItemCount() > 0) { 
-								//we have a submenu which may contan developer tools
-								//this is the case when running from Servoy Developer
-								var submenu = myMenu.items[index].submenu;
-								var subItemsCount = submenu.getItemCount();
-								for (var subIndex = 0; subIndex < subItemsCount; subIndex++) {
-									if (submenu.items[subIndex].label.includes("Developer Tools")) {
-										return -1;
-									}
-								}
-							}
-						}
-					}
-				}
 				var result = addDevToolsMenu();
 				Menu.setApplicationMenu(Menu.buildFromTemplate(result[0]));
 				return result[1];
@@ -334,6 +364,12 @@ angular.module('ngdesktopui',['servoy'])
 			 */
 			removeAllMenus: function() {
 				Menu.setApplicationMenu(Menu.buildFromTemplate(clearMenu()));
+			},
+			/**
+			 * Reset ngdesktop menu to default
+			 */
+			resetMenuToDefault: function() {
+				Menu.setApplicationMenu(Menu.buildFromTemplate(resetMenuToDefault()))
 			},
 			/**
 			 * Show/hide menubar visibility. This function is working only on Windows/Linux

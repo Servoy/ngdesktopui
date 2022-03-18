@@ -40,6 +40,7 @@
  			"returns": "int"
  		},
  		"removeAllMenus": {},
+		"resetMenuToDefault": {},
  		"setMenuBarVisibility": {
  			"parameters": [
  				{"name": "visible", "type": "boolean"}
