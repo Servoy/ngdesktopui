@@ -34,9 +34,10 @@ angular.module('ngdesktopui',['servoy'])
 		isMacOS = (os.platform() == 'darwin');
 		ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
 		var menuJSON = ipcRenderer.sendSync('ngdesktop-menu', true);
+		ipcRenderer = null;
 		var defaultTemplate = [];
 		var mainMenuTemplate = [];
-		currentMenu = 'default';
+		var currentMenu = 'default';
 		
 		if (menuJSON.length > 0) {
 			defaultTemplate =JSON.parse(menuJSON);
@@ -82,6 +83,14 @@ angular.module('ngdesktopui',['servoy'])
 			}
 			return templateArray
 		}
+
+		function refreshMenuTemplate() {
+			ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+			var menuJSON = ipcRenderer.sendSync('ngdesktop-refresh-menu', true);
+			ipcRenderer = null;
+			return resetDevToolWindow(JSON.parse(menuJSON));;
+		}
+
 		function clearMenu() {
 			mainMenuTemplate = [];
 			if (isMacOS) {
@@ -104,6 +113,25 @@ angular.module('ngdesktopui',['servoy'])
 				currentMenu = 'clean';
 			}
 			return mainMenuTemplate;
+		}
+		function addRoleMenu(index, role, text) {
+			if (isCleanMenu()) {
+				mainMenuTemplate = [];
+				currentMenu = 'custom';
+			}
+			var addResultIndex = -1;
+			var myMenu = {
+				label: text,
+				role: role
+			}
+			if (Number.isInteger(index)) {
+				mainMenuTemplate.splice(index, 0, myMenu);
+				addResultIndex = index;
+			} else {
+				mainMenuTemplate.push(myMenu)
+				addResultIndex = mainMenuTemplate.length - 1;
+			}
+			return [mainMenuTemplate, addResultIndex];
 		}
 		function addMenu(text, index) {
 			if (isCleanMenu()) {
@@ -519,15 +547,21 @@ angular.module('ngdesktopui',['servoy'])
 			 * @param {int} index - menu index
 			 * @param {string} role - item role. 
 			 * @param {string} [text] - menuitem text; when not specified the System will provide a standard (localized) one
-			 * @param {int} [position] - insert position
-			 * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
+			 * @param {int} [position] - insert position; when role is a predefined menu, this parameter is ignored;
+			 * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu; when role is a predefined menu this parameter is ignored
 			 * 
 			 * @return {int} - the index of the added role item
 			 * 
 			 */
 			addRoleItem: function(index, role, text, position, itemIndex) {
-				var result = addMenuItem(index, text, role, null, null, position, itemIndex, "role");
+				var result;
+				if (role.endsWith('Menu')) {
+					result = addRoleMenu(index, role, text);
+				} else {
+					result = addMenuItem(index, text, role, null, null, position, itemIndex, "role");
+				}
 				Menu.setApplicationMenu(Menu.buildFromTemplate(result[0]));
+				mainMenuTemplate = refreshMenuTemplate();
 				return result[1];
 			},
 			/**
@@ -800,6 +834,7 @@ angular.module('ngdesktopui',['servoy'])
 			addSeparator: function() {console.log("not in ngdesktop");},			
 			addMenuItem: function() {console.log("not in ngdesktop");},
 			removeMenuItem: function() {console.log("not in ngdesktop");},
+			resetMenuToDefault: function() {console.log("not in ngdesktop");},
 			getMenuItemsCount: function() {console.log("not in ngdesktop");},		
 			addCheckBox: function() {console.log("not in ngdesktop");},
 			addRadioButton: function() {console.log("not in ngdesktop");},

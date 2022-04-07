@@ -11,12 +11,25 @@ export class NGDesktopUIService {
     private log: LoggerService;
     private window: electron.BrowserWindow;
     private isMacOS = false;
-    private isMacDefaultMenu = false;
     private browserViews = {};
     private browserViewCounter = 0;
     private mainMenuTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
+    private defaultTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
     private ipcRenderer: typeof electron.ipcRenderer
     private callbackOnClose = null;
+    private currentMenu = 'default';
+
+    private cleanMenu = [
+		{
+			label: 'App name', //overwritten by MacOS
+			submenu: [
+				{
+					label: 'Quit',
+					role: 'quit'
+				}
+			]
+		}
+	];
 
     private executeOnCloseCallback = () => { 
         if (!!this.callbackOnClose) {// not (null || undefined)
@@ -42,26 +55,111 @@ export class NGDesktopUIService {
             this.window = this.remote.getCurrentWindow();
             this.ipcRenderer = r('electron').ipcRenderer; //we must initialize renderer here
             this.isMacOS = ( r('os').platform() === 'darwin');
-            if (this.isMacOS) {
-                this.mainMenuTemplate = [
-                    {
-                        label: 'AppMenu', //this is overwritten by MacOS
-                        role: 'appMenu' 
-                    },
-                    {
-                        label: 'Edit',
-                        role: 'editMenu' 
-                    },
-                    {
-                        label: 'WIndow',
-                        role: 'windowMenu' 
-                    }
-                ];
-                this.isMacDefaultMenu = true;
-            }
+
+            let menuJSON = this.ipcRenderer.sendSync('ngdesktop-menu', true);
+	
+		    
+		
+            if (menuJSON.length > 0) {
+                this.defaultTemplate =JSON.parse(menuJSON);
+                this.mainMenuTemplate = JSON.parse(menuJSON);
+                this.defaultTemplate = this.resetDevToolWindow(this.defaultTemplate);
+                this.mainMenuTemplate = this.resetDevToolWindow(this.mainMenuTemplate);
+            } else if (this.isMacOS) {
+                this.currentMenu = 'clean';
+                this.defaultTemplate =JSON.parse(JSON.stringify(this.cleanMenu));
+                this.mainMenuTemplate = JSON.parse(JSON.stringify(this.cleanMenu));
+            } else { //windows, Linux
+                this.currentMenu = 'clean';
+                this.defaultTemplate = [];
+                this.mainMenuTemplate = [];
+            };
         } else {
             this.log.warn('ngdesktopui service/plugin loaded in a none electron environment');
         }
+    }
+
+    isDevToolsAdded(templateArray) {
+        let result = false;
+        for (let index = 0; index < templateArray.length; index ++) {
+            if (templateArray[index].submenu != null && templateArray[index].submenu.length > 0) {
+                result = this.isDevToolsAdded(templateArray[index].submenu);
+                if (result) break;
+            } else if (templateArray[index].label != null && templateArray[index].label.includes('Developer Tools')) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    resetDevToolWindow(templateArray) {
+        for (let index = 0; index < templateArray.length; index ++) {
+            if (templateArray[index].submenu != null && templateArray[index].submenu.length > 0) {
+                templateArray[index].submenu = this.resetDevToolWindow(templateArray[index].submenu);
+            } else if (templateArray[index].label != null && templateArray[index].label.includes('Detach Developer')) {
+                templateArray[index].click = function() {
+                    let devTools = new this.remote.BrowserWindow();
+                    this.window.webContents.setDevToolsWebContents(devTools.webContents);
+                    this.win.webContents.openDevTools({mode: 'detach'});
+                }
+                break;
+            }
+        }
+        return templateArray
+    }
+
+    refreshMenuTemplate() {
+        this.ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+        let menuJSON = this.ipcRenderer.sendSync('ngdesktop-refresh-menu', true);
+        this.ipcRenderer = null;
+        return this.resetDevToolWindow(JSON.parse(menuJSON));
+    }
+
+    clearMenu() {
+        this.mainMenuTemplate = [];
+        if (this.isMacOS) {
+            this.mainMenuTemplate = JSON.parse(JSON.stringify(this.cleanMenu));
+        };
+        this.currentMenu = 'clean';
+        return this.mainMenuTemplate;
+    }
+    
+    isCleanMenu() {
+        return this.currentMenu == 'clean'
+    }
+    
+    resetMenuToDefault() {
+        this.currentMenu = 'default';
+        this.mainMenuTemplate = JSON.parse(JSON.stringify(this.defaultTemplate));
+
+        if (this.mainMenuTemplate.length > 0) {
+            this.mainMenuTemplate = this.resetDevToolWindow(this.mainMenuTemplate);
+        } else {
+            this.mainMenuTemplate = [];
+            this.currentMenu = 'clean';
+        }
+        return this.mainMenuTemplate;
+    }
+
+    addRoleMenu(index, role, text) {
+        if (this.isCleanMenu()) {
+            this.mainMenuTemplate = [];
+            this.currentMenu = 'custom';
+        }
+        let addResultIndex = -1;
+        const myMenu = {
+            label: text,
+            role: role
+        }
+        if (Number.isInteger(index)) {
+            this.mainMenuTemplate.splice(index, 0, myMenu);
+            addResultIndex = index;
+        } else {
+            this.mainMenuTemplate.push(myMenu)
+            addResultIndex = this.mainMenuTemplate.length - 1;
+        }
+        return [this.mainMenuTemplate, addResultIndex];
     }
 
     /**
@@ -86,52 +184,32 @@ export class NGDesktopUIService {
      * @return - the index of the added menu
      */
     addDevToolsMenu() {
-        //on Mac, default menu can't be dynamically modified
-		if (this.isMacDefaultMenu) {
-		    let myMenu = this.Menu.getApplicationMenu();
-			//check for existing dev tools menu
-			if (myMenu != null && myMenu.items.length > 0) {
-				for (var index = 0; index < myMenu.items.length; index++) {
-					if (myMenu.items[index].label.includes("Developer Tools")) {
-						return -1;
-					} else if (myMenu.items[index].submenu != null && myMenu.items[index].submenu.items.length > 0) { 
-						//we have a submenu which may contan developer tools
-						//this is the case when running from Servoy Developer
-						var submenu = myMenu.items[index].submenu;
-						for (var subIndex = 0; subIndex < submenu.items.length; subIndex++) {
-							if (submenu.items[subIndex].label.includes("Developer Tools")) {
-								return -1;
-							}
-						}
-					}
-				}
-			}
-		}
-        const myMenu = {
-            label: 'Developer Tools',
-            submenu: [
-                {
-                    label: 'Open Developer Tools',
-                    click: () => {
-                        const devTools = new this.remote.BrowserWindow();
-                        this.window.webContents.setDevToolsWebContents(devTools.webContents);
-                        this.window.webContents.openDevTools({ mode: 'detach' });
-                        setTimeout(() => {
-                            // set the bounds to be a bit bigger to just force a redraw
-                            const bounds = devTools.getBounds();
-                            bounds.width = bounds.width + 10;
-                            devTools.setBounds(bounds);
-                        }, 10);
-                    }
-                }
-            ]
-        };
-        if (this.isMacDefaultMenu) {
-            this.isMacDefaultMenu = false;
+        if (this.isCleanMenu()) {
+            this.mainMenuTemplate = [];
+            this.currentMenu = 'custom';
         }
-
-        this.mainMenuTemplate.push(myMenu);
-
+        if (!this.isDevToolsAdded(this.mainMenuTemplate)) {
+            let myMenu = {
+                label: "Developer Tools",
+                submenu: [
+                    {
+                        label: 'Open Developer Tools',
+                        click: () => {
+                            const devTools = new this.remote.BrowserWindow();
+                            this.window.webContents.setDevToolsWebContents(devTools.webContents);
+                            this.window.webContents.openDevTools({ mode: 'detach' });
+                            setTimeout(() => {
+                                // set the bounds to be a bit bigger to just force a redraw
+                                const bounds = devTools.getBounds();
+                                bounds.width = bounds.width + 10;
+                                devTools.setBounds(bounds);
+                            }, 10);
+                        }
+                    }
+                ]
+            }			
+            this.mainMenuTemplate.push(myMenu)
+        }
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return this.mainMenuTemplate.length - 1;
     }
@@ -143,9 +221,10 @@ export class NGDesktopUIService {
      */
     removeMenu(index: number) {
         if (Number.isInteger(index)) {
+            this.currentMenu = 'custom'
             this.mainMenuTemplate.splice(index, 1);
             if (this.mainMenuTemplate.length === 0) {
-                this.removeAllMenus();
+                this.mainMenuTemplate = this.clearMenu();
             } else {
                 this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
             }
@@ -201,26 +280,7 @@ export class NGDesktopUIService {
      * Cleanup the menubar. For MacOS that means to display a minimal menu
      */
     removeAllMenus() {
-        if (this.isMacOS) {//reset to default
-            this.mainMenuTemplate = [
-                {
-                    label: 'AppMenu', //this is overwritten by MacOS
-                    role: 'appMenu' 
-                },
-                {
-                    label: 'Edit',
-                    role: 'editMenu' 
-                },
-                {
-                    label: 'WIndow',
-                    role: 'windowMenu' 
-                }
-            ];
-            this.isMacDefaultMenu = true;
-        } else {
-            this.mainMenuTemplate = [];
-        }
-        this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
+        this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.clearMenu()));
     }
     /**
      * Show/hide menubar visibility. This function is working only on Windows/Linux
@@ -236,6 +296,7 @@ export class NGDesktopUIService {
      */
     removeAllMenuItems(menuIndex: number, itemIndex: number) {
         if (Number.isInteger(menuIndex) && (menuIndex >= 0 && menuIndex < this.mainMenuTemplate.length)) {
+            this.currentMenu = 'custom';
             if (Number.isInteger(itemIndex)) {//submenu wanted
                 if (itemIndex >= 0 && itemIndex < (this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[]).length) {
                     this.mainMenuTemplate[menuIndex].submenu[itemIndex].submenu = [];
@@ -245,10 +306,9 @@ export class NGDesktopUIService {
             } else {//
                 this.mainMenuTemplate[menuIndex].submenu = [];
                 if (this.mainMenuTemplate.length === 1 && this.isMacOS) {
-                    this.removeAllMenus(); // create default MacOS menu
-                } else {
-                    this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
-                }
+                    this.mainMenuTemplate = this.clearMenu();
+                } 
+                this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
             }
         }
     }
@@ -394,8 +454,15 @@ export class NGDesktopUIService {
     // eslint-disable-next-line max-len
     addRoleItem(index: number, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
                          text: string, position: number, itemIndex: number) {
-        const result = this.addMenuItemImpl(index, text, role, null, null, position, itemIndex, 'role');
+
+        let result;
+        if (role.endsWith('Menu')) {
+            result = this.addRoleMenu(index, role, text);
+        } else {
+            this.addMenuItemImpl(index, text, role, null, null, position, itemIndex, 'role');
+        }
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
+        this.mainMenuTemplate = this.refreshMenuTemplate();
         return result;
     }
     /**
@@ -494,11 +561,11 @@ export class NGDesktopUIService {
     }
 
     private addMenuImpl(text: string, index: number) {
-        let addResultIndex = -1;
-        if (this.isMacDefaultMenu) {
-            this.mainMenuTemplate = [];//add first item to an ampty playground
-            this.isMacDefaultMenu = false;
+        if (this.isCleanMenu()) {
+            this.mainMenuTemplate = [];
+            this.currentMenu = 'custom';
         }
+        let addResultIndex = -1;
         const myMenu = {
             label: text,
             submenu: []
@@ -540,7 +607,12 @@ export class NGDesktopUIService {
                 // eslint-disable-next-line max-len
                 checked: boolean, callback: {formname: string; script: string}, position: number, itemIndex: number, type: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio') | 'role'): number {
         let addResultIndex = -1;
+        if (this.isCleanMenu()) {
+            this.mainMenuTemplate = [];
+            this.currentMenu = 'custom';
+        }
         if (Number.isInteger(menuIndex) && (menuIndex >= 0 && menuIndex < this.mainMenuTemplate.length)) {
+            this.currentMenu = 'custom';
             let submenu = this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[];
             let isSubmenu = false;
             if (Number.isInteger(itemIndex) && (itemIndex >= 0 && itemIndex < (this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[]).length)) {
