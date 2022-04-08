@@ -56,7 +56,7 @@ export class NGDesktopUIService {
             this.ipcRenderer = r('electron').ipcRenderer; //we must initialize renderer here
             this.isMacOS = ( r('os').platform() === 'darwin');
 
-            let menuJSON = this.ipcRenderer.sendSync('ngdesktop-menu', true);
+            let menuJSON = this.ipcRenderer.sendSync('ngdesktop-menu', false);
 	
 		    
 		
@@ -111,7 +111,7 @@ export class NGDesktopUIService {
 
     refreshMenuTemplate() {
         this.ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
-        let menuJSON = this.ipcRenderer.sendSync('ngdesktop-refresh-menu', true);
+        let menuJSON = this.ipcRenderer.sendSync('ngdesktop-menu', true);
         this.ipcRenderer = null;
         return this.resetDevToolWindow(JSON.parse(menuJSON));
     }

@@ -33,7 +33,7 @@ angular.module('ngdesktopui',['servoy'])
 	if (remote) {
 		isMacOS = (os.platform() == 'darwin');
 		ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
-		var menuJSON = ipcRenderer.sendSync('ngdesktop-menu', true);
+		var menuJSON = ipcRenderer.sendSync('ngdesktop-menu', false);
 		ipcRenderer = null;
 		var defaultTemplate = [];
 		var mainMenuTemplate = [];
@@ -86,7 +86,7 @@ angular.module('ngdesktopui',['servoy'])
 
 		function refreshMenuTemplate() {
 			ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
-			var menuJSON = ipcRenderer.sendSync('ngdesktop-refresh-menu', true);
+			var menuJSON = ipcRenderer.sendSync('ngdesktop-menu', true);
 			ipcRenderer = null;
 			return resetDevToolWindow(JSON.parse(menuJSON));;
 		}
