@@ -110,7 +110,7 @@ export class NGDesktopUIService {
     }
 
     refreshMenuTemplate() {
-        this.ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+        this.ipcRenderer = this.electron.ipcRenderer; //we must initialize renderer here
         let menuJSON = this.ipcRenderer.sendSync('ngdesktop-menu', true);
         this.ipcRenderer = null;
         return this.resetDevToolWindow(JSON.parse(menuJSON));
