@@ -202,6 +202,11 @@
 			],
 			"returns": "boolean"
 		},
-		"unregisterOnCloseMethod": {}
+		"unregisterOnCloseMethod": {},
+		"useDefaultBrowserForExternalLinks": {
+			"parameters" : [
+				{"name":"flag", "type":"boolean"}
+			]
+		}
  	}
  }

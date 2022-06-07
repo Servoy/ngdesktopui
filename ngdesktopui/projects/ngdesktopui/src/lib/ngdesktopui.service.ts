@@ -846,4 +846,16 @@ export class NGDesktopUIService {
 			this.callbackOnClose = null;
 		}
 	}
+
+    /**
+	 * Set the way external links will be handled from ngdesktop.
+     * WHen the flag parameter is set to:
+	 *  - true: open external links using OS default browser
+	 *  - false: open external links using a new ngdesktop window
+	 * 
+	 * @param {boolean}
+	 */
+     useDefaultBrowserForExternalLinks(flag) {
+        this.ipcRenderer.send('ngdesktop-useDefaultBrowserForExternal', flag);
+    }
 }

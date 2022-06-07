@@ -819,6 +819,26 @@ angular.module('ngdesktopui',['servoy'])
 					callbackOnClose = null;
 					ipcRenderer = null;
 				}
+			},
+
+			/**
+			 * Set the way external links will be handled from ngdesktop.
+			 * WHen the flag parameter is set to:
+			 *  - true: open external links using OS default browser
+			 *  - false: open external links using a new ngdesktop window
+			 * 
+			 * @param {boolean}
+			 */
+			useDefaultBrowserForExternalLinks: function(flag) {
+				var deleteRenderer = false;
+				if (!ipcRenderer) {
+					ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+					deleteRenderer = true;
+				}
+				ipcRenderer.send('ngdesktop-useDefaultBrowserForExternal', flag);
+				if (deleteRenderer) {
+					ipcRenderer = null;
+				}
 			}
 		}
 	} else {
@@ -862,7 +882,8 @@ angular.module('ngdesktopui',['servoy'])
 			isNormal: function () { console.log("not in ngdesktop"); },
 			isVisible: function () { console.log("not in ngdesktop"); },
 			registerOnCloseMethod: function () { console.log("not in ngdesktop"); },
-			unregisterOnCloseMethod: function () { console.log("not in ngdesktop"); }
+			unregisterOnCloseMethod: function () { console.log("not in ngdesktop"); },
+			useDefaultBrowserForExternalLinks: function () { console.log("not in ngdesktop"); }
 		}
 	}
 })
