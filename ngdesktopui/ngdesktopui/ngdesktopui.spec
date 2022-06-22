@@ -207,6 +207,69 @@
 			"parameters" : [
 				{"name":"flag", "type":"boolean"}
 			]
+		},
+		"setTrayIcon": {
+			"parameters": [
+				{"name": "icon", "type": "byte[]"}
+			]
+		},
+		"createTray": {
+			"parameters": [
+				{"name": "icon", "type": "byte[]", "optional": true}
+			]
+		},
+		"addTrayMenuItem": {
+ 			"parameters": [
+ 				{"name": "index", "type": "int"},
+ 				{"name": "text", "type": "string"},
+ 				{"name": "callback", "type": "function"}
+ 			],
+ 			"returns": "int"
+ 		},
+		"removeTrayMenuItem": {
+ 			"parameters": [
+ 				{"name": "index", "type": "int"}
+ 			],
+ 			"returns": "int"
+ 		},
+		"addTraySeparator": {
+ 			"parameters": [
+ 				{"name": "index", "type": "int"},
+ 				{"name": "position", "type": "int", "optional": true}
+ 			],
+ 			"returns": "int"
+ 		},
+		"addTrayCheckBox": {
+ 			"parameters": [
+ 				{"name": "index", "type": "int"},
+ 				{"name": "text", "type": "string"},
+ 				{"name": "callback", "type": "function"},
+ 				{"name": "checked", "type": "boolean", "optional": true}			
+ 			],
+ 			"returns": "int"
+ 		},
+ 		"addTrayRoleItem": {
+ 			"parameters": [
+ 				{"name": "index", "type": "int"},
+ 				{"name": "role", "type": "string"},
+				{"name": "text", "type": "string", "optional": true}
+ 			],
+ 			"returns": "int"
+ 		},
+		"setTrayPressedIcon": {
+			"parameters": [
+				{"name": "icon", "type": "byte[]"}
+			]
+		},
+		"setTrayTitle": {
+			"parameters": [
+				{"name": "title", "type": "string"}
+			]
+		},
+		"setTrayTooltip": {
+			"parameters": [
+				{"name": "tooltip", "type": "string"}
+			]
 		}
  	}
  }

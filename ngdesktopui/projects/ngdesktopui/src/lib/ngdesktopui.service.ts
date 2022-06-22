@@ -1,3 +1,4 @@
+import { Byte } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
 import { LoggerFactory, LoggerService, WindowRefService, ServoyPublicService } from '@servoy/public';
 
@@ -8,6 +9,7 @@ export class NGDesktopUIService {
     private electron: typeof electron;
     private remote: typeof electron.remote;
     private Menu: typeof electron.Menu;
+    private Tray: typeof electron.Tray;
     private log: LoggerService;
     private window: electron.BrowserWindow;
     private isMacOS = false;
@@ -15,9 +17,11 @@ export class NGDesktopUIService {
     private browserViewCounter = 0;
     private mainMenuTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
     private defaultTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
-    private ipcRenderer: typeof electron.ipcRenderer
+    private ipcRenderer: typeof electron.ipcRenderer;
     private callbackOnClose = null;
     private currentMenu = 'default';
+    private tray = null;
+    private trayMenuTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
 
     private cleanMenu = [
 		{
@@ -31,19 +35,6 @@ export class NGDesktopUIService {
 		}
 	];
 
-    private executeOnCloseCallback = () => { 
-        if (!!this.callbackOnClose) {// not (null || undefined)
-            this.servoyService.executeInlineScript(this.callbackOnClose.formname, this.callbackOnClose.script, []).then((result: any) => {
-                this.ipcRenderer.send('ngdesktop-close-response', result);
-            }).catch((err) => {
-                console.log(err);
-                this.ipcRenderer.send('ngdesktop-close-response', true);
-                throw(err);
-            })		
-        }
-    }
-
-
     constructor(private servoyService: ServoyPublicService, windowRef: WindowRefService, logFactory: LoggerFactory) {
         this.log = logFactory.getLogger('NGDesktopUtilsService');
         const userAgent = navigator.userAgent.toLowerCase();
@@ -52,14 +43,13 @@ export class NGDesktopUIService {
             this.electron = r('electron');
             this.remote = r('@electron/remote');
             this.Menu = this.remote.Menu;
+            this.Tray = this.remote.Tray;
             this.window = this.remote.getCurrentWindow();
             this.ipcRenderer = r('electron').ipcRenderer; //we must initialize renderer here
             this.isMacOS = ( r('os').platform() === 'darwin');
 
-            let menuJSON = this.ipcRenderer.sendSync('ngdesktop-menu', false);
-	
-		    
-		
+            const menuJSON = this.ipcRenderer.sendSync('ngdesktop-menu', false);
+
             if (menuJSON.length > 0) {
                 this.defaultTemplate =JSON.parse(menuJSON);
                 this.mainMenuTemplate = JSON.parse(menuJSON);
@@ -81,11 +71,11 @@ export class NGDesktopUIService {
 
     isDevToolsAdded(templateArray) {
         let result = false;
-        for (let index = 0; index < templateArray.length; index ++) {
-            if (templateArray[index].submenu != null && templateArray[index].submenu.length > 0) {
-                result = this.isDevToolsAdded(templateArray[index].submenu);
+        for (const template of templateArray) {
+            if (template.submenu != null && template.submenu.length > 0) {
+                result = this.isDevToolsAdded(template.submenu);
                 if (result) break;
-            } else if (templateArray[index].label != null && templateArray[index].label.includes('Developer Tools')) {
+            } else if (template.label != null && template.label.includes('Developer Tools')) {
                 result = true;
                 break;
             }
@@ -94,23 +84,23 @@ export class NGDesktopUIService {
     }
 
     resetDevToolWindow(templateArray) {
-        for (let index = 0; index < templateArray.length; index ++) {
-            if (templateArray[index].submenu != null && templateArray[index].submenu.length > 0) {
-                templateArray[index].submenu = this.resetDevToolWindow(templateArray[index].submenu);
-            } else if (templateArray[index].label != null && templateArray[index].label.includes('Detach Developer')) {
-                templateArray[index].click = function() {
-                    let devTools = new this.remote.BrowserWindow();
+        for (const template of templateArray) {
+            if (template.submenu != null && template.submenu.length > 0) {
+                template.submenu = this.resetDevToolWindow(template.submenu);
+            } else if (template.label != null && template.label.includes('Detach Developer')) {
+                template.click = function() {
+                    const devTools = new this.remote.BrowserWindow();
                     this.window.webContents.setDevToolsWebContents(devTools.webContents);
                     this.win.webContents.openDevTools({mode: 'detach'});
-                }
+                };
                 break;
             }
         }
-        return templateArray
+        return templateArray;
     }
 
     refreshMenuTemplate() {
-        let menuJSON = this.ipcRenderer.sendSync('ngdesktop-menu', true);
+        const menuJSON = this.ipcRenderer.sendSync('ngdesktop-menu', true);
         return this.resetDevToolWindow(JSON.parse(menuJSON));
     }
 
@@ -122,11 +112,11 @@ export class NGDesktopUIService {
         this.currentMenu = 'clean';
         return this.mainMenuTemplate;
     }
-    
+
     isCleanMenu() {
-        return this.currentMenu == 'clean'
+        return this.currentMenu === 'clean';
     }
-    
+
     resetMenuToDefault() {
         this.currentMenu = 'default';
         this.mainMenuTemplate = JSON.parse(JSON.stringify(this.defaultTemplate));
@@ -140,7 +130,7 @@ export class NGDesktopUIService {
         return this.mainMenuTemplate;
     }
 
-    addRoleMenu(index, role, text) {
+    addRoleMenu(index, roleValue, text) {
         if (this.isCleanMenu()) {
             this.mainMenuTemplate = [];
             this.currentMenu = 'custom';
@@ -148,13 +138,13 @@ export class NGDesktopUIService {
         let addResultIndex = -1;
         const myMenu = {
             label: text,
-            role: role
-        }
+            role: roleValue
+        };
         if (Number.isInteger(index)) {
             this.mainMenuTemplate.splice(index, 0, myMenu);
             addResultIndex = index;
         } else {
-            this.mainMenuTemplate.push(myMenu)
+            this.mainMenuTemplate.push(myMenu);
             addResultIndex = this.mainMenuTemplate.length - 1;
         }
         return [this.mainMenuTemplate, addResultIndex];
@@ -163,10 +153,10 @@ export class NGDesktopUIService {
     /**
      * Add new menu to the menu bar
      *
-     * @param text - menu text
-     * @param [index] - menu insert position (zero based)
+     * @param{string} text - menu text
+     * @param{int} index - menu insert position (zero based)
      *
-     * @return - the index of the added menu
+     * @return{int} - the index of the added menu
      */
     addMenu(text: string, index: number) {
         const result = this.addMenuImpl(text, index);
@@ -179,7 +169,7 @@ export class NGDesktopUIService {
      * This function is adding Developer Tools menu.
      * Use it just for debugging. Remove any call to this function once you're done.
      *
-     * @return - the index of the added menu
+     * @return{int} - the index of the added menu
      */
     addDevToolsMenu() {
         if (this.isCleanMenu()) {
@@ -187,8 +177,8 @@ export class NGDesktopUIService {
             this.currentMenu = 'custom';
         }
         if (!this.isDevToolsAdded(this.mainMenuTemplate)) {
-            let myMenu = {
-                label: "Developer Tools",
+            const myMenu = {
+                label: 'Developer Tools',
                 submenu: [
                     {
                         label: 'Open Developer Tools',
@@ -205,8 +195,8 @@ export class NGDesktopUIService {
                         }
                     }
                 ]
-            }			
-            this.mainMenuTemplate.push(myMenu)
+            };
+            this.mainMenuTemplate.push(myMenu);
         }
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return this.mainMenuTemplate.length - 1;
@@ -215,11 +205,11 @@ export class NGDesktopUIService {
     /**
      * Delete menu from the specified position from the menu bar
      *
-     * @param index - menu position to be deleted
+     * @param{int} index - menu position to be deleted
      */
     removeMenu(index: number) {
         if (Number.isInteger(index)) {
-            this.currentMenu = 'custom'
+            this.currentMenu = 'custom';
             this.mainMenuTemplate.splice(index, 1);
             if (this.mainMenuTemplate.length === 0) {
                 this.mainMenuTemplate = this.clearMenu();
@@ -232,9 +222,9 @@ export class NGDesktopUIService {
     /**
      * Return the menu text at the specified position.
      *
-     * @param (string) text - the text to query for
+     * @param{string} text - the text to query for
      *
-     * @return - menu index containing the specified text; if not found return -1
+     * @return{int} - menu index containing the specified text; if not found return -1
      */
     getMenuIndexByText(text: string) {
         const menu = this.Menu.getApplicationMenu();
@@ -253,9 +243,9 @@ export class NGDesktopUIService {
     /**
      * Return the menu text from the specified menu position.
      *
-     * @param position to query for
+     * @param{int} index - zero based index to query for
      *
-     * @return - menu's text; if index is out of range - null is returned
+     * @return(string) - menu's text; if index is out of range - null is returned
      */
     getMenuText(index: number) {
         const menu = this.Menu.getApplicationMenu();
@@ -289,8 +279,8 @@ export class NGDesktopUIService {
     /**
      * Cleanup the specified menu
      *
-     * @param index - menu position
-     * @param [itemIndex] - submenu index
+     * @param{int} menuIndex - menu index position
+     * @param{int} itemIndex - item position in the menu
      */
     removeAllMenuItems(menuIndex: number, itemIndex: number) {
         if (Number.isInteger(menuIndex) && (menuIndex >= 0 && menuIndex < this.mainMenuTemplate.length)) {
@@ -305,7 +295,7 @@ export class NGDesktopUIService {
                 this.mainMenuTemplate[menuIndex].submenu = [];
                 if (this.mainMenuTemplate.length === 1 && this.isMacOS) {
                     this.mainMenuTemplate = this.clearMenu();
-                } 
+                };
                 this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
             }
         }
@@ -314,11 +304,11 @@ export class NGDesktopUIService {
      * Add separator line to the specified menu
      *
      *
-     * @param index - menu index
-     * @param [position] - insert position
-     * @param [itemIndex] - submenu index; when specified the position is relative to this submenu
+     * @param{int} index - menu index
+     * @param{int} position - insert position
+     * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
-     * @return - the index of the added separator
+     * @return{int} - the index of the added separator
      */
     addSeparator(index: number, position: number, itemIndex: number) {
         const result = this.addMenuItemImpl(index, null, null, null, null, position, itemIndex, 'separator');
@@ -328,17 +318,17 @@ export class NGDesktopUIService {
     /**
      * Add menu items to existing menu.
      *
-     * @param index - menu index
-     * @param text - menuitem text
-     * @param callback - callback function to call
+     * @param{int} index - menu index
+     * @param{string} text - menuitem text
+     * @param{function} callback - callback function to call
      *                   The callback function will receive:
      *                       - text of the clicked item
      *                       - type of the clicked item ("normal", "radio", "checkbox")
      *                       - checked value for checkboxes and radio buttons, otherwise undefined
-     * @param [position] - insert position
-     * @param [itemIndex] - submenu index; when specified the position is relative to this submenu
+     * @param{int} position - insert position
+     * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
-     * @return - the index of the added menu item
+     * @return{int} - the index of the added menu item
      *
      * Note: when add an item to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
      *       If previously a callback has been set, that callback will no longer be called
@@ -351,9 +341,9 @@ export class NGDesktopUIService {
     /**
      * Remove menu item from existing menu.
      *
-     * @param index - menu index
-     * @param position - menuitem position to be removed
-     * @param [itemIndex] - submenu index; when specified the position is relative to this submenu
+     * @param{int} index - menu index
+     * @param{int} position - menuitem position to be removed
+     * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
      * Note: when the last item from a submenu it is removed that submenu will get from type "submenu" to type "normal".
      *       If previously a callback has been set for the item, that callback will be called further
@@ -364,8 +354,10 @@ export class NGDesktopUIService {
     /**
      * Count menu items for the specified menu
      *
-     * @param index - menu index
-     * @param (int) [itemIndex] - submenu index; when specified the submenu items will be count
+     * @param{int} index - menu index
+     * @param{int} itemIndex - submenu index; when specified the submenu items will be count
+     *
+     * @return{int} - counted items
      */
     getMenuItemsCount(index: number, itemIndex: number) {
         const items = this.Menu.getApplicationMenu().items;
@@ -390,18 +382,18 @@ export class NGDesktopUIService {
      * Add checkbox to the specified menu
      *
      *
-     * @param index - menu index
-     * @param text - checkbox label
-     * @param callback - callback function to call
+     * @param{int} index - menu index
+     * @param{string} text - checkbox label
+     * @param{function} callback - callback function to call
      *                   The callback function will receive:
      *                       - text of the clicked item
      *                       - type of the clicked item ("normal", "radio", "checkbox")
      *                       - checked value for checkboxes and radio buttons, otherwise undefined
-     * @param [checked] - checkbox initial status (unchecked by defaul)
-     * @param [position] - insert position
-     * @param [itemIndex] - submenu index; when specified the position is relative to this submenu
+     * @param{boolean} checked - checkbox initial status (unchecked by defaul)
+     * @param{int} position - insert position
+     * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
-     * @return - the index of the added checkbox
+     * @return{int} - the index of the added checkbox
      *
      * Note: when add the checkbox to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
      *       If previously a callback has been set, that callback will no longer be called
@@ -414,18 +406,18 @@ export class NGDesktopUIService {
     /**
      * Add radio button to the specified menu
      *
-     * @param index - menu index
-     * @param text - checkbox label
-     * @param callback - callback function to call
+     * @param{int} index - menu index
+     * @param{string} text - checkbox label
+     * @param{function} callback - callback function to call
      *                   The callback function will receive:
      *                       - text of the clicked item
      *                       - type of the clicked item ("normal", "radio", "checkbox")
      *                       - checked value for checkboxes and radio buttons, otherwise undefined
-     * @param [selected] - initial selected status
-     * @param [position] - insert position
-     * @param [itemIndex] - submenu index; when specified the position is relative to this submenu
+     * @param{boolean} selected - initial selected status
+     * @param{int} position - insert position
+     * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
-     * @return - the index of the added radio button
+     * @return{int} - the index of the added radio button
      *
      * Note: when add the checkbox to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
      *       If previously a callback has been set, that callback will no longer be called
@@ -440,13 +432,13 @@ export class NGDesktopUIService {
      * Add a menuitem with standard native system behavior.
      * For complete allowed value list: https://github.com/Servoy/ngdesktopui
      *
-     * @param index - menu index
-     * @param role - item role.
-     * @param [text] - menuitem text; when not specified the System will provide a standard (localized) one
-     * @param [position] - insert position
-     * @param [itemIndex] - submenu index; when specified the position is relative to this submenu
+     * @param{int} index - menu index
+     * @param{string} role - item role.
+     * @param{string} text - menuitem text; when not specified the System will provide a standard (localized) one
+     * @param{int} position - insert position
+     * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
-     * @return - the index of the added role item
+     * @return{int} - the index of the added role item
      *
      */
     // eslint-disable-next-line max-len
@@ -466,8 +458,10 @@ export class NGDesktopUIService {
     /**
      * Get menuitem index from the specified menu
      *
-     * @param index - menu index
-     * @param text - menuitem text to query for index
+     * @param{int} index - menu index
+     * @param{string} text - menuitem text to query for index
+     *
+     * @return{string} - text of the item
      */
     getMenuItemIndexByText(index: number, text: string) {
         const appMenu = this.Menu.getApplicationMenu();
@@ -486,8 +480,10 @@ export class NGDesktopUIService {
     /**
      * Get menuitem text from the specified menu
      *
-     * @param index - menu index
-     * @param itemIndex - menuitem index to query for text
+     * @param{int} index - menu index
+     * @param{int} itemIndex - menuitem index to query for text
+     *
+     * @return{string} - text of the item
      */
     getMenuItemText(index: number, itemIndex: number) {
         const appMenu = this.Menu.getApplicationMenu();
@@ -503,12 +499,13 @@ export class NGDesktopUIService {
      * Creates a BrowserView (looks like an iframe) and adds this to the current window at the given coordinates with the given width and height.
      * It returns and id that can be used to close/clean up this view later on, or to target that view to inject some javascript.
      *
-     * @param x - the X coordinate to position this view
-     * @param y - the Y coordinate to position this view
-     * @param width - the width of this view
-     * @param height - the height of this view
-     * @param url - the url to load into this view
-     * @return the id to target this view later on.
+     * @param{int} x - the X coordinate to position this view
+     * @param{int} y - the Y coordinate to position this view
+     * @param{int} width - the width of this view
+     * @param{int} height - the height of this view
+     * @param{string} url - the url to load into this view
+     *
+     * @return{string} - the id to target this view later on.
      */
     createBrowserView(x: number, y: number, width: number, height: number, url: string): string {
         const id = this.browserViewCounter++ + '';
@@ -522,7 +519,7 @@ export class NGDesktopUIService {
     /**
      * Closes a and destroys a previously created BrowserView by the given id.
      *
-     * @param id - the id of the view to close.
+     * @param{string} id - the id of the view to close.
      */
     closeBrowserView(id: string) {
         const view = this.browserViews[id];
@@ -543,9 +540,9 @@ export class NGDesktopUIService {
      * // get the value of the search field and return this.<br/>
      * plugins.ngdesktopui.injectJSIntoBrowserView(id, "function test() { return document.getElementsByName('q')[0].value};test();", callback);
      *
-     * @param id - the id of the view to execute javascript in.
-     * @param js - the piece of javascript that is injected into this view.
-     * @param callback - the callback function that is used to get the results or exception if the call fails.
+     * @param{string} id - the id of the view to execute javascript in.
+     * @param{string} js - the piece of javascript that is injected into this view.
+     * @param{function} callback - the callback function that is used to get the results or exception if the call fails.
      */
     injectJSIntoBrowserView(id: string, js: string, callback: {formname: string; script: string}) {
         const view = this.browserViews[id];
@@ -557,6 +554,319 @@ export class NGDesktopUIService {
             });
         }
     }
+
+    /**
+     * Get the zoom factor of the current window
+     *
+     * @return{number} - The zoom factor of the current window
+     */
+    getZoomFactor(): number {
+        return this.electron.webFrame.getZoomFactor();
+    }
+
+    /**
+     * Set the zoom factor of the current window
+     * 1 == 100%. 0.5 == 50%.
+     *
+     * @param{float} factor - (values between 0.1 and 5)
+     *
+     * @return{boolean} - indicating success (true) or failure (false)
+     */
+    setZoomFactor(factor: number): boolean {
+        if (factor && (typeof factor === 'number') && factor > 0.0 && factor <= 5.0) {
+             this.electron.webFrame.setZoomFactor(factor);
+        	 return true;
+        } else {
+             return false;
+        }
+    }
+
+    /**
+     * Shows and gives focus to the window
+     */
+    showWindow() {
+        this.window.show();
+    }
+
+    /**
+     * Hides the window
+     */
+    hideWindow() {
+        if (this.isMacOS) {
+            //on MacOS calling after calling win.hide() - the main window is no longer receiving events
+            //calling win.show() has no effect; electron issue?
+            this.window.minimize();
+        } else {
+            this.window.hide();
+        }
+    }
+
+    /**
+     * Maximizes the window
+     */
+    maximizeWindow() {
+        this.window.maximize();
+    }
+
+    /**
+     * Unmaximizes the window
+     */
+    unmaximizeWindow() {
+        this.window.unmaximize();
+    }
+
+    /**
+     * Maximizes the window
+     */
+     minimmizeWindow() {
+        this.window.minimize();
+    }
+
+    /**
+     * Unmaximizes the window
+     */
+    restoreWindow() {
+        this.window.restore();
+    }
+
+    /**
+     * Set window size to the specified dimensions
+     *
+     * @param{int} width - integer value greater than zero
+     * @param{int} height - integer value greater than zero
+     */
+	setWindowSize(width: number, height: number) {
+		this.window.setSize(width, height);
+	}
+
+    /**
+     * Set window to full screen mode
+     *
+     * @param{boolean} flag -  set fullscreen mode status
+     */
+	setFullScreen(flag: boolean) {
+		this.window.setFullScreen(flag);
+	}
+
+    /**
+     * Get window size
+     *
+     * @return{int[]} - an array if integers containing window's width and height
+     */
+	getWindowSize() {
+		return this.window.getSize();
+	}
+
+    /**
+     * Return true if window is in minimized state
+     *
+     * @return{Boolean}
+     */
+	isMinimized(): boolean {
+		return this.window.isMinimized();
+	}
+
+    /**
+     * Return true if window is in maximized state
+     *
+     * @return{Boolean}
+     */
+	isMaximized(): boolean {
+		return this.window.isMaximized();
+	}
+
+	/**
+	 * Return true if window is in full screen state
+	 *
+	 * @return{Boolean}
+	 */
+	isFullScreen(): boolean {
+		return this.window.isFullScreen();
+	}
+
+	/**
+	 * Return true whether the window is in normal state (not maximized, not minimized, not in fullscreen mode)
+	 *
+	 * @return{Boolean}
+	 */
+	 isNormal(): boolean {
+		return this.window.isNormal();
+	}
+
+	/**
+	 * Return true if window is in visible to the user
+	 *
+	 * @return{Boolean}
+	 */
+	 isVisible(): boolean {
+		return this.window.isVisible();
+	}
+
+    /**
+     * Register callback to be executed before closing ngdesktop
+     *
+     * @param{function} callback - function to be executed before closing ngdesktop. Must return a boolean value:
+     *                         true: ngdesktop will close
+     *                         false: ngdesktop will not close
+     * @returns{Boolean} - whether callback was succesfully registered or not
+     */
+	registerOnCloseMethod(callback: {formname: string; script: string}): boolean{
+        if (this.callbackOnClose == null) { //null or undefined
+            this.callbackOnClose = callback;
+            this.ipcRenderer.on('ngdesktop-close-request', this.executeOnCloseCallback);
+            this.ipcRenderer.send('ngdesktop-enable-closeOnRequest', true);
+            return true;
+        };
+        return false;
+    }
+
+    /**
+     * Unregister the callback to be executed before closing ngdesktop.
+     */
+	unregisterOnCloseMethod() {
+		if (!!this.callbackOnClose) { // not (null || undefined)
+			this.ipcRenderer.removeListener('ngdesktop-close-request', this.executeOnCloseCallback);
+			this.ipcRenderer.send('ngdesktop-enable-closeOnRequest', false);
+			this.callbackOnClose = null;
+		}
+	}
+
+    /**
+     * Set the way external links will be handled from ngdesktop.
+     * WHen the flag parameter is set to:
+     *  - true: open external links using OS default browser
+     *  - false: open external links using a new ngdesktop window
+     *
+     * @param{boolean} flag
+     *      - true: open external links using OS default browser
+     *      - false: open external links using a new ngdesktop window
+     */
+     useDefaultBrowserForExternalLinks(flag: boolean) {
+        this.ipcRenderer.send('ngdesktop-useDefaultBrowserForExternal', flag);
+    }
+
+    /**
+     * Create tray for the ngdesktop app.
+     * When no icon is provided, ngdesktop use a default one.
+     *
+     * @param icon as byte array
+     */
+	createTray(icon) {
+		//expected byte array
+		this.tray = new this.Tray(this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',  icon !== undefined ? Buffer.from(icon).toString('base64') : null, 'trayIcon'));
+	}
+
+    /**
+     * Add tray menu items to existing tray menu.
+     *
+     * @param{int} index - menuitem index
+     * @param{string} text - menuitem text
+     * @param{function} callback - callback function to call. It callback function will receive:
+     *                 - text of the clicked item
+     *                 - type of the clicked item ("normal", "radio", "checkbox")
+     *                 - checked value for checkboxes and radio buttons, otherwise undefined
+     *
+     * @return{int} - the index of the added menu item
+     */
+    addTrayMenuItem(index: number, text: string, callback: {formname: string; script: string}) {
+		const result = this.addTrayMenuItemImpl(index, text, null, callback, null, 'normal');
+		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
+		return result;
+	}
+
+    /**
+     * Remove tray menu item from existing tray menu.
+     *
+     * @param{int} index - menuitem to be removed
+     */
+	removeTrayMenuItem(index: number) {
+        this.removeTrayMenuItemImpl(index);
+		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
+	}
+    /**
+     * Add separator line to the tray menu
+     *
+     * @param{int} index - position to add separator
+     *
+     * @return{int} the index of the added separator
+     */
+	addTraySeparator(index: number){
+		const result = this.addTrayMenuItemImpl(index, null, null, null, null, 'separator');
+		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
+		return result;
+	}
+    /**
+     * Add checkbox to the tray menu
+     *
+     * @param{int} index - menu index
+     * @param{string} text - checkbox label
+     * @param{function} callback - callback function to call
+     *                   The callback function will receive:
+     *                       - text of the clicked item
+     *                       - type of the clicked item ("normal", "radio", "checkbox")
+     *                       - checked value for checkboxes and radio buttons, otherwise undefined
+     * @param{boolean} checked - checkbox initial status (unchecked by default)
+     *
+     * @return{int} the index of the added checkbox
+     */
+	addTrayCheckBox(index: number, text: string, callback: {formname: string; script: string}, checked: boolean) {
+		const result =this.addTrayMenuItemImpl(index, text, null, callback, checked, 'checkbox');
+		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
+		return result;
+	}
+    /**
+     * Add a menuitem to the system tray having a standard native system behavior.
+     * For complete allowed value list: https://github.com/Servoy/ngdesktopui
+     *
+     * @param{int} index - menu index
+     * @param{text} role - item role.
+     * @param{string} text - menuitem text; when not specified the System will provide a standard (localized) one
+     *
+     * @return{int} the index of the added role item
+     *
+     */
+	addTrayRoleItem(index: number, role, text) {
+		const result = this.addTrayMenuItemImpl(index, text, role, null, null, 'role');
+		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
+		return result;
+	}
+    /**
+     * Set the tray icon to display when tray menu is active
+     *
+     * @param icon as byte array
+     */
+	setTrayPressedIcon(icon){
+		const pressedIcon = this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',   Buffer.from(icon).toString('base64'), 'pressedTrayIcon'); //reset to default icon
+		this.tray.setPressedImage(pressedIcon);
+	}
+	/**
+	 * Set tray title to display next to the tray icon
+	 *
+	 * @param{string} title string
+	 */
+	setTrayTitle(title: string){
+		this.tray.setTitle(title);
+	}
+	/**
+	 * Set tray tooltip
+	 *
+	 * @param{string} tooltip string
+	 */
+	trayTooltip(tooltip: string) {
+		this.tray.setToolTip(tooltip);
+	}
+
+    private executeOnCloseCallback = () => {
+        if (!!this.callbackOnClose) {// not (null || undefined)
+            this.servoyService.executeInlineScript(this.callbackOnClose.formname, this.callbackOnClose.script, []).then((result: any) => {
+                this.ipcRenderer.send('ngdesktop-close-response', result);
+            }).catch((err) => {
+                console.log(err);
+                this.ipcRenderer.send('ngdesktop-close-response', true);
+                throw(err);
+            });
+        }
+    };
 
     private addMenuImpl(text: string, index: number) {
         if (this.isCleanMenu()) {
@@ -600,7 +910,7 @@ export class NGDesktopUIService {
         }
         return this.mainMenuTemplate;
     }
-                // eslint-disable-next-line max-len
+    // eslint-disable-next-line max-len
     private addMenuItemImpl(menuIndex: number, text: string, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
                 // eslint-disable-next-line max-len
                 checked: boolean, callback: {formname: string; script: string}, position: number, itemIndex: number, type: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio') | 'role'): number {
@@ -672,190 +982,54 @@ export class NGDesktopUIService {
         return addResultIndex;
     }
 
-    /**
-     * Get the zoom factor of the current window
-     *
-     * @return{number} - The zoom factor of the current window
-     */
-    getZoomFactor(): number {
-        return this.electron.webFrame.getZoomFactor();
-    }
+      // eslint-disable-next-line max-len
+    private addTrayMenuItemImpl(menuIndex: number, text: string, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
+      callback: {formname: string; script: string}, checked: boolean, type: ('normal' | 'separator' | 'checkbox' | 'role')) {
+      let addResultIndex = -1;
+      if (Number.isInteger(menuIndex) && (menuIndex >=0)) {
+          const myItem: electron.MenuItemConstructorOptions = {};
+          if (type === 'role') {
+              if (text != null) {
+                  myItem.label = text;
+              }
+              myItem.role = role;
+          } else {
+              if (text != null) {
+                  myItem.label = text;
+              }
+              if (type != null) {
+                  myItem.type = type;
+              }
+              if (checked != null) {
+                  myItem.checked = checked;
+              }
+              if (callback != null) {
+                  myItem.click = (clickedItem) => {
+                      this.servoyService.executeInlineScript(callback.formname, callback.script, [clickedItem.label, clickedItem.type, clickedItem.checked]);
+                  };
+              }
+          }
+          if (menuIndex < this.trayMenuTemplate.length) {
+              this.trayMenuTemplate.splice(menuIndex, 0, myItem);
+              addResultIndex = menuIndex;
+          } else {
+              this.trayMenuTemplate.push(myItem);
+              addResultIndex = this.trayMenuTemplate.length - 1;
+          }
+      }
+      return addResultIndex;
+  }
 
-    /**
-     * Set the zoom factor of the current window
-     * 1 == 100%. 0.5 == 50%.
-     *
-     * @param factor - (values between 0.1 and 5)
-     * @return boolean
-     */
-    setZoomFactor(factor: number): boolean {
-        if (factor && (typeof factor === 'number') && factor > 0.0 && factor <= 5.0) {
-             this.electron.webFrame.setZoomFactor(factor);
-        	 return true;
-        } else {
-             return false;
-        }
-    }
+  private removeTrayMenuItemImpl(menuIndex: number) {
+      if (Number.isInteger(menuIndex) && menuIndex >=0) {
+          if (menuIndex >= this.trayMenuTemplate.length) {
+              menuIndex = this.trayMenuTemplate.length - 1;
+          }
+          if (this.trayMenuTemplate.length > 0) {
+              this.trayMenuTemplate.splice(menuIndex, 1);
+          }
+      }
+      return this.trayMenuTemplate;
+  }
 
-    /**
-     * Shows and gives focus to the window
-     */
-    showWindow() {
-        this.window.show();
-    }
-
-    /**
-     * Hides the window
-     */
-    hideWindow() {
-        if (this.isMacOS) {
-            //on MacOS calling after calling win.hide() - the main window is no longer receiving events
-            //calling win.show() has no effect; electron issue?
-            this.window.minimize();
-        } else {
-            this.window.hide();
-        }
-    }
-
-    /**
-     * Maximizes the window
-     */
-    maximizeWindow() {
-        this.window.maximize();
-    }
-
-    /**
-     * Unmaximizes the window
-     */
-    unmaximizeWindow() {
-        this.window.unmaximize();
-    }
-
-    /**
-     * Maximizes the window
-     */
-     minimmizeWindow() {
-        this.window.minimize();
-    }
-
-    /**
-     * Unmaximizes the window
-     */
-    restoreWindow() {
-        this.window.restore();
-    }
-
-    /**
-	 * Set window size to the specified dimensions
-	 * 
-	 * @param{int} - width (integer value greater than zero)
-	 * @param{int} - height (integer value greater than zero)
-	 */
-	setWindowSize(width: number, height: number) {
-		this.window.setSize(width, height);
-	}
-
-    /**
-			 * Set window to full screen mode
-			 * 
-			 * @param{boolean} -  whether the window should be in fullscreen mode
-			 */
-	setFullScreen(flag: boolean) {
-		this.window.setFullScreen(flag);
-	}
-
-    /**
-	 * Get window size 
-	 * 
-	 * @return{int[]} - an array containing window's width and height
-	 */
-	getWindowSize() {
-		return this.window.getSize();
-	}
-
-    /**
-	 * Return true if window is in minimized state
-	 * 
-	 * @return{Boolean}
-	 */
-	isMinimized(): boolean {
-		return this.window.isMinimized();
-	}
-
-    /**
-	 * Return true if window is in maximized state
-	 * 
-	 * @return{Boolean}
-	 */
-	isMaximized(): boolean {
-		return this.window.isMaximized();
-	}
-
-	/**
-	 * Return true if window is in full screen state
-	 * 
-	 * @return{Boolean}
-	 */
-	isFullScreen(): boolean {
-		return this.window.isFullScreen();
-	}
-
-	/**
-	 * Return true whether the window is in normal state (not maximized, not minimized, not in fullscreen mode)
-	 * 
-	 * @return{Boolean}
-	 */
-	 isNormal(): boolean {
-		return this.window.isNormal();
-	}
-
-	/**
-	 * Return true if window is in visible to the user
-	 * 
-	 * @return{Boolean}
-	 */
-	 isVisible(): boolean {
-		return this.window.isVisible();
-	}
-
-    /**
-	 * Register callback to be executed before closing ngdesktop
-	 * 
-	 * @param {function} callback - function to be executed before closing ngdesktop. Must return a boolean value: 
-	 *                         true: ngdesktop will close
-	 *                         false: ngdesktop will not close
-	 * @returns {boolean} - whether function executed succesfully or not
-	 */
-	registerOnCloseMethod(callback: {formname: string; script: string}): boolean{ 
-        if (this.callbackOnClose == null) { //null or undefined
-            this.callbackOnClose = callback;
-            this.ipcRenderer.on('ngdesktop-close-request', this.executeOnCloseCallback);
-            this.ipcRenderer.send('ngdesktop-enable-closeOnRequest', true);
-            return true;
-        }			
-        return false;
-    }
-
-    /**
-	 * Unregister the callback to be executed before closing ngdesktop.
-	 */ 
-	unregisterOnCloseMethod() {
-		if (!!this.callbackOnClose) { // not (null || undefined)
-			this.ipcRenderer.removeListener('ngdesktop-close-request', this.executeOnCloseCallback);
-			this.ipcRenderer.send('ngdesktop-enable-closeOnRequest', false);
-			this.callbackOnClose = null;
-		}
-	}
-
-    /**
-	 * Set the way external links will be handled from ngdesktop.
-     * WHen the flag parameter is set to:
-	 *  - true: open external links using OS default browser
-	 *  - false: open external links using a new ngdesktop window
-	 * 
-	 * @param {boolean}
-	 */
-     useDefaultBrowserForExternalLinks(flag) {
-        this.ipcRenderer.send('ngdesktop-useDefaultBrowserForExternal', flag);
-    }
 }
