@@ -1,6 +1,7 @@
 angular.module('ngdesktopui',['servoy'])
 .factory("ngdesktopui",function($services, $q, $log, $window) 
 {
+	var electron = null;
 	var remote = null;
 	var Menu = null;
 	var Tray = null;
@@ -27,8 +28,9 @@ angular.module('ngdesktopui',['servoy'])
 	var trayMenuTemplate = [];
 	
 	if (typeof require == "function") {
+		electron = require('electron');
 		remote = require('@electron/remote');
-		webFrame = require('electron').webFrame;
+		webFrame = electron.webFrame;
 		Menu = remote.Menu;
 		Tray = remote.Tray;
 		MenuItem - remote.MenuItem;
@@ -39,7 +41,7 @@ angular.module('ngdesktopui',['servoy'])
 
 	if (remote) {
 		isMacOS = (os.platform() == 'darwin');
-		ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+		ipcRenderer = electron.ipcRenderer;
 		var menuJSON = ipcRenderer.sendSync('ngdesktop-menu', false);
 		ipcRenderer = null;
 		var defaultTemplate = [];
@@ -94,7 +96,7 @@ angular.module('ngdesktopui',['servoy'])
 		}
 
 		function refreshMenuTemplate() {
-			ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+			ipcRenderer = electron.ipcRenderer;
 			var menuJSON = ipcRenderer.sendSync('ngdesktop-menu', true);
 			ipcRenderer = null;
 			return resetDevToolWindow(JSON.parse(menuJSON));;
@@ -858,7 +860,7 @@ angular.module('ngdesktopui',['servoy'])
 			registerOnCloseMethod: function(callback){
 				if (!callbackOnClose) {
 					callbackOnClose = callback;
-					ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+					ipcRenderer = electron.ipcRenderer;
 					ipcRenderer.on('ngdesktop-close-request', executeOnCloseCallback);
 					ipcRenderer.send('ngdesktop-enable-closeOnRequest', true);
 					return true;
@@ -888,7 +890,7 @@ angular.module('ngdesktopui',['servoy'])
 			 */
 			useDefaultBrowserForExternalLinks: function(flag) {
 				var deleteRenderer = false;
-				ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+				ipcRenderer = electron.ipcRenderer;
 				ipcRenderer.send('ngdesktop-useDefaultBrowserForExternal', flag);
 				ipcRenderer = null;
 			},
@@ -901,7 +903,7 @@ angular.module('ngdesktopui',['servoy'])
 			 */
 			createTray: function(icon) {
 				//expected byte array
-				ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+				ipcRenderer = electron.ipcRenderer;
 				var trayIcon = ipcRenderer.sendSync('ngdesktop-set-tray-icon',  icon != undefined ? Buffer.from(icon).toString('base64') : null, 'trayIcon'); //reset to default icon
 				tray = new Tray(trayIcon);
 				ipcRenderer = null;
@@ -988,7 +990,7 @@ angular.module('ngdesktopui',['servoy'])
 			 * @param {byte[]} 
 			 */
 			setTrayPressedIcon: function(icon){
-				ipcRenderer = require('electron').ipcRenderer; //we must initialize renderer here
+				ipcRenderer = electron.ipcRenderer;
 				var pressedIcon = ipcRenderer.sendSync('ngdesktop-set-tray-icon',  Buffer.from(icon).toString('base64'), 'pressedTrayIcon'); //reset to default icon
 				tray.setPressedImage(pressedIcon)
 				ipcRenderer = null;
