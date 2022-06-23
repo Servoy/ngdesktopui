@@ -747,6 +747,7 @@ export class NGDesktopUIService {
 
     /**
      * Create tray for the ngdesktop app.
+     * The recommended icon size is of 19 x 19 pixels using PNG format (ICO may be used also for Windows).
      * When no icon is provided, ngdesktop use a default one.
      *
      * @param icon as byte array
@@ -831,7 +832,8 @@ export class NGDesktopUIService {
 		return result;
 	}
     /**
-     * Set the tray icon to display when tray menu is active
+     * Set the tray icon to display when tray menu is active.
+     * The recommended icon size is of 19 x 19 pixels using PNG format (ICO may be used also for Windows).
      *
      * @param icon as byte array
      */
