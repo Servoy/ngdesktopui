@@ -1,4 +1,3 @@
-import { Byte } from '@angular/compiler/src/util';
 import { Injectable } from '@angular/core';
 import { LoggerFactory, LoggerService, WindowRefService, ServoyPublicService } from '@servoy/public';
 
