@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LoggerFactory, LoggerService, WindowRefService, ServoyPublicService } from '@servoy/public';
+import { LoggerFactory, LoggerService, WindowRefService, ServoyPublicService, BaseCustomObject, Callback } from '@servoy/public';
 
 import * as electron from 'electron';
 
@@ -21,6 +21,8 @@ export class NGDesktopUIService {
     private currentMenu = 'default';
     private tray = null;
     private trayMenuTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
+
+    private trayMenu: TrayMenu;
 
     private cleanMenu = [
 		{
@@ -744,117 +746,51 @@ export class NGDesktopUIService {
         this.ipcRenderer.send('ngdesktop-useDefaultBrowserForExternal', flag);
     }
 
-    /**
-     * Create tray for the ngdesktop app.
-     * The recommended icon size is of 19 x 19 pixels using PNG format (ICO may be used also for Windows).
-     * When no icon is provided, ngdesktop use a default one.
-     *
-     * @param icon as byte array
-     */
-	createTray(icon) {
-		//expected byte array
-		this.tray = new this.Tray(this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',  icon !== undefined ? Buffer.from(icon).toString('base64') : null, 'trayIcon'));
-	}
+    private resetTrayMenu() {
+        this.trayMenuTemplate = []; //reset tray menu
+        for (let index = 0; index < this.trayMenu.trayMenuItems.length; index++) {
+            let trayMenuItem = this.trayMenu.trayMenuItems[index];
+            if (trayMenuItem.type === 'normal')
+                this.addTrayMenuItemImpl(index, trayMenuItem.label, null, trayMenuItem.click, null, "normal");
+            else if (trayMenuItem.type === 'checkbox') {
+                this.addTrayMenuItemImpl(index, trayMenuItem.label, null, trayMenuItem.click, trayMenuItem.checked, "checkbox");
+            } else if (trayMenuItem.type === 'separator') {
+                this.addTrayMenuItemImpl(index, null, null, null, null, "separator");
+            } else {//role
+                this.addTrayMenuItemImpl(index, trayMenuItem.label, trayMenuItem.role, null, null, "role");
+            }
+        }
+    }
 
-    /**
-     * Add tray menu items to existing tray menu.
-     *
-     * @param{int} index - menuitem index
-     * @param{string} text - menuitem text
-     * @param{function} callback - callback function to call. It callback function will receive:
-     *                 - text of the clicked item
-     *                 - type of the clicked item ("normal", "radio", "checkbox")
-     *                 - checked value for checkboxes and radio buttons, otherwise undefined
-     *
-     * @return{int} - the index of the added menu item
-     */
-    addTrayMenuItem(index: number, text: string, callback: {formname: string; script: string}) {
-		const result = this.addTrayMenuItemImpl(index, text, null, callback, null, 'normal');
-		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
-		return result;
-	}
-
-    /**
-     * Remove tray menu item from existing tray menu.
-     *
-     * @param{int} index - menuitem to be removed
-     */
-	removeTrayMenuItem(index: number) {
-        this.removeTrayMenuItemImpl(index);
-		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
-	}
-    /**
-     * Add separator line to the tray menu
-     *
-     * @param{int} index - position to add separator
-     *
-     * @return{int} the index of the added separator
-     */
-	addTraySeparator(index: number){
-		const result = this.addTrayMenuItemImpl(index, null, null, null, null, 'separator');
-		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
-		return result;
-	}
-    /**
-     * Add checkbox to the tray menu
-     *
-     * @param{int} index - menu index
-     * @param{string} text - checkbox label
-     * @param{function} callback - callback function to call
-     *                   The callback function will receive:
-     *                       - text of the clicked item
-     *                       - type of the clicked item ("normal", "radio", "checkbox")
-     *                       - checked value for checkboxes and radio buttons, otherwise undefined
-     * @param{boolean} checked - checkbox initial status (unchecked by default)
-     *
-     * @return{int} the index of the added checkbox
-     */
-	addTrayCheckBox(index: number, text: string, callback: {formname: string; script: string}, checked: boolean) {
-		const result =this.addTrayMenuItemImpl(index, text, null, callback, checked, 'checkbox');
-		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
-		return result;
-	}
-    /**
-     * Add a menuitem to the system tray having a standard native system behavior.
-     * For complete allowed value list: https://github.com/Servoy/ngdesktopui
-     *
-     * @param{int} index - menu index
-     * @param{text} role - item role.
-     * @param{string} text - menuitem text; when not specified the System will provide a standard (localized) one
-     *
-     * @return{int} the index of the added role item
-     *
-     */
-	addTrayRoleItem(index: number, role, text) {
-		const result = this.addTrayMenuItemImpl(index, text, role, null, null, 'role');
-		this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
-		return result;
-	}
-    /**
-     * Set the tray icon to display when tray menu is active.
-     * The recommended icon size is of 19 x 19 pixels using PNG format (ICO may be used also for Windows).
-     *
-     * @param icon as byte array
-     */
-	setTrayPressedIcon(icon){
-		const pressedIcon = this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',   Buffer.from(icon).toString('base64'), 'pressedTrayIcon'); //reset to default icon
-		this.tray.setPressedImage(pressedIcon);
-	}
-	/**
-	 * Set tray title to display next to the tray icon
-	 *
-	 * @param{string} title string
-	 */
-	setTrayTitle(title: string){
-		this.tray.setTitle(title);
-	}
-	/**
-	 * Set tray tooltip
-	 *
-	 * @param{string} tooltip string
-	 */
-	trayTooltip(tooltip: string) {
-		this.tray.setToolTip(tooltip);
+    //the server script side is sending the callback name and server (ServoyFunctionPropertyType class) is
+	//adding missing parts (formname and script). Adding tray items with no callback associated (separator and role) - somewhere on the
+	//road the association between tray itemms and callbacks is lost (all callbacks get into 'undefined' after sending the menu to electron. 
+	//Can't spot any menu difference for the items with callbacks in these situations (may be an electron issue?)
+	//Recreating fully the template at the client side - is solving the problem. 
+    //Further investigations needed.
+	private	done() {//internal api 
+		this.resetTrayMenu();
+		let trayIcon = this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',  this.trayMenu.icon ? Buffer.from(this.trayMenu.icon).toString('base64') : null, 'trayIcon'); //reset to default icon
+		if (!this.tray) {
+			this.tray = new this.Tray(trayIcon);
+		} else if (trayIcon != null){
+			this.tray.setImage(trayIcon);
+		}
+		if (this.trayMenu.pressedIcon) {
+			let pressedIcon = this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',  Buffer.from(this.trayMenu.pressedIcon).toString('base64'), 'pressedTrayIcon'); //reset to default icon
+			this.tray.setPressedImage(pressedIcon);
+		}
+		if (this.trayMenu.title) {
+			this.tray.setTitle(this.trayMenu.title);
+		} else {
+			this.tray.setTitle('');
+		}
+		if (this.trayMenu.tooltip) {
+			this.tray.setToolTip(this.trayMenu.tooltip);
+		} else {
+			this.tray.setToolTip('');
+		}
+	    this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
 	}
 
     private executeOnCloseCallback = () => {
@@ -986,7 +922,6 @@ export class NGDesktopUIService {
       // eslint-disable-next-line max-len
     private addTrayMenuItemImpl(menuIndex: number, text: string, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
       callback: {formname: string; script: string}, checked: boolean, type: ('normal' | 'separator' | 'checkbox' | 'role')) {
-      let addResultIndex = -1;
       if (Number.isInteger(menuIndex) && (menuIndex >=0)) {
           const myItem: electron.MenuItemConstructorOptions = {};
           if (type === 'role') {
@@ -1012,25 +947,25 @@ export class NGDesktopUIService {
           }
           if (menuIndex < this.trayMenuTemplate.length) {
               this.trayMenuTemplate.splice(menuIndex, 0, myItem);
-              addResultIndex = menuIndex;
           } else {
               this.trayMenuTemplate.push(myItem);
-              addResultIndex = this.trayMenuTemplate.length - 1;
           }
       }
-      return addResultIndex;
   }
+}
 
-  private removeTrayMenuItemImpl(menuIndex: number) {
-      if (Number.isInteger(menuIndex) && menuIndex >=0) {
-          if (menuIndex >= this.trayMenuTemplate.length) {
-              menuIndex = this.trayMenuTemplate.length - 1;
-          }
-          if (this.trayMenuTemplate.length > 0) {
-              this.trayMenuTemplate.splice(menuIndex, 1);
-          }
-      }
-      return this.trayMenuTemplate;
-  }
+export class TrayMenu extends BaseCustomObject {
+    public title: string;
+    public tooltip: string;
+    public icon: any;
+    public pressedIcon: any;
+    public trayMenuItems: TrayMenuItem[];
+}
 
+export class TrayMenuItem extends BaseCustomObject{
+    public label: string;
+    public type: ('normal' | 'separator' | 'checkbox' | 'role');
+    public role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu');
+    public checked: boolean;
+    public click: Callback;
 }

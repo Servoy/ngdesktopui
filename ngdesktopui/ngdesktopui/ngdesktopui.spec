@@ -3,11 +3,18 @@
 	"displayName": "NGDesktop UI",
 	"version": 1,
  	"definition": "ngdesktopui/ngdesktopui/ngdesktopui.js",
+	"serverscript": "ngdesktopui/ngdesktopui/ngdesktopui_server.js",
 	"libraries": [],
 	"ng2Config": {
        "packageName": "@servoy/ngdesktopui",
        "serviceName": "NGDesktopUIService",
        "entryPoint": "dist/servoy/ngdesktopui"
+    },
+    "model": {
+    	"trayMenu": {"type": "trayMenu", "tags": { "scope": "private"} }
+    },
+    "internalApi": {
+    	"done": {}
     },
  	"api":
  	{
@@ -208,68 +215,24 @@
 				{"name":"flag", "type":"boolean"}
 			]
 		},
-		"setTrayIcon": {
-			"parameters": [
-				{"name": "icon", "type": "byte[]"}
-			]
-		},
-		"createTray": {
-			"parameters": [
-				{"name": "icon", "type": "byte[]", "optional": true}
-			]
-		},
-		"addTrayMenuItem": {
- 			"parameters": [
- 				{"name": "index", "type": "int"},
- 				{"name": "text", "type": "string"},
- 				{"name": "callback", "type": "function"}
- 			],
- 			"returns": "int"
- 		},
-		"removeTrayMenuItem": {
- 			"parameters": [
- 				{"name": "index", "type": "int"}
- 			],
- 			"returns": "int"
- 		},
-		"addTraySeparator": {
- 			"parameters": [
- 				{"name": "index", "type": "int"},
- 				{"name": "position", "type": "int", "optional": true}
- 			],
- 			"returns": "int"
- 		},
-		"addTrayCheckBox": {
- 			"parameters": [
- 				{"name": "index", "type": "int"},
- 				{"name": "text", "type": "string"},
- 				{"name": "callback", "type": "function"},
- 				{"name": "checked", "type": "boolean", "optional": true}			
- 			],
- 			"returns": "int"
- 		},
- 		"addTrayRoleItem": {
- 			"parameters": [
- 				{"name": "index", "type": "int"},
- 				{"name": "role", "type": "string"},
-				{"name": "text", "type": "string", "optional": true}
- 			],
- 			"returns": "int"
- 		},
-		"setTrayPressedIcon": {
-			"parameters": [
-				{"name": "icon", "type": "byte[]"}
-			]
-		},
-		"setTrayTitle": {
-			"parameters": [
-				{"name": "title", "type": "string"}
-			]
-		},
-		"setTrayTooltip": {
-			"parameters": [
-				{"name": "tooltip", "type": "string"}
-			]
+		"createTrayMenu": {
+			"returns": "trayMenu"
 		}
- 	}
+ 	},
+	"types": {
+	  "trayMenu": {
+  		"title": "string",
+  		"tooltip": "string",
+  		"icon": "byte[]",
+  		"pressedIcon": "byte[]",
+  		"trayMenuItems": {"type": "trayMenuItem[]", "tags": { "scope": "private"} }
+	  },
+	  "trayMenuItem": {
+	  	"label": "string",
+	  	"type": "string",
+		"role": "string",
+	  	"checked": "boolean",
+	  	"click": "function"
+	  }
+	}
  }

@@ -23,9 +23,10 @@ angular.module('ngdesktopui',['servoy'])
 			]
 		}
 	];
-
 	var tray = null;
 	var trayMenuTemplate = [];
+	
+	var scope = $services.getServiceScope('ngdesktopui');
 	
 	if (typeof require == "function") {
 		electron = require('electron');
@@ -46,9 +47,7 @@ angular.module('ngdesktopui',['servoy'])
 		ipcRenderer = null;
 		var defaultTemplate = [];
 		var mainMenuTemplate = [];
-		var currentMenu = 'default';
-
-		
+		var currentMenu = 'default';	
 
 		if (menuJSON.length > 0) {
 			defaultTemplate =JSON.parse(menuJSON);
@@ -308,7 +307,6 @@ angular.module('ngdesktopui',['servoy'])
 			return [mainMenuTemplate, addResultIndex];
 		}
 		function addTrayMenuItem(menuIndex, text, role, callback, checked, type) {
-			var addResultIndex = -1;
 			if (Number.isInteger(menuIndex) && (menuIndex >=0)) {
 				var myItem = {};
 
@@ -335,24 +333,25 @@ angular.module('ngdesktopui',['servoy'])
 				}
 				if (menuIndex < trayMenuTemplate.length) {
 					trayMenuTemplate.splice(menuIndex, 0, myItem);
-					addResultIndex = menuIndex;
 				} else {
 					trayMenuTemplate.push(myItem)
-					addResultIndex = trayMenuTemplate.length - 1
 				}
 			}
-			return [trayMenuTemplate, addResultIndex];
 		}
-		function removeTrayMenuItem(menuIndex) {
-			if (Number.isInteger(menuIndex) && menuIndex >=0) {
-				if (menuIndex >= trayMenuTemplate.length) {
-					menuIndex = trayMenuTemplate.length - 1;
+		function resetTrayMenu(trayMenu) {
+			trayMenuTemplate = []; //reset tray menu
+			for (var index = 0; index < trayMenu.trayMenuItems.length; index++) {
+				var trayMenuItem = trayMenu.trayMenuItems[index];
+				if (trayMenuItem.type === 'normal')
+					addTrayMenuItem(index, trayMenuItem.label, null, trayMenuItem.click, null, "normal");
+				else if (trayMenuItem.type === 'checkbox') {
+					addTrayMenuItem(index, trayMenuItem.label, null, trayMenuItem.click, trayMenuItem.checked, "checkbox");
+				} else if (trayMenuItem.type === 'separator') {
+					addTrayMenuItem(index, null, null, null, null, "separator");
+				} else {//role
+					addTrayMenuItem(index, trayMenuItem.label, trayMenuItem.role, null, null, "role");
 				}
-				if (trayMenuTemplate.length > 0) {
-					trayMenuTemplate.splice(menuIndex, 1);
-				}		
 			}
-			return trayMenuTemplate;
 		}
 		function executeOnCloseCallback() {//ipcRendere is always initialized when executing this function
 			if (callbackOnClose) {
@@ -893,126 +892,39 @@ angular.module('ngdesktopui',['servoy'])
 				ipcRenderer = electron.ipcRenderer;
 				ipcRenderer.send('ngdesktop-useDefaultBrowserForExternal', flag);
 				ipcRenderer = null;
-			},
-
-			/**
-			 * Create tray for the ngdesktop app.
-			 * The recommended icon size is of 19 x 19 pixels using PNG format (ICO may be used also for Windows).
-			 * When no icon is provided, ngdesktop use a default one. 
-			 * 
-			 * @param {byte[]} - icon used for tray image
-			 */
-			createTray: function(icon) {
-				//expected byte array
+			},		
+			//the server script side is sending the callback name and server (ServoyFunctionPropertyType class) is
+			//adding missing parts (formname and script). Adding tray items with no callback associated (separator and role) - somewhere on the
+			//road the association between tray itemms and callbacks is lost (all callbacks get into 'undefined' after sending the menu to electron. 
+			//Can't spot any menu difference for the items with callbacks in these situations (may be an electron issue?)
+			//Recreating fully the template at the client side - is solving the problem. 
+    		//Further investigations needed.
+			done: function() {//internal api
+				var trayMenu = scope.model.trayMenu; 
+				resetTrayMenu(trayMenu);
 				ipcRenderer = electron.ipcRenderer;
-				var trayIcon = ipcRenderer.sendSync('ngdesktop-set-tray-icon',  icon != undefined ? Buffer.from(icon).toString('base64') : null, 'trayIcon'); //reset to default icon
-				tray = new Tray(trayIcon);
+				var trayIcon = ipcRenderer.sendSync('ngdesktop-set-tray-icon',  trayMenu.icon ? Buffer.from(trayMenu.icon).toString('base64') : null, 'trayIcon'); //reset to default icon
+				if (!tray) {
+					tray = new Tray(trayIcon);
+				} else if (trayIcon != null){
+					tray.setImage(trayIcon);
+				}
+				if (trayMenu.pressedIcon) {
+					var pressedIcon = ipcRenderer.sendSync('ngdesktop-set-tray-icon',  Buffer.from(trayMenu.pressedIcon).toString('base64'), 'pressedTrayIcon'); //reset to default icon
+					tray.setPressedImage(pressedIcon);
+				}
 				ipcRenderer = null;
-			},
-
-			/**
-			 * Add tray menu items to existing tray menu.
-			 * 
-			 * @param {int} index - menuitem index
-			 * @param {string} text - menuitem text
-			 * @param {function} callback - callback function to call
-			 *                   The callback function will receive:
-			 *                       - text of the clicked item 
-			 *                       - type of the clicked item ("normal", "radio", "checkbox")
-			 *                       - checked value for checkboxes and radio buttons, otherwise undefined
-			 * 
-			 * @return {int} - the index of the added menu item
-			 */
-			addTrayMenuItem: function(index, text, callback) {
-				var result = addTrayMenuItem(index, text, null, callback, null, "normal");
-				tray.setContextMenu(Menu.buildFromTemplate(result[0]));
-				return result[1];
-			},
-			/**
-			 * Remove tray menu item from existing tray menu.
-			 * 
-			 * @param {int} index - menuitem index
-			 */
-			removeTrayMenuItem: function(index) {
-				tray.setContextMenu(Menu.buildFromTemplate(removeTrayMenuItem(index)));
-			},
-			/**
-			 * Add separator line to the tray menu
-			 * 
-			 * 
-			 * @param {int} index - position to add separator
-			 * 
-			 * @return {int} - the index of the added separator
-			 */
-			addTraySeparator: function(index){
-				var result = addTrayMenuItem(index, null, null, null, null, "separator");
-				tray.setContextMenu(Menu.buildFromTemplate(result[0]));
-				return result[1];
-			},
-			/**
-			 * Add checkbox to the tray menu
-			 * 
-			 * 
-			 * @param {int} index - menu index
-			 * @param {string} text - checkbox label
-			 * @param {function} callback - callback function to call
-			 *                   The callback function will receive:
-			 *                       - text of the clicked item 
-			 *                       - type of the clicked item ("normal", "radio", "checkbox")
-			 *                       - checked value for checkboxes and radio buttons, otherwise undefined
-			 * @param {boolean} [checked] - checkbox initial status (unchecked by default)
-			 * 
-			 * @return {int} - the index of the added checkbox
-			 */
-			addTrayCheckBox: function(index, text, callback, checked) {
-				var result = addTrayMenuItem(index, text, null, callback, checked, "checkbox");
-				tray.setContextMenu(Menu.buildFromTemplate(result[0]));
-				return result[1];
-			},
-			/**
-			 * Add a menuitem to the system tray having a standard native system behavior. 
-			 * For complete allowed value list: https://github.com/Servoy/ngdesktopui
-			 * 
-			 * @param {int} index - menu index
-			 * @param {string} role - item role. 
-			 * @param {string} [text] - menuitem text; when not specified the System will provide a standard (localized) one
-			 * 
-			 * @return {int} - the index of the added role item
-			 * 
-			 */
-			addTrayRoleItem: function(index, role, text) {
-				var result = addTrayMenuItem(index, text, role, null, null, "role");
-				tray.setContextMenu(Menu.buildFromTemplate(result[0]));
-				return result[1];
-			},
-			/**
-			 * Set the tray icon to display when tray menu is active.
-			 * The recommended icon size is of 19 x 19 pixels using PNG format (ICO may be used also for Windows).
-			 * When no icon is provided, ngdesktop use a default one. 
-			 *   
-			 * @param {byte[]} 
-			 */
-			setTrayPressedIcon: function(icon){
-				ipcRenderer = electron.ipcRenderer;
-				var pressedIcon = ipcRenderer.sendSync('ngdesktop-set-tray-icon',  Buffer.from(icon).toString('base64'), 'pressedTrayIcon'); //reset to default icon
-				tray.setPressedImage(pressedIcon)
-				ipcRenderer = null;
-			},
-			/**
-			 * Set tray title to display next to the tray icon
-			 *   
-			 * @param {string} 
-			 */
-			setTrayTitle: function(title){
-				tray.setTitle(title);
-			},
-			/**
-			 * Set tray tooltip
-			 *   
-			 * @param {string} 
-			 */
-			trayTooltip: function(tooltip) {
-				tray.setToolTip(tooltip);
+				if (trayMenu.title) {
+					tray.setTitle(trayMenu.title);
+				} else {
+					tray.setTitle('');
+				}
+				if (trayMenu.tooltip) {
+					tray.setToolTip(trayMenu.tooltip);
+				} else {
+					tray.setToolTip('');
+				}
+				tray.setContextMenu(Menu.buildFromTemplate(trayMenuTemplate));
 			}
 		}
 	} else {
@@ -1058,16 +970,7 @@ angular.module('ngdesktopui',['servoy'])
 			registerOnCloseMethod: function () { console.log("not in ngdesktop"); },
 			unregisterOnCloseMethod: function () { console.log("not in ngdesktop"); },
 			useDefaultBrowserForExternalLinks: function () { console.log("not in ngdesktop"); },
-			createTray: function () { console.log("not in ngdesktop"); },
-			addTrayMenuItem: function () { console.log("not in ngdesktop"); },
-			removeTrayMenuItem: function () { console.log("not in ngdesktop"); },
-			addTraySeparator: function () { console.log("not in ngdesktop"); },
-			addTrayCheckBox: function () { console.log("not in ngdesktop"); },
-			addTrayRadioButton: function () { console.log("not in ngdesktop"); },
-			addTrayRoleItem: function () { console.log("not in ngdesktop"); },
-			setTrayPressedIcon: function () { console.log("not in ngdesktop"); },
-			setTrayTitle: function () { console.log("not in ngdesktop"); },
-			trayTooltip: function () { console.log("not in ngdesktop"); }
+			createTrayMenu: function () { console.log("not in ngdesktop"); }
 		}
 	}
 })
