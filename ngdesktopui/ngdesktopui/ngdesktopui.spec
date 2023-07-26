@@ -3,6 +3,7 @@
 	"displayName": "NGDesktop UI",
 	"version": 1,
  	"definition": "ngdesktopui/ngdesktopui/ngdesktopui.js",
+ 	"doc": "ngdesktopui/ngdesktopui/ngdesktopui_doc.js",
 	"serverscript": "ngdesktopui/ngdesktopui/ngdesktopui_server.js",
 	"libraries": [],
 	"ng2Config": {
