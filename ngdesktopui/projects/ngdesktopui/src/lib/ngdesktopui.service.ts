@@ -3,6 +3,8 @@ import { LoggerFactory, LoggerService, WindowRefService, ServoyPublicService, Ba
 
 import * as electron from 'electron';
 
+type CallableFunction = (...args: unknown[]) => any;
+
 @Injectable()
 export class NGDesktopUIService {
     private electron: typeof electron;
@@ -334,7 +336,7 @@ export class NGDesktopUIService {
      * Note: when add an item to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
      *       If previously a callback has been set, that callback will no longer be called
      */
-    addMenuItem(index: number, text: string, callback: {formname: string; script: string}, position: number, itemIndex: number) {
+    addMenuItem(index: number, text: string, callback: CallableFunction, position: number, itemIndex: number) {
         const result = this.addMenuItemImpl(index, text, null, null, callback, position, itemIndex, 'normal');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -399,7 +401,7 @@ export class NGDesktopUIService {
      * Note: when add the checkbox to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
      *       If previously a callback has been set, that callback will no longer be called
      */
-    addCheckBox(index: number, text: string, callback: {formname: string; script: string}, checked: boolean, position: number, itemIndex: number) {
+    addCheckBox(index: number, text: string, callback: CallableFunction, checked: boolean, position: number, itemIndex: number) {
         const result = this.addMenuItemImpl(index, text, null, checked, callback, position, itemIndex, 'checkbox');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -424,7 +426,7 @@ export class NGDesktopUIService {
      *       If previously a callback has been set, that callback will no longer be called
      * Note: For the first added radio button in a group, the radio button is selected regardless the selected param
      */
-    addRadioButton(index: number, text: string, callback: {formname: string; script: string}, selected: boolean, position: number, itemIndex: number) {
+    addRadioButton(index: number, text: string, callback: CallableFunction, selected: boolean, position: number, itemIndex: number) {
         const result = this.addMenuItemImpl(index, text, null, selected, callback, position, itemIndex, 'radio');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -545,13 +547,13 @@ export class NGDesktopUIService {
      * @param{string} js - the piece of javascript that is injected into this view.
      * @param{function} callback - the callback function that is used to get the results or exception if the call fails.
      */
-    injectJSIntoBrowserView(id: string, js: string, callback: {formname: string; script: string}) {
+    injectJSIntoBrowserView(id: string, js: string, callback: CallableFunction) {
         const view = this.browserViews[id];
         if (view) {
             view.webContents.executeJavaScript(js).then((result: any) => {
-                if (callback) this.servoyService.executeInlineScript(callback.formname, callback.script, [result]);
+                if (callback) callback(result);
             }).catch((e: Error) => {
-                if (callback) this.servoyService.executeInlineScript(callback.formname, callback.script, [null, e.message]);
+                if (callback) callback(null, e.message);
             });
         }
     }
@@ -795,7 +797,7 @@ export class NGDesktopUIService {
 
     private executeOnCloseCallback = () => {
         if (!!this.callbackOnClose) {// not (null || undefined)
-            this.servoyService.executeInlineScript(this.callbackOnClose.formname, this.callbackOnClose.script, []).then((result: any) => {
+            this.callbackOnClose().then((result: any) => {
                 this.ipcRenderer.send('ngdesktop-close-response', result);
             }).catch((err) => {
                 console.log(err);
@@ -850,7 +852,7 @@ export class NGDesktopUIService {
     // eslint-disable-next-line max-len
     private addMenuItemImpl(menuIndex: number, text: string, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
                 // eslint-disable-next-line max-len
-                checked: boolean, callback: {formname: string; script: string}, position: number, itemIndex: number, type: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio') | 'role'): number {
+                checked: boolean, callback: CallableFunction, position: number, itemIndex: number, type: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio') | 'role'): number {
         let addResultIndex = -1;
         if (this.isCleanMenu()) {
             this.mainMenuTemplate = [];
@@ -882,7 +884,7 @@ export class NGDesktopUIService {
                 }
                 if (callback != null) {
                     myItem.click = (clickedItem) => {
-                        this.servoyService.executeInlineScript(callback.formname, callback.script, [clickedItem.label, clickedItem.type, clickedItem.checked]);
+                        callback(clickedItem.label, clickedItem.type, clickedItem.checked);
                     };
                 }
             }
@@ -921,7 +923,7 @@ export class NGDesktopUIService {
 
       // eslint-disable-next-line max-len
     private addTrayMenuItemImpl(menuIndex: number, text: string, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
-      callback: {formname: string; script: string}, checked: boolean, type: ('normal' | 'separator' | 'checkbox' | 'role')) {
+      callback: CallableFunction, checked: boolean, type: ('normal' | 'separator' | 'checkbox' | 'role')) {
       if (Number.isInteger(menuIndex) && (menuIndex >=0)) {
           const myItem: electron.MenuItemConstructorOptions = {};
           if (type === 'role') {
@@ -941,7 +943,7 @@ export class NGDesktopUIService {
               }
               if (callback != null) {
                   myItem.click = (clickedItem) => {
-                      this.servoyService.executeInlineScript(callback.formname, callback.script, [clickedItem.label, clickedItem.type, clickedItem.checked]);
+                    callback(clickedItem.label, clickedItem.type, clickedItem.checked);
                   };
               }
           }
@@ -967,5 +969,5 @@ export class TrayMenuItem extends BaseCustomObject{
     public type: ('normal' | 'separator' | 'checkbox' | 'role');
     public role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu');
     public checked: boolean;
-    public click: Callback;
+    public click: CallableFunction;
 }
