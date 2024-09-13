@@ -85,33 +85,30 @@ function addSeparator(index, position, itemIndex) {
 }
 /**
  * Add menu items to existing menu.
+ * NOTE: when adding an item to an existing menuitem, that menuitem will turn from type "normal" to type "submenu". If a callback has been set previously, that callback will no longer be called.
  * 
  * @param {int} index - menu index
  * @param {string} text - menuitem text
- * @param {function} callback - callback function to call
- *                   The callback function will receive:
- *                       - text of the clicked item 
- *                       - type of the clicked item ("normal", "radio", "checkbox")
- *                       - checked value for checkboxes and radio buttons, otherwise undefined
+ * @param {function} callback - callback function to call. The callback function will receive:
+ * <ul>
+ *   <li>text of the clicked item</li> 
+ *   <li>type of the clicked item ("normal", "radio", "checkbox")</li>
+ *   <li>checked value for checkboxes and radio buttons, otherwise undefined</li>
+ * </ul>
  * @param {int} [position] - insert position
  * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
  * 
  * @return {int} - the index of the added menu item
- * 
- * Note: when add an item to an existing menuitem, that menuitem will get from type "normal" to type "submenu". 
- *       If previously a callback has been set, that callback will no longer be called
  */
 function addMenuItem(index, text, callback, position, itemIndex) {
 }
 /**
- * Remove menu item from existing menu.
+ * Removes a menu item from an existing menu.
+ * NOTE: when the last item from a submenu is removed, that submenu will turn from type "submenu" to type "normal". If a callback has been set previously for the item, that callback will be called from then on.
  * 
  * @param {int} index - menu index
  * @param {int} position - menuitem position to be removed
  * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
- * 
- * Note: when the last item from a submenu it is removed that submenu will get from type "submenu" to type "normal". 
- *       If previously a callback has been set for the item, that callback will be called further
  */
 function removeMenuItem(index, position, itemIndex) {
 }
@@ -126,52 +123,50 @@ function getMenuItemsCount(index, itemIndex) {
 
 
 /**
- * Add checkbox to the specified menu
- * 
+ * Add a checkbox to the specified menu.
+ * NOTE: when adding the checkbox to an existing menuitem, that menuitem will turn from type "normal" to type "submenu". If a callback has been set previously, that callback will no longer be called.
  * 
  * @param {int} index - menu index
  * @param {string} text - checkbox label
- * @param {function} callback - callback function to call
- *                   The callback function will receive:
- *                       - text of the clicked item 
- *                       - type of the clicked item ("normal", "radio", "checkbox")
- *                       - checked value for checkboxes and radio buttons, otherwise undefined
+ * @param {function} callback - callback function to call. The callback function will receive:
+ * <ul>
+ *   <li>text of the clicked item</li> 
+ *   <li>type of the clicked item ("normal", "radio", "checkbox")</li>
+ *   <li>checked value for checkboxes and radio buttons, otherwise undefined</li>
+ * </ul>
  * @param {boolean} [checked] - checkbox initial status (unchecked by default)
  * @param {int} [position] - insert position
  * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
  * 
  * @return {int} - the index of the added checkbox
- * 
- * Note: when add the checkbox to an existing menuitem, that menuitem will get from type "normal" to type "submenu". 
- *       If previously a callback has been set, that callback will no longer be called
  */
 function addCheckBox(index, text, callback, checked, position, itemIndex) {
 }
 /**
- * Add radio button to the specified menu
+ * Add a radio button to the specified menu.
+ * 
+ * NOTE: when adding the checkbox to an existing menuitem, that menuitem will turn from type "normal" to type "submenu". If a callback has been set previously, that callback will no longer be called.
+ * NOTE: For the first added radio button in a group, the radio button will be selected ignoring the 'selected' param.
  * 
  * @param {int} index - menu index
  * @param {string} text - checkbox label
- * @param {function} callback - callback function to call
- *                   The callback function will receive:
- *                       - text of the clicked item 
- *                       - type of the clicked item ("normal", "radio", "checkbox")
- *                       - checked value for checkboxes and radio buttons, otherwise undefined
+ * @param {function} callback - callback function to call. The callback function will receive:
+ * <ul>
+ *   <li>text of the clicked item</li> 
+ *   <li>type of the clicked item ("normal", "radio", "checkbox")</li>
+ *   <li>checked value for checkboxes and radio buttons, otherwise undefined</li>
+ * </ul>
  * @param {boolean} [selected] - initial selected status
  * @param {int} [position] - insert position
  * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
  * 
  * @return {int} - the index of the added radio button
- * 
- * Note: when add the checkbox to an existing menuitem, that menuitem will get from type "normal" to type "submenu". 
- *       If previously a callback has been set, that callback will no longer be called
- * Note: For the first added radio button in a group, the radio button is selected regardless the selected param
  */
 function addRadioButton(index, text, callback, selected, position, itemIndex) {
 }
 /**
  * Add a menuitem with standard native system behavior. 
- * For complete allowed value list: https://github.com/Servoy/ngdesktopui
+ * For a complete list of allowed values see: https://github.com/Servoy/ngdesktopui
  * 
  * @param {int} index - menu index
  * @param {string} role - item role. 
@@ -226,7 +221,7 @@ function closeBrowserView(id) {
  * The last statement return value is given back to the callback as a first argument.
  * If something goes wrong then the callback is called where the first argument is null and a second argument has the message of the exception.
  * 
- * @sample
+ * @example
  * // open google.com<br/>
  * var id = plugins.ngdesktopui.createBrowserView(100,200,700,500,"https://www.google.com/");<br/>
  * // get the value of the search field and return this.<br/>
@@ -278,7 +273,7 @@ function unmaximizeWindow () {
 /**
  * Minimize the window
  */
-function  minimizeWindow () {
+function minimizeWindow () {
 }
 /**
  * Restore the window
@@ -298,58 +293,56 @@ function setWindowSize(width, height) {
  * 
  * @param{boolean} -  whether the window should be in fullscreen mode
  */
-function  setFullScreen(flag) {
+function setFullScreen(flag) {
 }
 /**
  * Get window size 
  * 
- * @return{int[]} - an array containing window's width and height
+ * @return {int[]} - an array containing window's width and height
  */
 function getWindowSize() {
 }
 /**
  * Return true if window is in minimized state
  * 
- * @return{Boolean}
+ * @return {Boolean}
  */
 function isMinimized() {
 }
 /**
  * Return true if window is in maximized state
  * 
- * @return{Boolean}
+ * @return {Boolean}
  */
-function  isMaximized() {
+function isMaximized() {
 }
 /**
  * Return true if window is in full screen state
  * 
- * @return{Boolean}
+ * @return {Boolean}
  */
-function  isFullScreen() {
+function isFullScreen() {
 }
 /**
  * Return true whether the window is in normal state (not maximized, not minimized, not in fullscreen mode)
  * 
- * @return{Boolean}
+ * @return {Boolean}
  */
-function  isNormal() {
+function isNormal() {
 }
 /**
  * Return true if window is in visible to the user
  * 
- * @return{Boolean}
+ * @return {Boolean}
  */
-function  isVisible() {
+function isVisible() {
 }
 
 /**
  * Register callback to be executed before closing ngdesktop
  * 
- * @param {function} callback - function to be executed before closing ngdesktop. Must return a boolean value: 
- *                         true: ngdesktop will close
- *                         false: ngdesktop will not close
- * @returns {boolean} - whether function executed succesfully or not
+ * @param {function} callback - function to be executed before closing ngdesktop. Must return a boolean value: true if ngdesktop will close; false if ngdesktop will not close
+ * @return {boolean} - whether function executed succesfully or not
  */
 function registerOnCloseMethod(callback){
 }
@@ -362,7 +355,7 @@ function unregisterOnCloseMethod(){
 
 /**
  * Set the way external links will be handled from ngdesktop.
- * WHen the flag parameter is set to:
+ * When the flag parameter is set to:
  *  - true: open external links using OS default browser
  *  - false: open external links using a new ngdesktop window
  * 
@@ -370,6 +363,7 @@ function unregisterOnCloseMethod(){
  */
 function useDefaultBrowserForExternalLinks(flag) {
 }
+
 //the server script side is sending the callback name and server (ServoyFunctionPropertyType class) is
 //adding missing parts (formname and script). Adding tray items with no callback associated (separator and role) - somewhere on the
 //road the association between tray itemms and callbacks is lost (all callbacks get into 'undefined' after sending the menu to electron. 
