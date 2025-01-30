@@ -2,10 +2,10 @@
 /**
  * Add new menu to the menu bar
  * 
- * @param {string} text - menu text
- * @param {int} [index] - menu insert position (zero based)
+ * @param {String} text - menu text
+ * @param {Number} [index] - menu insert position (zero based)
  * 
- * @return {int} - the index of the added menu
+ * @return {Number} - the index of the added menu
  */
 function addMenu(text, index) {
 }
@@ -14,40 +14,44 @@ function addMenu(text, index) {
  * 
  * Use it just for debugging. Remove any call to this function once you're done.  
  * 
- * @return {int} - the index of the added menu or -1 if nothing has changed
+ * @return {Number} - the index of the added menu or -1 if nothing has changed
  */
 function addDevToolsMenu() {
 }
 /**
  * Delete menu from the specified position from the menu bar
  * 
- * @param {int} index - menu position to be deleted
+ * @param {Number} index - menu position to be deleted
  */
 function removeMenu(index) {
 }
 /**
  * Return the menu text at the specified position.
  * 
- * @param (string) text - the text to query for
+ * @param {String} text - the text to query for
  * 
- * @return {int} - menu index containing the specified text; if not found return -1
+ * @return {Number} - menu index containing the specified text; if not found return -1
  */
 function getMenuIndexByText(text) {
 }
 /**
  * Return the menu text from the specified menu position.
  * 
- * @param {int} position to query for
+ * @param {Number} index The index to query for
  * 
- * @return {string} - menu's text; if index is out of range - null is returned
+ * @return {String} - menu's text; if index is out of range - null is returned
  */
 function getMenuText(index) {
 }
+
 /**
  * Count menus from the menu bar.
+ * 
+ * @return {Number} The total number of menus currently present in the menu bar.
  */
 function getMenuCount() {
 }
+
 /**
  * Cleanup the menubar. For MacOS that means to display a minimal menu
  */
@@ -58,65 +62,75 @@ function removeAllMenus() {
  */
 function resetMenuToDefault() {
 }
+
 /**
  * Show/hide menubar visibility. This function is working only on Windows/Linux
+ * 
+ * @param {Boolean} visible If true, the menu bar will be shown; if false, it will be hidden.
  */
 function setMenuBarVisibility(visible) {
 }
+
 /**
  * Cleanup the specified menu
  * 
- * @param {int} index - menu position
- * @param {int} [itemIndex] - submenu index
+ * @param {Number} index - menu position
+ * @param {Number} [itemIndex] - submenu index
  */
 function removeAllMenuItems(index, itemIndex) {
 }
+
 /**
  * Add separator line to the specified menu
  * 
  * 
- * @param {int} index - menu index
- * @param {int} [position] - insert position
- * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
+ * @param {Number} index - menu index
+ * @param {Number} [position] - insert position
+ * @param {Number} [itemIndex] - submenu index; when specified the position is relative to this submenu
  * 
- * @return {int} - the index of the added separator
+ * @return {Number} - the index of the added separator
  */
 function addSeparator(index, position, itemIndex) {
 }
+
 /**
  * Add menu items to existing menu.
  * NOTE: when adding an item to an existing menuitem, that menuitem will turn from type "normal" to type "submenu". If a callback has been set previously, that callback will no longer be called.
  * 
- * @param {int} index - menu index
- * @param {string} text - menuitem text
+ * @param {Number} index - menu index
+ * @param {String} text - menuitem text
  * @param {function} callback - callback function to call. The callback function will receive:
  * <ul>
  *   <li>text of the clicked item</li> 
  *   <li>type of the clicked item ("normal", "radio", "checkbox")</li>
  *   <li>checked value for checkboxes and radio buttons, otherwise undefined</li>
  * </ul>
- * @param {int} [position] - insert position
- * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
+ * @param {Number} [position] - insert position
+ * @param {Number} [itemIndex] - submenu index; when specified the position is relative to this submenu
  * 
- * @return {int} - the index of the added menu item
+ * @return {Number} - the index of the added menu item
  */
 function addMenuItem(index, text, callback, position, itemIndex) {
 }
+
 /**
  * Removes a menu item from an existing menu.
  * NOTE: when the last item from a submenu is removed, that submenu will turn from type "submenu" to type "normal". If a callback has been set previously for the item, that callback will be called from then on.
  * 
- * @param {int} index - menu index
- * @param {int} position - menuitem position to be removed
- * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
+ * @param {Number} index - menu index
+ * @param {Number} position - menuitem position to be removed
+ * @param {Number} [itemIndex] - submenu index; when specified the position is relative to this submenu
  */
 function removeMenuItem(index, position, itemIndex) {
 }
+
 /**
  * Count menu items for the specified menu
  * 
- * @param {int} index - menu index
- * @param (int) [itemIndex] - submenu index; when specified the submenu items will be count
+ * @param {Number} index - menu index
+ * @param {Number} [itemIndex] - submenu index; when specified the submenu items will be count
+ * 
+ * @return {Number} The number of menu items in the specified menu or submenu.
  */
 function getMenuItemsCount(index, itemIndex) {
 }
@@ -126,19 +140,19 @@ function getMenuItemsCount(index, itemIndex) {
  * Add a checkbox to the specified menu.
  * NOTE: when adding the checkbox to an existing menuitem, that menuitem will turn from type "normal" to type "submenu". If a callback has been set previously, that callback will no longer be called.
  * 
- * @param {int} index - menu index
- * @param {string} text - checkbox label
+ * @param {Number} index - menu index
+ * @param {String} text - checkbox label
  * @param {function} callback - callback function to call. The callback function will receive:
  * <ul>
  *   <li>text of the clicked item</li> 
  *   <li>type of the clicked item ("normal", "radio", "checkbox")</li>
  *   <li>checked value for checkboxes and radio buttons, otherwise undefined</li>
  * </ul>
- * @param {boolean} [checked] - checkbox initial status (unchecked by default)
- * @param {int} [position] - insert position
- * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
+ * @param {Boolean} [checked] - checkbox initial status (unchecked by default)
+ * @param {Number} [position] - insert position
+ * @param {Number} [itemIndex] - submenu index; when specified the position is relative to this submenu
  * 
- * @return {int} - the index of the added checkbox
+ * @return {Number} - the index of the added checkbox
  */
 function addCheckBox(index, text, callback, checked, position, itemIndex) {
 }
@@ -148,19 +162,19 @@ function addCheckBox(index, text, callback, checked, position, itemIndex) {
  * NOTE: when adding the checkbox to an existing menuitem, that menuitem will turn from type "normal" to type "submenu". If a callback has been set previously, that callback will no longer be called.
  * NOTE: For the first added radio button in a group, the radio button will be selected ignoring the 'selected' param.
  * 
- * @param {int} index - menu index
- * @param {string} text - checkbox label
+ * @param {Number} index - menu index
+ * @param {String} text - checkbox label
  * @param {function} callback - callback function to call. The callback function will receive:
  * <ul>
  *   <li>text of the clicked item</li> 
  *   <li>type of the clicked item ("normal", "radio", "checkbox")</li>
  *   <li>checked value for checkboxes and radio buttons, otherwise undefined</li>
  * </ul>
- * @param {boolean} [selected] - initial selected status
- * @param {int} [position] - insert position
- * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu
+ * @param {Boolean} [selected] - initial selected status
+ * @param {Number} [position] - insert position
+ * @param {Number} [itemIndex] - submenu index; when specified the position is relative to this submenu
  * 
- * @return {int} - the index of the added radio button
+ * @return {Number} - the index of the added radio button
  */
 function addRadioButton(index, text, callback, selected, position, itemIndex) {
 }
@@ -168,50 +182,57 @@ function addRadioButton(index, text, callback, selected, position, itemIndex) {
  * Add a menuitem with standard native system behavior. 
  * For a complete list of allowed values see: https://github.com/Servoy/ngdesktopui
  * 
- * @param {int} index - menu index
- * @param {string} role - item role. 
- * @param {string} [text] - menuitem text; when not specified the System will provide a standard (localized) one
- * @param {int} [position] - insert position; when role is a predefined menu, this parameter is ignored;
- * @param {int} [itemIndex] - submenu index; when specified the position is relative to this submenu; when role is a predefined menu this parameter is ignored
+ * @param {Number} index - menu index
+ * @param {String} role - item role. 
+ * @param {String} [text] - menuitem text; when not specified the System will provide a standard (localized) one
+ * @param {Number} [position] - insert position; when role is a predefined menu, this parameter is ignored;
+ * @param {Number} [itemIndex] - submenu index; when specified the position is relative to this submenu; when role is a predefined menu this parameter is ignored
  * 
- * @return {int} - the index of the added role item
+ * @return {Number} - the index of the added role item
  * 
  */
 function addRoleItem(index, role, text, position, itemIndex) {
 }
+
 /**
  * Get menuitem index from the specified menu
  * 
- * @param {int} index - menu index
- * @param {string} text - menuitem text to query for index
+ * @param {Number} index - menu index
+ * @param {String} text - menuitem text to query for index
+ * 
+ * @return {Number} The index of the menu item with the specified text, or -1 if not found.
  */
 function getMenuItemIndexByText(index, text) {
 }
+
 /**
  * Get menuitem text from the specified menu
  * 
- * @param {int} index - menu index
- * @param {int} itemIndex - menuitem index to query for text
+ * @param {Number} index - menu index
+ * @param {Number} itemIndex - menuitem index to query for text
+ * 
+ * @return {String} The text of the specified menu item, or null if the index is out of range.
  */
 function getMenuItemText(index, itemIndex) {
 }
+
 /**
  * Creates a BrowserView (looks like an iframe) and adds this to the current window at the given coordinates with the given width and height.
  * It returns and id that can be used to close/clean up this view later on, or to target that view to inject some javascript.
  *  
- * @param {int} x - the X coordinate to position this view
- * @param {int} y - the Y coordinate to position this view
- * @param {int} width - the width of this view
- * @param {int} height - the height of this view
- * @param {string} url - the url to load into this view
- * @return {int} the id to target this view later on.
+ * @param {Number} x - the X coordinate to position this view
+ * @param {Number} y - the Y coordinate to position this view
+ * @param {Number} width - the width of this view
+ * @param {Number} height - the height of this view
+ * @param {String} url - the url to load into this view
+ * @return {Number} the id to target this view later on.
  */
 function createBrowserView(x,y,width,height,url) {
 }
 /**
  * Closes a and destroys a previously created BrowserView by the given id.
  * 
- * @param {int} id - the id of the view to close.
+ * @param {Number} id - the id of the view to close.
  */
 function closeBrowserView(id) {
 }
@@ -227,8 +248,8 @@ function closeBrowserView(id) {
  * // get the value of the search field and return this.<br/>
  * plugins.ngdesktopui.injectJSIntoBrowserView(id, "function test() { return document.getElementsByName('q')[0].value};test();", callback);
  * 
- * @param {int} id - the id of the view to execute javascript in.
- * @param {string} js - the piece of javascript that is injected into this view.
+ * @param {Number} id - the id of the view to execute javascript in.
+ * @param {String} js - the piece of javascript that is injected into this view.
  * @param {function} callback - the callback function that is used to get the results or exception if the call fails.
  */
 function injectJSIntoBrowserView(id, js, callback) {
@@ -236,16 +257,17 @@ function injectJSIntoBrowserView(id, js, callback) {
 /**
  * Get the zoom factor of the current window
  *
- * @return {number} The zoom factor of the current window
+ * @return {Number} The zoom factor of the current window
  */
 function getZoomFactor () {
 }
+
 /**
  * Set the zoom factor of the current window
  * 1 == 100%. 0.5 == 50%.
  *
- * @param {number} factor (values greater than 0.0 and smaller or equal to 5.0)
- * @return {boolean}
+ * @param {Number} factor (values greater than 0.0 and smaller or equal to 5.0)
+ * @return {Boolean} True if the zoom factor was successfully set; otherwise, false.
  */
 function setZoomFactor (factor) {
 }
@@ -283,57 +305,63 @@ function restoreWindow () {
 /**
  * Set window size to the specified dimensions
  * 
- * @param{int} - width (integer value greater than zero)
- * @param{int} - height (integer value greater than zero)
+ * @param {Number} width Integer value greater than zero
+ * @param {Number} height Integer value greater than zero
  */
 function setWindowSize(width, height) {
 }
 /**
  * Set window to full screen mode
  * 
- * @param{boolean} -  whether the window should be in fullscreen mode
+ * @param {Boolean} flag If true, sets the window to full-screen mode; if false, exits full-screen mode.
  */
 function setFullScreen(flag) {
 }
+
 /**
  * Get window size 
  * 
- * @return {int[]} - an array containing window's width and height
+ * @return {Array<Number>} - an array containing window's width and height
  */
 function getWindowSize() {
 }
+
 /**
  * Return true if window is in minimized state
  * 
- * @return {Boolean}
+ * @return {Boolean} True if the window is currently minimized; otherwise, false.
  */
 function isMinimized() {
 }
+
 /**
  * Return true if window is in maximized state
  * 
- * @return {Boolean}
+ * @return {Boolean} True if the window is currently maximized; otherwise, false.
  */
 function isMaximized() {
 }
+
 /**
  * Return true if window is in full screen state
  * 
- * @return {Boolean}
+ * @return {Boolean} True if the window is currently in full-screen mode; otherwise, false.
  */
 function isFullScreen() {
 }
+
 /**
  * Return true whether the window is in normal state (not maximized, not minimized, not in fullscreen mode)
  * 
- * @return {Boolean}
+ * @return {Boolean} True if the window is in its default (normal) state; otherwise, false.
  */
 function isNormal() {
 }
+
 /**
  * Return true if window is in visible to the user
  * 
- * @return {Boolean}
+ * @return {Boolean} True if the window is currently visible to the user; otherwise, false.
  */
 function isVisible() {
 }
@@ -342,7 +370,7 @@ function isVisible() {
  * Register callback to be executed before closing ngdesktop
  * 
  * @param {function} callback - function to be executed before closing ngdesktop. Must return a boolean value: true if ngdesktop will close; false if ngdesktop will not close
- * @return {boolean} - whether function executed succesfully or not
+ * @return {Boolean} - whether function executed succesfully or not
  */
 function registerOnCloseMethod(callback){
 }
@@ -359,7 +387,7 @@ function unregisterOnCloseMethod(){
  *  - true: open external links using OS default browser
  *  - false: open external links using a new ngdesktop window
  * 
- * @param {boolean}
+ * @param {Boolean} flag If true, external links will open in the OS default browser; if false, they will open in a new ngdesktop window.
  */
 function useDefaultBrowserForExternalLinks(flag) {
 }
@@ -372,4 +400,24 @@ function useDefaultBrowserForExternalLinks(flag) {
 //Further investigations needed.
 function done() {//internal api
 
+}
+
+/**
+ * Creates a system tray menu for the application. 
+ * The tray menu allows users to interact with the application via a small icon in the system tray.
+ * 
+ * @example
+ * // Create a tray menu with custom options
+ * var trayMenu = plugins.ngdesktopui.createTrayMenu();
+ * trayMenu.title = "My App";
+ * trayMenu.tooltip = "Application is running";
+ * trayMenu.icon = plugins.file.readFile('media:///tray_icon.png');
+ * trayMenu.trayMenuItems = [
+ *     { label: "Open", type: "normal", click: function() { application.showForm('mainForm'); } },
+ *     { label: "Exit", type: "normal", click: function() { application.exit(); } }
+ * ];
+ *
+ * @return {CustomType<ngdesktopui.trayMenu>}  The tray menu object that can be customized with title, tooltip, icon, and menu items.
+ */
+function createTrayMenu() {
 }

@@ -26,7 +26,10 @@
  			],
  			"returns": "int"
  		},
- 		"addDevToolsMenu": {},
+ 		"addDevToolsMenu": {
+ 			"returns": "int"
+
+		},
  		"removeMenu": {
  			"parameters": [
  				{"name": "index", "type": "int"}
