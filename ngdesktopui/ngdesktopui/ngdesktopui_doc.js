@@ -1,3 +1,6 @@
+var trayMenu;
+
+
 
 /**
  * Add new menu to the menu bar
