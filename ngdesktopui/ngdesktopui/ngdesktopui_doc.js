@@ -421,3 +421,32 @@ function done() {//internal api
  */
 function createTrayMenu() {
 }
+
+var svy_types = {
+
+    trayMenu: {
+
+        title : null,
+
+        tooltip : null,
+
+        icon : null,
+
+        pressedIcon : null,
+
+    },
+
+    trayMenuItem: {
+
+        label : null,
+
+        type : null,
+
+        role : null,
+
+        checked : null,
+
+        click : null,
+
+    }
+}
