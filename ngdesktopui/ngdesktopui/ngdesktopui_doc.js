@@ -1,4 +1,5 @@
 
+
 /**
  * Add new menu to the menu bar
  * 
@@ -423,6 +424,35 @@ function createTrayMenu() {
 }
 
 var svy_types = {
+
+    trayMenu: {
+
+        title : null,
+
+        tooltip : null,
+
+        icon : null,
+
+        pressedIcon : null,
+
+    },
+
+    trayMenuItem: {
+
+        label : null,
+
+        type : null,
+
+        role : null,
+
+        checked : null,
+
+        click : null,
+
+    }
+}
+
+var types = {
 
     trayMenu: {
 
