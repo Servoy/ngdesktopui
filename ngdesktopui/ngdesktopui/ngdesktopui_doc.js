@@ -424,59 +424,62 @@ function createTrayMenu() {
 }
 
 var svy_types = {
-
+    
+    /**
+     * Represents a Tray Menu.
+     * Contains properties for setting the tray menu's title, tooltip, and icons.
+     */
     trayMenu: {
-
-        title : null,
-
-        tooltip : null,
-
-        icon : null,
-
-        pressedIcon : null,
-
+        /**
+         * The title displayed on the tray menu.
+         */
+        title: null,
+        
+        /**
+         * The tooltip text displayed when hovering over the tray menu.
+         */
+        tooltip: null,
+        
+        /**
+         * The icon image data for the tray menu.
+         */
+        icon: null,
+        
+        /**
+         * The icon image data displayed when the tray menu is pressed.
+         */
+        pressedIcon: null
+        // Note: 'trayMenuItems' is private and is not documented here.
     },
-
+    
+    /**
+     * Represents a Tray Menu Item.
+     * Defines the properties for an individual item within a tray menu.
+     */
     trayMenuItem: {
-
-        label : null,
-
-        type : null,
-
-        role : null,
-
-        checked : null,
-
-        click : null,
-
+        /**
+         * The label text for the tray menu item.
+         */
+        label: null,
+        
+        /**
+         * The type of the tray menu item (e.g., "normal", "separator").
+         */
+        type: null,
+        
+        /**
+         * The role associated with the tray menu item.
+         */
+        role: null,
+        
+        /**
+         * Indicates whether the tray menu item is checked (for checkbox or radio items).
+         */
+        checked: null,
+        
+        /**
+         * The callback function to be executed when the tray menu item is clicked.
+         */
+        click: null
     }
-}
-
-var types = {
-
-    trayMenu: {
-
-        title : null,
-
-        tooltip : null,
-
-        icon : null,
-
-        pressedIcon : null,
-
-    },
-
-    trayMenuItem: {
-
-        label : null,
-
-        type : null,
-
-        role : null,
-
-        checked : null,
-
-        click : null,
-
-    }
-}
+};
