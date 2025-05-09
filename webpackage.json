@@ -19,6 +19,9 @@
                   {"version": "2022.9.0","url": "https://github.com/Servoy/ngdesktopui/releases/download/v2022.9.0/ngdesktopui.zip","servoy-version":"2022.9"},
                   {"version": "2023.3.1","url": "https://github.com/Servoy/ngdesktopui/releases/download/v2023.3.1/ngdesktopui.zip","servoy-version":"2023.3"},
                   {"version": "2024.3.0","url": "https://github.com/Servoy/ngdesktopui/releases/download/v2024.3.0/ngdesktopui.zip","servoy-version":"2024.3"},
-                  {"version": "2024.9.0","url": "https://github.com/Servoy/ngdesktopui/releases/download/v2024.9.0/ngdesktopui.zip","servoy-version":"2024.9"}
+                  {"version": "2024.9.0","url": "https://github.com/Servoy/ngdesktopui/releases/download/v2024.9.0/ngdesktopui.zip","servoy-version":"2024.9"},
+                  {"version": "2025.3.0","url": "https://github.com/Servoy/ngdesktopui/releases/download/v2025.3.0/ngdesktopui.zip","servoy-version":"2025.3"}
+
+         
                 ]
 }
