@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-SymbolicName: ngdesktopui
 Bundle-Name: NGDesktop UI
-Bundle-Version: 2024.9.0
+Bundle-Version: 2025.3.0
 Package-Type: Web-Service
 
 Name: ngdesktopui/ngdesktopui.spec
