@@ -23,8 +23,42 @@ export class NGDesktopUIService {
     private currentMenu = 'default';
     private tray = null;
     private trayMenuTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
+    private menuCreatedWith: 'old-api' | 'new-api' | null = null;
 
     private trayMenu: TrayMenu;
+    
+    /**
+     * Check if old API can be used (blocks if menu created with new API)
+     * @returns true if old API can proceed, false if blocked
+     */
+    private canUseOldAPI(methodName: string): boolean {
+        if (this.menuCreatedWith === 'new-api') {
+            this.log.error(`Cannot use ${methodName}() on menu created with setMenu()/updateMenu(). Call removeAllMenus() or resetMenuToDefault() first.`);
+            return false;
+        }
+        this.menuCreatedWith = 'old-api';
+        return true;
+    }
+    
+    /**
+     * Check if new API can be used (blocks if menu created with old API)
+     * @returns true if new API can proceed, false if blocked
+     */
+    private canUseNewAPI(methodName: string): boolean {
+        if (this.menuCreatedWith === 'old-api') {
+            this.log.error(`Cannot use ${methodName}() on menu created with old API methods. Call removeAllMenus() or resetMenuToDefault() first.`);
+            return false;
+        }
+        this.menuCreatedWith = 'new-api';
+        return true;
+    }
+    
+    /**
+     * Reset API tracking flag (allows switching between APIs)
+     */
+    private resetAPITracking(): void {
+        this.menuCreatedWith = null;
+    }
 
     private cleanMenu = [
 		{
@@ -121,6 +155,7 @@ export class NGDesktopUIService {
     }
 
     resetMenuToDefault() {
+        this.resetAPITracking();
         this.currentMenu = 'default';
         this.mainMenuTemplate = JSON.parse(JSON.stringify(this.defaultTemplate));
 
@@ -159,9 +194,11 @@ export class NGDesktopUIService {
      * @param{string} text - menu text
      * @param{int} index - menu insert position (zero based)
      *
+     * @deprecated
      * @return{int} - the index of the added menu
      */
     addMenu(text: string, index: number) {
+        if (!this.canUseOldAPI('addMenu')) return -1;
         const result = this.addMenuImpl(text, index);
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result[1];
@@ -209,8 +246,11 @@ export class NGDesktopUIService {
      * Delete menu from the specified position from the menu bar
      *
      * @param{int} index - menu position to be deleted
+     *
+     * @deprecated
      */
     removeMenu(index: number) {
+        if (!this.canUseOldAPI('removeMenu')) return;
         if (Number.isInteger(index)) {
             this.currentMenu = 'custom';
             this.mainMenuTemplate.splice(index, 1);
@@ -227,9 +267,11 @@ export class NGDesktopUIService {
      *
      * @param{string} text - the text to query for
      *
+     * @deprecated
      * @return{int} - menu index containing the specified text; if not found return -1
      */
     getMenuIndexByText(text: string) {
+        if (!this.canUseOldAPI('getMenuIndexByText')) return -1;
         const menu = this.Menu.getApplicationMenu();
         let retVal = -1;
         if (menu != null) {
@@ -248,9 +290,11 @@ export class NGDesktopUIService {
      *
      * @param{int} index - zero based index to query for
      *
+     * @deprecated
      * @return(string) - menu's text; if index is out of range - null is returned
      */
     getMenuText(index: number) {
+        if (!this.canUseOldAPI('getMenuText')) return null;
         const menu = this.Menu.getApplicationMenu();
         if (index >= 0 && index < menu.items.length) {
             return menu.items[index].label;
@@ -259,8 +303,11 @@ export class NGDesktopUIService {
     }
     /**
      * Count menus from the menu bar.
+     * 
+     * @deprecated
      */
     getMenuCount() {
+        if (!this.canUseOldAPI('getMenuCount')) return 0;
         const menu = this.Menu.getApplicationMenu();
         if (menu == null) {
             return 0;
@@ -271,6 +318,7 @@ export class NGDesktopUIService {
      * Cleanup the menubar. For MacOS that means to display a minimal menu
      */
     removeAllMenus() {
+        this.resetAPITracking();
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.clearMenu()));
     }
     /**
@@ -284,8 +332,10 @@ export class NGDesktopUIService {
      *
      * @param{int} menuIndex - menu index position
      * @param{int} itemIndex - item position in the menu
+     * @deprecated
      */
     removeAllMenuItems(menuIndex: number, itemIndex: number) {
+        if (!this.canUseOldAPI('removeAllMenuItems')) return;
         if (Number.isInteger(menuIndex) && (menuIndex >= 0 && menuIndex < this.mainMenuTemplate.length)) {
             this.currentMenu = 'custom';
             if (Number.isInteger(itemIndex)) {//submenu wanted
@@ -306,14 +356,15 @@ export class NGDesktopUIService {
     /**
      * Add separator line to the specified menu
      *
-     *
      * @param{int} index - menu index
      * @param{int} position - insert position
      * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
+     * @deprecated
      * @return{int} - the index of the added separator
      */
     addSeparator(index: number, position: number, itemIndex: number) {
+        if (!this.canUseOldAPI('addSeparator')) return -1;
         const result = this.addMenuItemImpl(index, null, null, null, null, position, itemIndex, 'separator');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -331,12 +382,14 @@ export class NGDesktopUIService {
      * @param{int} position - insert position
      * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
+     * @deprecated
      * @return{int} - the index of the added menu item
      *
      * Note: when add an item to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
      *       If previously a callback has been set, that callback will no longer be called
      */
     addMenuItem(index: number, text: string, callback: CallableFunction, position: number, itemIndex: number) {
+        if (!this.canUseOldAPI('addMenuItem')) return -1;
         const result = this.addMenuItemImpl(index, text, null, null, callback, position, itemIndex, 'normal');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -348,10 +401,12 @@ export class NGDesktopUIService {
      * @param{int} position - menuitem position to be removed
      * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
+     * @deprecated
      * Note: when the last item from a submenu it is removed that submenu will get from type "submenu" to type "normal".
      *       If previously a callback has been set for the item, that callback will be called further
      */
     removeMenuItem(index: number, position: number, itemIndex: number) {
+        if (!this.canUseOldAPI('removeMenuItem')) return;
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.removeMenuItemImpl(index, position, itemIndex)));
     }
     /**
@@ -360,9 +415,11 @@ export class NGDesktopUIService {
      * @param{int} index - menu index
      * @param{int} itemIndex - submenu index; when specified the submenu items will be count
      *
+     * @deprecated
      * @return{int} - counted items
      */
     getMenuItemsCount(index: number, itemIndex: number) {
+        if (!this.canUseOldAPI('getMenuItemsCount')) return -1;
         const items = this.Menu.getApplicationMenu().items;
         if ((Number.isInteger(index)) &&
             (index >= 0 && index < items.length)) {
@@ -384,7 +441,6 @@ export class NGDesktopUIService {
     /**
      * Add checkbox to the specified menu
      *
-     *
      * @param{int} index - menu index
      * @param{string} text - checkbox label
      * @param{function} callback - callback function to call
@@ -396,12 +452,14 @@ export class NGDesktopUIService {
      * @param{int} position - insert position
      * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
+     * @deprecated
      * @return{int} - the index of the added checkbox
      *
      * Note: when add the checkbox to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
      *       If previously a callback has been set, that callback will no longer be called
      */
     addCheckBox(index: number, text: string, callback: CallableFunction, checked: boolean, position: number, itemIndex: number) {
+        if (!this.canUseOldAPI('addCheckBox')) return -1;
         const result = this.addMenuItemImpl(index, text, null, checked, callback, position, itemIndex, 'checkbox');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -420,6 +478,7 @@ export class NGDesktopUIService {
      * @param{int} position - insert position
      * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
+     * @deprecated
      * @return{int} - the index of the added radio button
      *
      * Note: when add the checkbox to an existing menuitem, that menuitem will get from type "normal" to type "submenu".
@@ -427,6 +486,7 @@ export class NGDesktopUIService {
      * Note: For the first added radio button in a group, the radio button is selected regardless the selected param
      */
     addRadioButton(index: number, text: string, callback: CallableFunction, selected: boolean, position: number, itemIndex: number) {
+        if (!this.canUseOldAPI('addRadioButton')) return -1;
         const result = this.addMenuItemImpl(index, text, null, selected, callback, position, itemIndex, 'radio');
         this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
         return result;
@@ -441,12 +501,14 @@ export class NGDesktopUIService {
      * @param{int} position - insert position
      * @param{int} itemIndex - submenu index; when specified the position is relative to this submenu
      *
+     * @deprecated
      * @return{int} - the index of the added role item
      *
      */
     // eslint-disable-next-line max-len
     addRoleItem(index: number, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
                          text: string, position: number, itemIndex: number) {
+        if (!this.canUseOldAPI('addRoleItem')) return -1;
 
         let result;
         if (role.endsWith('Menu')) {
@@ -464,9 +526,11 @@ export class NGDesktopUIService {
      * @param{int} index - menu index
      * @param{string} text - menuitem text to query for index
      *
+     * @deprecated
      * @return{string} - text of the item
      */
     getMenuItemIndexByText(index: number, text: string) {
+        if (!this.canUseOldAPI('getMenuItemIndexByText')) return -1;
         const appMenu = this.Menu.getApplicationMenu();
         let retVal = -1;
         if (Number.isInteger(index) && (index >= 0 && index < appMenu.items.length)) {
@@ -486,9 +550,11 @@ export class NGDesktopUIService {
      * @param{int} index - menu index
      * @param{int} itemIndex - menuitem index to query for text
      *
+     * @deprecated
      * @return{string} - text of the item
      */
     getMenuItemText(index: number, itemIndex: number) {
+        if (!this.canUseOldAPI('getMenuItemText')) return null;
         const appMenu = this.Menu.getApplicationMenu();
         if (Number.isInteger(index) && (index >= 0 && index < appMenu.items.length)) {
             const menuItems = appMenu.items[index].submenu.items;
@@ -746,6 +812,194 @@ export class NGDesktopUIService {
      */
      useDefaultBrowserForExternalLinks(flag: boolean) {
         this.ipcRenderer.send('ngdesktop-useDefaultBrowserForExternal', flag);
+    }
+
+    /**
+     * Set menu from a JSMenu object (new API for menu designer support)
+     * Replaces the entire menu.
+     * 
+     * @param{JSMenu} menu - JSMenu object from Servoy menu designer
+     * @param{function} callback - Optional callback function called when menu item is clicked.
+     *                              Receives the itemID (string) of the clicked menu item
+     * @return{boolean} - true if menu was set successfully, false if blocked by API mixing
+     */
+    setMenu(menu: any, callback?: CallableFunction): boolean {
+        if (!this.canUseNewAPI('setMenu')) return false;
+        
+        if (!menu || !menu.items || menu.items.length === 0) {
+            this.log.warn('setMenu called with null/undefined/empty menu');
+            
+            if (this.isMacOS) {
+                this.mainMenuTemplate = JSON.parse(JSON.stringify(this.cleanMenu));
+                this.currentMenu = 'clean';
+            } else {
+                this.mainMenuTemplate = [];
+                this.currentMenu = 'clean';
+            }
+            
+            this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
+            return true;
+        }
+
+        this.mainMenuTemplate = [];
+        this.currentMenu = 'custom';
+
+        menu.items.forEach((menuItem: any) => {
+            const electronMenu = this.convertJSMenuItemToElectron(menuItem, callback);
+            if (electronMenu) {
+                this.mainMenuTemplate.push(electronMenu);
+            }
+        });
+
+        if (this.isMacOS && this.mainMenuTemplate.length === 0) {
+            this.mainMenuTemplate = JSON.parse(JSON.stringify(this.cleanMenu));
+            this.currentMenu = 'clean';
+        }
+
+        this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
+        return true;
+    }
+
+    /**
+     * Update menu by merging with existing menu (smart diff - only add/remove changed items)
+     * Preserves developer tools and default menu items.
+     * 
+     * @param{JSMenu} menu - JSMenu object from Servoy menu designer
+     * @param{function} callback - Optional callback function called when menu item is clicked.
+     *                              Receives the itemID (string) of the clicked menu item
+     * @return{boolean} - true if menu was updated successfully, false if blocked by API mixing
+     */
+    updateMenu(menu: any, callback?: CallableFunction): boolean {
+        if (!this.canUseNewAPI('updateMenu')) return false;
+        
+        if (!menu || !menu.items) {
+            this.log.warn('updateMenu called with null/undefined menu');
+            return false;
+        }
+
+        const newMenuItems: electron.MenuItemConstructorOptions[] = [];
+        menu.items.forEach((menuItem: any) => {
+            const electronMenu = this.convertJSMenuItemToElectron(menuItem, callback);
+            if (electronMenu) {
+                newMenuItems.push(electronMenu);
+            }
+        });
+
+        const mergedMenu = this.mergeMenus(this.mainMenuTemplate as electron.MenuItemConstructorOptions[], newMenuItems);
+
+        this.mainMenuTemplate = mergedMenu;
+        this.currentMenu = 'custom';
+
+        if (this.isMacOS && this.mainMenuTemplate.length === 0) {
+            this.mainMenuTemplate = JSON.parse(JSON.stringify(this.cleanMenu));
+            this.currentMenu = 'clean';
+        }
+
+        this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
+        return true;
+    }
+
+    /**
+     * Get the current menu API mode
+     * 
+     * @return{string} - 'old-api' if created with deprecated methods,
+     *                   'new-api' if created with setMenu/updateMenu,
+     *                   null if no menu or after reset
+     */
+    getMenuAPIMode(): 'old-api' | 'new-api' | null {
+        return this.menuCreatedWith;
+    }
+
+    private mergeMenus(
+        existing: electron.MenuItemConstructorOptions[], 
+        newItems: electron.MenuItemConstructorOptions[]
+    ): electron.MenuItemConstructorOptions[] {
+        const result: electron.MenuItemConstructorOptions[] = [];
+        const processedLabels = new Set<string>();
+
+        existing.forEach(item => {
+            if (item.label) {
+                result.push(item);
+                processedLabels.add(item.label);
+            }
+        });
+
+        newItems.forEach(newItem => {
+            if (!newItem.label) return;
+
+            const existingIndex = result.findIndex(item => item.label === newItem.label);
+            
+            if (existingIndex >= 0) {
+                const existing = result[existingIndex];
+                if (newItem.submenu && existing.submenu) {
+                    newItem.submenu = this.mergeMenus(
+                        existing.submenu as electron.MenuItemConstructorOptions[],
+                        newItem.submenu as electron.MenuItemConstructorOptions[]
+                    );
+                }
+                result[existingIndex] = newItem;
+            } else {
+                result.push(newItem);
+            }
+            
+            processedLabels.add(newItem.label);
+        });
+
+        return result;
+    }
+
+    private convertJSMenuItemToElectron(jsMenuItem: any, globalCallback?: CallableFunction): electron.MenuItemConstructorOptions {
+        const electronItem: electron.MenuItemConstructorOptions = {
+            label: jsMenuItem.menuText || jsMenuItem.itemID || 'Menu Item'
+        };
+
+        if (jsMenuItem.enabled !== undefined) {
+            electronItem.enabled = jsMenuItem.enabled;
+        }
+
+        if (jsMenuItem.tooltipText) {
+            electronItem.toolTip = jsMenuItem.tooltipText;
+        }
+
+        if (jsMenuItem.extraProperties && jsMenuItem.extraProperties.NGDesktop) {
+            const ngd = jsMenuItem.extraProperties.NGDesktop;
+            
+            if (ngd.role && ngd.role !== 'none') {
+                electronItem.role = ngd.role as any;
+            }
+            
+            if (ngd.accelerator) {
+                electronItem.accelerator = ngd.accelerator;
+            }
+            
+            if (ngd.type && ngd.type !== 'normal') {
+                electronItem.type = ngd.type as any;
+            }
+            
+            if (ngd.checked !== undefined && (ngd.type === 'checkbox' || ngd.type === 'radio')) {
+                electronItem.checked = ngd.checked;
+            }
+            
+            if (ngd.sublabel) {
+                (electronItem as any).sublabel = ngd.sublabel;
+            }
+        }
+
+        if (jsMenuItem.items && Array.isArray(jsMenuItem.items) && jsMenuItem.items.length > 0) {
+            electronItem.submenu = jsMenuItem.items.map((subItem: any) => 
+                this.convertJSMenuItemToElectron(subItem, globalCallback)
+            );
+        } else {
+            if (!electronItem.role) {
+                electronItem.click = () => {
+                    if (globalCallback) {
+                        globalCallback(jsMenuItem.itemID);
+                    }
+                };
+            }
+        }
+
+        return electronItem;
     }
 
     private resetTrayMenu() {
