@@ -1,4 +1,9 @@
-
+/*
+ * A service that allows interaction with the native window when running inside an NGDesktop client.
+ * You can customize menus, play with window bounds, listen to some events and so on.
+ * 
+ * This will not work when running inside a normal browser.
+ */
 
 /**
  * Add new menu to the menu bar
