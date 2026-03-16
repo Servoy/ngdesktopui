@@ -2,7 +2,7 @@
     "name": "ngdesktopui",
     "displayName": "NG-Desktop UI plug-in",
     "packageType": "Web-Service",
-    "icon": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0c/File_alt_font_awesome.svg/512px-File_alt_font_awesome.svg.png",
+    "icon": "https://raw.githubusercontent.com/Servoy/servoy-extra-components/master/servoy.png",
     "invertIcon": true,
     "description": "Provides a web-service for customizing the native window UI of NGDesktop clients. You can tweak menus, play with the zoom level and so on.",
     "wikiUrl": "https://github.com/Servoy/ngdesktopui/wiki/NGDesktop-ui-plugin",
