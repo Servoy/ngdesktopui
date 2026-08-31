@@ -1,31 +1,32 @@
 import { Injectable } from '@angular/core';
-import { LoggerFactory, LoggerService, WindowRefService, ServoyPublicService, BaseCustomObject, Callback } from '@servoy/public';
+import { LoggerFactory, LoggerService, WindowRefService, ServoyPublicService, BaseCustomObject } from '@servoy/public';
 
 import * as electron from 'electron';
 
 type CallableFunction = (...args: unknown[]) => any;
+type RoleType = 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu';
 
 @Injectable()
 export class NGDesktopUIService {
-    private electron: typeof electron;
-    private remote: typeof electron.remote;
-    private Menu: typeof electron.Menu;
-    private Tray: typeof electron.Tray;
-    private log: LoggerService;
-    private window: electron.BrowserWindow;
+    private electron!: typeof electron;
+    private remote!: typeof electron.remote;
+    private Menu!: typeof electron.Menu;
+    private Tray!: typeof electron.Tray;
+    private log!: LoggerService;
+    private window!: electron.BrowserWindow;
     private isMacOS = false;
-    private browserViews = {};
+    private browserViews: Record<string, any> = {};
     private browserViewCounter = 0;
     private mainMenuTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
     private defaultTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
-    private ipcRenderer: typeof electron.ipcRenderer;
-    private callbackOnClose = null;
+    private ipcRenderer!: typeof electron.ipcRenderer;
+    private callbackOnClose: { formname: string; script: string } | null = null;
     private currentMenu = 'default';
-    private tray = null;
+    private tray: electron.Tray | null = null;
     private trayMenuTemplate: Array<(electron.MenuItemConstructorOptions) | (electron.MenuItem)> = [];
     private menuCreatedWith: 'old-api' | 'new-api' | null = null;
 
-    private trayMenu: TrayMenu;
+    private trayMenu!: TrayMenu;
     
     /**
      * Check if old API can be used (blocks if menu created with new API)
@@ -75,7 +76,7 @@ export class NGDesktopUIService {
     constructor(private servoyService: ServoyPublicService, windowRef: WindowRefService, logFactory: LoggerFactory) {
         this.log = logFactory.getLogger('NGDesktopUtilsService');
         const userAgent = navigator.userAgent.toLowerCase();
-        const r = windowRef.nativeWindow['require'];
+        const r = (windowRef.nativeWindow as any)['require'];
         if (userAgent.indexOf(' electron/') > -1 && r) {
             this.electron = r('electron');
             this.remote = r('@electron/remote');
@@ -106,7 +107,7 @@ export class NGDesktopUIService {
         }
     }
 
-    isDevToolsAdded(templateArray) {
+    isDevToolsAdded(templateArray: any[]): boolean {
         let result = false;
         for (const template of templateArray) {
             if (template.submenu != null && template.submenu.length > 0) {
@@ -120,7 +121,7 @@ export class NGDesktopUIService {
         return result;
     }
 
-    resetDevToolWindow(templateArray) {
+    resetDevToolWindow(templateArray: any[]): any[] {
         for (const template of templateArray) {
             if (template.submenu != null && template.submenu.length > 0) {
                 template.submenu = this.resetDevToolWindow(template.submenu);
@@ -168,7 +169,7 @@ export class NGDesktopUIService {
         return this.mainMenuTemplate;
     }
 
-    addRoleMenu(index, roleValue, text) {
+    addRoleMenu(index: any, roleValue: any, text: any) {
         if (this.isCleanMenu()) {
             this.mainMenuTemplate = [];
             this.currentMenu = 'custom';
@@ -296,7 +297,7 @@ export class NGDesktopUIService {
     getMenuText(index: number) {
         if (!this.canUseOldAPI('getMenuText')) return null;
         const menu = this.Menu.getApplicationMenu();
-        if (index >= 0 && index < menu.items.length) {
+        if (menu && index >= 0 && index < menu.items.length) {
             return menu.items[index].label;
         }
         return null;
@@ -339,9 +340,10 @@ export class NGDesktopUIService {
         if (Number.isInteger(menuIndex) && (menuIndex >= 0 && menuIndex < this.mainMenuTemplate.length)) {
             this.currentMenu = 'custom';
             if (Number.isInteger(itemIndex)) {//submenu wanted
-                if (itemIndex >= 0 && itemIndex < (this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[]).length) {
-                    this.mainMenuTemplate[menuIndex].submenu[itemIndex].submenu = [];
-                    this.mainMenuTemplate[menuIndex].submenu[itemIndex].type = 'normal';
+                const submenuArr = this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[];
+                if (submenuArr && itemIndex >= 0 && itemIndex < submenuArr.length) {
+                    submenuArr[itemIndex].submenu = [];
+                    submenuArr[itemIndex].type = 'normal';
                     this.Menu.setApplicationMenu(this.Menu.buildFromTemplate(this.mainMenuTemplate));
                 }
             } else {//
@@ -420,19 +422,19 @@ export class NGDesktopUIService {
      */
     getMenuItemsCount(index: number, itemIndex: number) {
         if (!this.canUseOldAPI('getMenuItemsCount')) return -1;
-        const items = this.Menu.getApplicationMenu().items;
+        const items = this.Menu.getApplicationMenu()!.items;
         if ((Number.isInteger(index)) &&
             (index >= 0 && index < items.length)) {
             const menuItem = items[index];
-            if (Number.isInteger(itemIndex) && (itemIndex >= 0 && itemIndex < menuItem.submenu.items.length)) {//submenu count desired
+            if (Number.isInteger(itemIndex) && menuItem.submenu && (itemIndex >= 0 && itemIndex < menuItem.submenu.items.length)) {//submenu count desired
                 const submenuItem = menuItem.submenu.items[itemIndex];
                 if (submenuItem.type === 'submenu') {
-                    return submenuItem.submenu.items.length;
+                    return submenuItem.submenu!.items.length;
                 } else {
                     return 0;
                 }
             }
-            return menuItem.submenu.items.length;
+            return menuItem.submenu!.items.length;
         }
         return -1;
     }
@@ -505,9 +507,7 @@ export class NGDesktopUIService {
      * @return{int} - the index of the added role item
      *
      */
-    // eslint-disable-next-line max-len
-    addRoleItem(index: number, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
-                         text: string, position: number, itemIndex: number) {
+    addRoleItem(index: number, role: RoleType, text: string, position: number, itemIndex: number) {
         if (!this.canUseOldAPI('addRoleItem')) return -1;
 
         let result;
@@ -533,8 +533,8 @@ export class NGDesktopUIService {
         if (!this.canUseOldAPI('getMenuItemIndexByText')) return -1;
         const appMenu = this.Menu.getApplicationMenu();
         let retVal = -1;
-        if (Number.isInteger(index) && (index >= 0 && index < appMenu.items.length)) {
-            const menuitems = appMenu.items[index].submenu.items;
+        if (appMenu && Number.isInteger(index) && (index >= 0 && index < appMenu.items.length)) {
+            const menuitems = appMenu.items[index].submenu!.items;
             for (let itemIndex = 0; itemIndex < menuitems.length; itemIndex++) {
                 if (menuitems[itemIndex].label === text) {
                     retVal = itemIndex;
@@ -556,8 +556,8 @@ export class NGDesktopUIService {
     getMenuItemText(index: number, itemIndex: number) {
         if (!this.canUseOldAPI('getMenuItemText')) return null;
         const appMenu = this.Menu.getApplicationMenu();
-        if (Number.isInteger(index) && (index >= 0 && index < appMenu.items.length)) {
-            const menuItems = appMenu.items[index].submenu.items;
+        if (appMenu && Number.isInteger(index) && (index >= 0 && index < appMenu.items.length)) {
+            const menuItems = appMenu.items[index].submenu!.items;
             if (Number.isInteger(itemIndex) && (itemIndex >= 0 && itemIndex < menuItems.length)) {
                 return menuItems[itemIndex].label;
             }
@@ -793,7 +793,7 @@ export class NGDesktopUIService {
      * Unregister the callback to be executed before closing ngdesktop.
      */
 	unregisterOnCloseMethod() {
-		if (!!this.callbackOnClose) { // not (null || undefined)
+		if (this.callbackOnClose) { // not (null || undefined)
 			this.ipcRenderer.removeListener('ngdesktop-close-request', this.executeOnCloseCallback);
 			this.ipcRenderer.send('ngdesktop-enable-closeOnRequest', false);
 			this.callbackOnClose = null;
@@ -1005,15 +1005,15 @@ export class NGDesktopUIService {
     private resetTrayMenu() {
         this.trayMenuTemplate = []; //reset tray menu
         for (let index = 0; index < this.trayMenu.trayMenuItems.length; index++) {
-            let trayMenuItem = this.trayMenu.trayMenuItems[index];
+            const trayMenuItem = this.trayMenu.trayMenuItems[index];
             if (trayMenuItem.type === 'normal')
-                this.addTrayMenuItemImpl(index, trayMenuItem.label, null, trayMenuItem.click, null, "normal");
+                this.addTrayMenuItemImpl(index, trayMenuItem.label, null, trayMenuItem.click, null, 'normal');
             else if (trayMenuItem.type === 'checkbox') {
-                this.addTrayMenuItemImpl(index, trayMenuItem.label, null, trayMenuItem.click, trayMenuItem.checked, "checkbox");
+                this.addTrayMenuItemImpl(index, trayMenuItem.label, null, trayMenuItem.click, trayMenuItem.checked, 'checkbox');
             } else if (trayMenuItem.type === 'separator') {
-                this.addTrayMenuItemImpl(index, null, null, null, null, "separator");
+                this.addTrayMenuItemImpl(index, null, null, null, null, 'separator');
             } else {//role
-                this.addTrayMenuItemImpl(index, trayMenuItem.label, trayMenuItem.role, null, null, "role");
+                this.addTrayMenuItemImpl(index, trayMenuItem.label, trayMenuItem.role, null, null, 'role');
             }
         }
     }
@@ -1026,34 +1026,34 @@ export class NGDesktopUIService {
     //Further investigations needed.
 	private	done() {//internal api 
 		this.resetTrayMenu();
-		let trayIcon = this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',  this.trayMenu.icon ? Buffer.from(this.trayMenu.icon).toString('base64') : null, 'trayIcon'); //reset to default icon
+		const trayIcon = this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',  this.trayMenu.icon ? Buffer.from(this.trayMenu.icon).toString('base64') : null, 'trayIcon'); //reset to default icon
 		if (!this.tray) {
 			this.tray = new this.Tray(trayIcon);
 		} else if (trayIcon != null){
 			this.tray.setImage(trayIcon);
 		}
 		if (this.trayMenu.pressedIcon) {
-			let pressedIcon = this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',  Buffer.from(this.trayMenu.pressedIcon).toString('base64'), 'pressedTrayIcon'); //reset to default icon
-			this.tray.setPressedImage(pressedIcon);
+			const pressedIcon = this.ipcRenderer.sendSync('ngdesktop-set-tray-icon',  Buffer.from(this.trayMenu.pressedIcon).toString('base64'), 'pressedTrayIcon'); //reset to default icon
+			this.tray!.setPressedImage(pressedIcon);
 		}
 		if (this.trayMenu.title) {
-			this.tray.setTitle(this.trayMenu.title);
+			this.tray!.setTitle(this.trayMenu.title);
 		} else {
-			this.tray.setTitle('');
+			this.tray!.setTitle('');
 		}
 		if (this.trayMenu.tooltip) {
-			this.tray.setToolTip(this.trayMenu.tooltip);
+			this.tray!.setToolTip(this.trayMenu.tooltip);
 		} else {
-			this.tray.setToolTip('');
+			this.tray!.setToolTip('');
 		}
-	    this.tray.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
+	    this.tray!.setContextMenu(this.Menu.buildFromTemplate(this.trayMenuTemplate));
 	}
 
     private executeOnCloseCallback = () => {
-        if (!!this.callbackOnClose) {// not (null || undefined)
-            this.callbackOnClose().then((result: any) => {
+        if (this.callbackOnClose) {// not (null || undefined)
+            (this.callbackOnClose as any)().then((result: any) => {
                 this.ipcRenderer.send('ngdesktop-close-response', result);
-            }).catch((err) => {
+            }).catch((err: any) => {
                 console.log(err);
                 this.ipcRenderer.send('ngdesktop-close-response', true);
                 throw(err);
@@ -1069,7 +1069,7 @@ export class NGDesktopUIService {
         let addResultIndex = -1;
         const myMenu = {
             label: text,
-            submenu: []
+            submenu: [] as electron.MenuItemConstructorOptions[]
         };
         if (Number.isInteger(index)) {
             this.mainMenuTemplate.splice(index, 0, myMenu);
@@ -1092,10 +1092,11 @@ export class NGDesktopUIService {
             if (Number.isInteger(position)) {
                 submenu.splice(position, 1);
                 if (isSubmenu) {
+                    const parentSubmenu = this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[];
                     if (submenu.length === 0) {//no submenu items => switch item from submenu to normal
-                        this.mainMenuTemplate[menuIndex].submenu[itemIndex].type = 'normal';
+                        parentSubmenu[itemIndex].type = 'normal';
                     }
-                    this.mainMenuTemplate[menuIndex].submenu[itemIndex].submenu = submenu;
+                    parentSubmenu[itemIndex].submenu = submenu;
                 } else {
                     this.mainMenuTemplate[menuIndex].submenu = submenu;
                 }
@@ -1103,10 +1104,12 @@ export class NGDesktopUIService {
         }
         return this.mainMenuTemplate;
     }
-    // eslint-disable-next-line max-len
-    private addMenuItemImpl(menuIndex: number, text: string, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
-                // eslint-disable-next-line max-len
-                checked: boolean, callback: CallableFunction, position: number, itemIndex: number, type: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio') | 'role'): number {
+
+    private addMenuItemImpl(
+        menuIndex: number, text: string | null, role: RoleType | null,
+        checked: boolean | null, callback: CallableFunction | null, position: number, itemIndex: number,
+        type: ('normal' | 'separator' | 'submenu' | 'checkbox' | 'radio') | 'role'
+    ): number {
         let addResultIndex = -1;
         if (this.isCleanMenu()) {
             this.mainMenuTemplate = [];
@@ -1125,7 +1128,7 @@ export class NGDesktopUIService {
                 if (text != null) {
                     myItem.label = text;
                 }
-                myItem.role = role;
+                myItem.role = role!;
             } else {
                 if (text != null) {
                     myItem.label = text;
@@ -1144,7 +1147,7 @@ export class NGDesktopUIService {
             }
             if (Number.isInteger(position)) {
                 if (submenu === undefined) {
-                    submenu = [].concat(myItem);
+                    submenu = [myItem];
                     addResultIndex = 0;
                 } else {
                     if (position < submenu.length) {
@@ -1157,15 +1160,17 @@ export class NGDesktopUIService {
                 }
 
                 if (isSubmenu) {
-                    this.mainMenuTemplate[menuIndex].submenu[itemIndex].type = 'submenu';
-                    this.mainMenuTemplate[menuIndex].submenu[itemIndex].submenu = submenu;
+                    const parentSubmenu = this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[];
+                    parentSubmenu[itemIndex].type = 'submenu';
+                    parentSubmenu[itemIndex].submenu = submenu;
                 } else {
                     this.mainMenuTemplate[menuIndex].submenu = submenu;
                 }
             } else {
                 if (isSubmenu) {
-                    this.mainMenuTemplate[menuIndex].submenu[itemIndex].submenu = submenu.concat([myItem]);
-                    addResultIndex = this.mainMenuTemplate[menuIndex].submenu[itemIndex].submenu.length - 1;
+                    const parentSubmenu = this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[];
+                    parentSubmenu[itemIndex].submenu = submenu.concat([myItem]);
+                    addResultIndex = (parentSubmenu[itemIndex].submenu as electron.MenuItemConstructorOptions[]).length - 1;
                 } else {
                     this.mainMenuTemplate[menuIndex].submenu = submenu.concat([myItem]);
                     addResultIndex = (this.mainMenuTemplate[menuIndex].submenu as electron.MenuItemConstructorOptions[]).length - 1;
@@ -1175,16 +1180,18 @@ export class NGDesktopUIService {
         return addResultIndex;
     }
 
-      // eslint-disable-next-line max-len
-    private addTrayMenuItemImpl(menuIndex: number, text: string, role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu'),
-      callback: CallableFunction, checked: boolean, type: ('normal' | 'separator' | 'checkbox' | 'role')) {
+    private addTrayMenuItemImpl(
+        menuIndex: number, text: string | null, role: RoleType | null,
+        callback: CallableFunction | null, checked: boolean | null,
+        type: ('normal' | 'separator' | 'checkbox' | 'role')
+    ) {
       if (Number.isInteger(menuIndex) && (menuIndex >=0)) {
           const myItem: electron.MenuItemConstructorOptions = {};
           if (type === 'role') {
               if (text != null) {
                   myItem.label = text;
               }
-              myItem.role = role;
+              myItem.role = role!;
           } else {
               if (text != null) {
                   myItem.label = text;
@@ -1210,18 +1217,18 @@ export class NGDesktopUIService {
   }
 }
 
-export class TrayMenu extends BaseCustomObject {
-    public title: string;
-    public tooltip: string;
-    public icon: any;
-    public pressedIcon: any;
-    public trayMenuItems: TrayMenuItem[];
+export interface TrayMenu {
+    title: string;
+    tooltip: string;
+    icon: any;
+    pressedIcon: any;
+    trayMenuItems: TrayMenuItem[];
 }
 
-export class TrayMenuItem extends BaseCustomObject{
-    public label: string;
-    public type: ('normal' | 'separator' | 'checkbox' | 'role');
-    public role: ('undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'pasteAndMatchStyle' | 'delete' | 'selectAll' | 'reload' | 'forceReload' | 'toggleDevTools' | 'resetZoom' | 'zoomIn' | 'zoomOut' | 'togglefullscreen' | 'window' | 'minimize' | 'close' | 'help' | 'about' | 'services' | 'hide' | 'hideOthers' | 'unhide' | 'quit' | 'startSpeaking' | 'stopSpeaking' | 'zoom' | 'front' | 'appMenu' | 'fileMenu' | 'editMenu' | 'viewMenu' | 'recentDocuments' | 'toggleTabBar' | 'selectNextTab' | 'selectPreviousTab' | 'mergeAllWindows' | 'clearRecentDocuments' | 'moveTabToNewWindow' | 'windowMenu');
-    public checked: boolean;
-    public click: CallableFunction;
+export interface TrayMenuItem {
+    label: string;
+    type: ('normal' | 'separator' | 'checkbox' | 'role');
+    role: RoleType;
+    checked: boolean;
+    click: CallableFunction;
 }
